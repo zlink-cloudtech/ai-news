@@ -1,0 +1,150 @@
+{
+  "source": "jiqizhixin",
+  "date": "2026-06-13",
+  "saved_at": "2026-06-13T20:47:57+08:00",
+  "count": 7,
+  "meta": {
+    "graphql": "https://www.jiqizhixin.com/graphql",
+    "window": [
+      "2026-06-13T00:00:00+08:00",
+      "2026-06-13T23:59:59.999999+08:00"
+    ],
+    "list_total": 30,
+    "detail_fetched": 0
+  },
+  "items": [
+    {
+      "title": "突发！美国政府禁止外国人使用Claude Fable 5",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-13-5",
+      "published": "2026-06-13T03:19:00+00:00",
+      "published_ts": 1781320740,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/19632695-36d4-4974-b18d-2e763769f136",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/19632695-36d4-4974-b18d-2e763769f136/0_-_2026-06-13T104141.996.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    },
+    {
+      "title": "交白卷也排第一？Fable 5二百题全部拒答，却登顶最严AI编程基准",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-13-4",
+      "published": "2026-06-13T03:16:00+00:00",
+      "published_ts": 1781320560,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/24d43a2c-c16f-4d29-97c0-87d715889822",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/24d43a2c-c16f-4d29-97c0-87d715889822/0_-_2026-06-13T104138.700.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    },
+    {
+      "title": "ICML 2026｜一句无关问题也能劫持Agent，港科大&复旦提出首个语义缓存键碰撞攻击",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-13-3",
+      "published": "2026-06-13T03:11:00+00:00",
+      "published_ts": 1781320260,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/710d9efc-0b2b-46c4-90c1-b685a5d0bb6e",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/710d9efc-0b2b-46c4-90c1-b685a5d0bb6e/0_-_2026-06-13T104132.633.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    },
+    {
+      "title": "一次三篇！李飞飞的空间智能公司，发论文了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-13-2",
+      "published": "2026-06-13T03:06:00+00:00",
+      "published_ts": 1781319960,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/ed49be67-0e32-480d-8125-1bf354a2301b",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/ed49be67-0e32-480d-8125-1bf354a2301b/0_-_2026-06-13T104129.175.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    },
+    {
+      "title": "30分钟人类第一人称视频，零样本教会机器人双臂操作｜马里兰大学提出HumanEgo",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-13",
+      "published": "2026-06-13T03:00:00+00:00",
+      "published_ts": 1781319600,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/0f9cc292-6137-4068-b245-f23ac1c84f9c",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/0f9cc292-6137-4068-b245-f23ac1c84f9c/0_-_2026-06-13T104124.639.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    },
+    {
+      "title": "2026智源大会：一场技术硬核的AI年度盛会",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-14",
+      "published": "2026-06-12T15:13:00+00:00",
+      "published_ts": 1781277180,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff/0_-_2026-06-12T230416.581.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    },
+    {
+      "title": "Claude Fable 5最难档零分！智能体的最后考试来了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-13",
+      "published": "2026-06-12T15:09:00+00:00",
+      "published_ts": 1781276940,
+      "summary": "",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/7e528d48-7c08-466e-945b-efdf056ce31f",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/7e528d48-7c08-466e-945b-efdf056ce31f/0_-_2026-06-12T230412.288.jpg"
+      },
+      "fetched_at": "2026-06-13T20:47:57+08:00"
+    }
+  ]
+}

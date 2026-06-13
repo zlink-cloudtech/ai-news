@@ -1,0 +1,248 @@
+{
+  "source": "jiqizhixin",
+  "date": "2026-06-11",
+  "saved_at": "2026-06-13T20:47:47+08:00",
+  "count": 11,
+  "meta": {
+    "graphql": "https://www.jiqizhixin.com/graphql",
+    "window": [
+      "2026-06-11T00:00:00+08:00",
+      "2026-06-11T23:59:59.999999+08:00"
+    ],
+    "list_total": 30,
+    "detail_fetched": 11
+  },
+  "items": [
+    {
+      "title": "ACM博士论文奖出炉：纽约大学刘书亮，曾是三届IMO金牌得主",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-14",
+      "published": "2026-06-11T11:00:00+00:00",
+      "published_ts": 1781175600,
+      "summary": "一年一度的 ACM 博士论文奖出炉了！ 6 月 10 日，美国计算机协会 ACM 宣布了最新一届的博士论文奖。 该奖项于 1978 年设立，每年颁发给计算机科学与工程领域最佳博士论文的作者，奖金为 20000 美元，荣誉提名奖奖金为 10000 美元。获奖论文将作为 ACM 图书系列的一部分，在 ACM 数字图书馆出版。 今年颁发的是 2025 年的奖项，包括一个博士论文奖和两个博士论文奖荣誉提名。 其中， MIT 博士、现纽约大学库朗数学、计算与数据科学学院计算机科学助理教授 Allen Liu（刘书亮） 凭借博士论文《Learning Theoretic Foundations for Understanding Quantum Systems》摘得本届 ACM 博士论文奖。 刘书亮的研究方向较为广泛，主要涉及算法和机器学习理论。目前，他最关注的是机器学习和语言模型的基础理论。他也曾研究过多个方向，从计算和统计中的基础问题，到科学领域中的反问题，尤其是量子信息中的相关问题。 &nbsp; 此前，他于 2025 年秋季在加州大学伯克利分校担任 Miller 博士后研究员。他本科同样就读于 MIT，专业为数学。博士专业为计算机科学。 值得一提的是 2014 年到 2016 年， 刘书亮代表美国奥数代表队连续三届拿到过 IMO 金牌，其中 2016 年拿到满分 。在 2020 年，他还参加过阿里巴巴数学竞赛决赛。 ACM 博士论文奖荣誉提名授予以下两位学者： 博科尼大学博士后研究员 Gal Arnon ，博士论文题为《New Advancements in Interactive Oracle Proofs: Theory, Practice, and Limitations》，他在魏茨曼科学研究所获得博士学位； MIT 助理教授 Rachit Nigam ，博士论文题为《M",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/ae6db9c6-4851-4680-a3d6-c3e3b45b0ae0",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/ae6db9c6-4851-4680-a3d6-c3e3b45b0ae0/0_-_2026-06-11T170257.202.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "NEWTON:从「等物理涌现」到「请牛顿进工具箱」，Agent 驱动的视频生成新范式",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-13",
+      "published": "2026-06-11T11:00:00+00:00",
+      "published_ts": 1781175600,
+      "summary": "近年来，视频生成模型发展迅猛。从 Sora、Veo、Kling 到一系列开源视频生成模型，文生视频已经逼近真实影像的观感 &mdash;&mdash; 画面清晰、镜头流畅、风格可控，一句话就能生成一段观感不错的视频。 然而，当我们把目光从 &ldquo;像不像&rdquo; 转向 &ldquo;对不对&rdquo; 时，一个深刻的问题开始浮出水面： 当前视频生成模型虽然擅长制造视觉真实感，却并不真正理解物理世界。 一个球可能在没有接触的情况下突然改变速度；一个下落物体可能无视重力；碰撞、流体、切削、堆积、弹跳等动态过程，经常看起来合理，却经不起基本物理常识的检验。在 VideoPhy-2 这类面向物理常识的视频评测中，即便是表现最好的模型，联合准确率也只有 32.6%。这说明，视频生成距离真正的 &ldquo;世界模拟器&rdquo;，仍然存在一条关键鸿沟。 于是， 浙江大学、香港理工大学、树根科技与三一集团联合提出的 NEWTON（Neural Agentic World-Aware Tool-Orchestrated Navigation） &mdash;&mdash; 把 Agent 范式搬进视频生成里：与其继续把物理硬塞进生成器的权重里，不如让一个会规划、会调用物理工具、会自查自纠的 Agent，把生成器 &ldquo;降级&rdquo; 成它工具箱里的一件兵器。 论文标题：NEWTON: Agentic Planning for Physically Grounded Video Generation 论文地址：https://arxiv.org/abs/2605.18396 项目主页：https://newton026.github.io/newton/ 视频生成为什么总是 &ldquo;物理不稳&rdquo;？ 过去我们习惯认为，只要模型足够大、数据足够多，它",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/e270a613-3fe2-47eb-b3a8-0979370b7bc3",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/e270a613-3fe2-47eb-b3a8-0979370b7bc3/0_-_2026-06-11T170249.174.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "通向AGI的关键拼图！首篇多模态大模型「音频推理」综述出炉，万字拆解四大前沿路径",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-12",
+      "published": "2026-06-11T11:00:00+00:00",
+      "published_ts": 1781175600,
+      "summary": "想象这样一个惬意的周末： 空调带来阵阵凉意，你靠在沙发上看书，突然耳边传来“哒哒哒”的小碎步声，接着，玄关门边传来了一阵清脆、略带急切的“呜呜”声，还伴随着爪尖轻轻扒拉木门的声响。 如果把这段音频丢进传统的语音大模型，它只会输出冷冰冰的三个字：[狗叫声]。 AI 感知到了正确的音频信息，但是完全错过了这段声音里包含的灵动与期待。 当模型只是把语音转成文字，它真的“听懂”了吗？ 一个具备真正智能的多模态AI助手是什么样呢？它首先要能听出小狗的声音，然后捕捉到音频里的空间感（门边传来的声音）、序列动作（碎步声和抓门声），并结合情绪（急切的“呜呜”声），快速完成一系列逻辑推演，用欢快的语调提醒你：“狗狗想出门散步啦，快带它出去玩吧！” 让AI从“冷冰冰地转录声音”到“能够听懂生活中的情绪、物理常识与逻辑”，这正是大模型社区正在经历的一场剧变： 从现有的“音频感知（Audio Perception）”全面进化到“音频推理（Audio Reasoning）”。 这也是大模型真正通向 AGI，成为我们生活助手的必经之路！ 然而，当交互的模态从文字和图像转向声音，一个问题浮出水面： AI 能否不依赖转录的文本，直接基于声音进行推理？ 这并不是一个技术细节问题。真实世界里的声音，远不只是承载文字内容的载体。说话人的语气、语速、重音、停顿、情绪、多人重叠说话、环境事件等，都可能改变推理结论。而简单粗暴地把音频转写成文字，往往会丢失这些关键信息。 音频推理不应该只是文本或视觉推理的简单迁移，而是作为多模态基础模型中的独立问题重新定义。 近日，香港中文大学团队联合多位优秀研究者，正式推出了音频推理领域的首篇全景综述。 本文首次全面定义了“音频推理”的范式，系统解构了底层框架，并深度剖析了当前最受关注的四大前沿推理路径。 论文标题：A Survey of Audio Reasoning in Mu",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/d474b117-ddde-4700-820c-7cab3d13c465",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/d474b117-ddde-4700-820c-7cab3d13c465/0_-_2026-06-11T170240.864.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "WAIC 连接 | 告别大海捞针！WAIC 2026专业采购团招募，让供需精准咬合",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-11",
+      "published": "2026-06-11T08:21:00+00:00",
+      "published_ts": 1781166060,
+      "summary": "需求精准匹配&times;对接伙伴全程陪伴，直击企业核心痛点 精准的需求匹配 &times; 匹配合作伙伴提供的全程支持，直击企业核心痛点 当AI技术以天为单位狂飙迭代时，企业的核心担忧不再是&ldquo;看不见的技术&rdquo;，而是&ldquo;如何在大海捞针的展会中，闭眼避坑、精准找到能帮自己赚钱、降增效的解决方案&rdquo;。 成百上千家展商，你是否担心面对走马观花、费时费力却无功而返？WAIC 2026专业采购团招募组正式开启，我们为你彻底打破&ldquo;看展效率低、供需不路&rdquo;的魔咒！ 今年，WAIC CONNECT服务体系全新升级，核心聚焦&ldquo;超级高效&rdquo;与&ldquo;精准对接&rdquo;。我们不盲目推荐，只精准咬合&mdash;&mdash;确保你的每一个真实业务场景，直达技术核心。 随着人工智能技术日新月异，企业不再主要担心错过新技术。他们真正关心的是如何避免在大型展会上浪费时间和金钱，并精准找到能够创造收益、降低成本、提高效率的解决方案。 面对成百上千的参展商，您是否担心匆匆逛完展会，花费时间和精力，却一无所获？ 2026年WAIC专业采购团体注册现已正式开放。我们致力于打破低效的展会参观和供需不匹配的局面。 今年，WAIC CONNECT服务系统全面升级，重点关注&ldquo;超高效&rdquo;和&ldquo;精准匹配&rdquo;。我们不盲目推荐，而是进行精准匹配，确保每个实际业务场景都能直接对接合适的技术能力。 拒绝大海捞针，直奔商业核心：用最短路径锁定最优化解 无需再大海捞针：直击业务核心，通过最短路径找到最佳解决方案 在海量的AI企业、复杂的应用场景中，决策者今年最宝贵的是高效时间。WAIC CONNECT通过&ldquo;供需比对+对接伙伴&rdquo;双引擎，为您定制一套拒绝试错、直达结果的极速逛展",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/c9000ce2-b46e-42dc-b9da-1c7e10d5938d",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/c9000ce2-b46e-42dc-b9da-1c7e10d5938d/0_-_2026-06-11T161335.466.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "刚刚，Anthropic道歉了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-10",
+      "published": "2026-06-11T07:16:00+00:00",
+      "published_ts": 1781162160,
+      "summary": "在舆论发酵了一整天后，Anthropic 新模型降智事件似乎迎来了反转。 就在昨天，Anthropic 发布了他们的新模型 &nbsp;Claude Fable 5 。模型很强，实力毋庸置疑，但很快便在 AI 研究社区激起 骂声一片 。原因很简单：如果将 Claude Fable 5 用于研发 AI，它就会降智。 而且这种降智是悄悄进行的。也就是说，如果 Anthropic 的系统检测到你在做 AI 研究，它会在你不知情的情况下，悄悄让这个模型变笨，而且你根本不会发现。 对此，Anthropic 称这是为了防止外国对手利用模型加速 AI 研发，同时保护自身领先优势。 这一举动彻底惹怒了整个社区，逼得 Anthropic 不得不紧急应对。 压力之下，刚刚，《连线》记者 Max Zeff 爆料称， Anthropic 正在撤销这一政策 。该媒体从 Anthropic 获得了一份声明，其中写到：「我们正在调整 Fable 5 针对前沿 LLM 开发的安全限制，使其变得可见。」 更具体而言，Claude Fable 5 针对 AI 开发的保护措施将对用户可见。如果该公司怀疑用户试图使用 Claude 构建高能力 AI，它会向用户发出警报，表明它要么拒绝该请求，要么将用户引导至能力较弱的模型。 也就是说，如果 Claude Fable 5 检测到用户在研发 AI，还是会降智，只不过这一次会通知用户已经降智了，而不再是「悄悄」降智。 此外，Anthropic 还在这份声明中进行了道歉：「我们做出了错误的取舍，对于未能把握好平衡，我们深表歉意。」 而就在《连线》这篇文章在 X 引爆热议时，Anthropic 也通过 Claude Devs 帐号发布了一份正式声明。 具体内容如下： 我们正在推出一些变更，以使 Fable 5 针对前沿 LLM 开发的安全限制变得可见。 从本周开始，被标记的",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/7ceed366-dd77-4ab1-a035-be69a7abaff8",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/7ceed366-dd77-4ab1-a035-be69a7abaff8/0_-_2026-06-11T145515.745.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "Anthropic宣告「递归自我提升」时代到来，LLM如何实现自我进化？全景综述带你一探究竟",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-9",
+      "published": "2026-06-11T07:11:00+00:00",
+      "published_ts": 1781161860,
+      "summary": "近日，Anthropic 发布了一篇引发广泛关注的文章 《When AI builds itself》 。文中披露了极其惊人的内部数据： 截至 2026 年 5 月，Anthropic 超过 80% 的合并代码已由 Claude 编写，工程师的日常代码产出飙升了 8 倍 ；更令人瞩目的是，AI 智能体已经可以自主提出假设、执行长达数百小时的强化安全实验。 这说明 AI 已开始展现自主参与下一代模型设计与训练的潜力，而这种自我提升能力（Self-Improvement），正在成为下一代 AI 发展的关键驱动力。 图 1：大语言模型自我提升 (LLM Self-improvement) 的构想：人类只需启动系统，模型便能够持续改进自身能力。 过去，探讨大语言模型（LLMs）的下一步发展时，焦点往往局限于更大的参数规模、海量的数据喂养和极限的算力堆叠。 然而，传统依赖人类监督的训练范式正逐渐面临瓶颈：高质量人工标注极其昂贵，专家反馈难以规模化；更致命的是，随着模型能力的指数级攀升，在高等数学、复杂代码生成和前沿科研推理等任务中，人类的认知边界，反而成了限制模型进化的天花板。与此同时，随着智能体技术的成熟，模型已展现出自主生成数据、调用工具和执行代码的强大自动化能力。 这表明，当前的大语言模型已具备主动参与自身迭代的能力，无需再完全依赖人类的监督。这一趋势标志着一种深刻的范式转移： 大语言模型的发展正从被动接受人类微调与修正转向自主探索与持续进化。 为了解构大语言模型自我提升的底层逻辑，填补系统性研究的空白，来自 纽约州立大学石溪分校 Zesearch NLP Lab 的 Haoyan Yang、Jiawei Zhou 等人 经过将近一年的努力，最近发布了一篇 113 页、涵盖 500 余篇前沿文献的关于大模型自我提升的全景综述： 论文链接: https://arxiv.org/p",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/dc494a9b-e07c-4731-9a25-6201d0ff0ce2",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/dc494a9b-e07c-4731-9a25-6201d0ff0ce2/0_-_2026-06-11T145508.504.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "不用向量数据库，Agent也能会搜索：给它一个grep就够了？",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-8",
+      "published": "2026-06-11T07:02:00+00:00",
+      "published_ts": 1781161320,
+      "summary": "本文主要作者包括：TAMU 的 Zhuofeng Li、Yu Zhang，UCSD 的 Haoxiang Zhang，University of Waterloo 的 Dongfu Jiang、Cong Wei、Ping Nie、Wenhu Chen、Jimmy Lin， Stanford 的 Pan Lu、Yejin Choi、James Zou， UIUC 的 Ming Zhong、Jiawei Han、以及 UW、Verdent AI、Lambda 等机构的合作者。 当大模型从「回答问题」走向「自己搜索、验证、综合证据」，检索接口正在变成 Agentic Search 的关键瓶颈。过去，一个搜索系统通常先把文档切块、建索引，再根据 query 返回 top-k 结果；智能体只能在这批候选片段上继续推理。这个流程高效、成熟； 问题是，复杂搜索任务并不总是依靠语义最相近的片段就能解决；答案可能藏在多个弱线索的交叉处 。一旦这些证据在 top-k 阶段被过滤掉，后面的推理模型再强也很难把它们凭空找回来。 来自 Texas A&amp;M University、University of Waterloo、UC San Diego、Stanford University 等机构的研究团队提出了一种新的搜索范式： Direct Corpus Interaction&nbsp; (DCI)， 直接语料交互 。它不依赖 embedding 模型，不构建向量索引，也不调用传统 retriever，而是让智能体直接使用 grep、文件读取、shell 命令、轻量脚本等工具，在原始语料中多轮搜索、定位、验证和修正假设。 实验显示，在深度研究、多跳问答、信息检索等任务上，DCI-Agent 不仅摆脱了传统语义检索器，还在多个指标上超过了很多检索智能体 baseline。尤其在深度研究的 B",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/5ecfb3d9-7ad3-4b38-a3dc-e5b47a94648f",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/5ecfb3d9-7ad3-4b38-a3dc-e5b47a94648f/0__100_.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "Codex协助天体物理学家「改写」黑洞模拟，OpenAI讲述如何扩展科学边界",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-7",
+      "published": "2026-06-11T06:41:00+00:00",
+      "published_ts": 1781160060,
+      "summary": "编辑丨&amp; 在漆黑的深空之中，有许多暗淡的眼睛&mdash;&mdash;黑洞，一旦靠近事件视界，连光都逃不出它们的视线。但对天体物理学家来说，真正能研究的并不是黑洞「本体」，而是它周围那层会发光、会流动、会被磁场和相对论共同塑形的等离子体。 2026 年 6 月 11 日， OpenAI 发表了一篇文章，讲述了亚利桑那大学与 Steward Observatory 的 Chi-kwan Chan 正做的这件事：用&nbsp;Codex&nbsp;帮自己改进黑洞模拟算法，让原本几乎被算力压住的问题，重新变得可探索。 不过在此之前，我们先来回顾一下人类对黑洞的认识历史。 2019 年，Event Horizon Telescope（EHT）公布了人类第一张黑洞图像，拍到的是 M87 星系中心的超大质量黑洞 M87*。今天的黑洞天体物理，本质上是观测、理论和模拟三者一起努力的结果。 图示：人类为 M87* 拍摄的照片。 拍下这张照片相当不易。很多情况下，研究者会把等离子体近似成流体，因为这样计算更可控；可一旦进入黑洞附近某些极热、极稀薄的区域，电子和离子就不再像普通流体那样频繁碰撞，而是更多沿磁力线做螺旋运动。 为了正确描述这些区域，模型就得追踪海量粒子的微观行为，时间步长也随之被压到很小，超级计算机的大部分时间都会被耗在细枝末节上。更直白的点来说，超算模拟的并非有序系统，而是在追踪数万亿个电子和离子各自的去向。 对此，Chan 有他自己的想法：不如从数学上改变模拟对粒子运动的追踪方式，使计算机不再需要直接跟踪每一个微小的螺旋。 这一点需要 Codex 帮助推导候选算法并用已知解进行测试。Codex 提出了许多潜在的方案&mdash;&mdash;并非全部正确，但这些问题无伤大雅，重点在于这些算法是可测试的。一旦找到有效的方法，Codex 就有可能解锁以前不可能实现的模拟",
+      "author": "ScienceAI",
+      "tags": [
+        "jiqizhixin",
+        "入门"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/6b56e316-a778-42fc-94b5-1e48d415e230",
+        "category": "入门",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/6b56e316-a778-42fc-94b5-1e48d415e230/iShot_2026-06-11_14.40.52.png",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "斩获15个顶级零日漏洞：0G Lab联合新国立，北大和北邮团队构建的共识协议debug智能体框架",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-6",
+      "published": "2026-06-11T06:28:00+00:00",
+      "published_ts": 1781159280,
+      "summary": "分布式系统的 &ldquo;圣杯&rdquo;&mdash;&mdash; 共识协议（Consensus Protocols），长久以来都是顶级基础设施工程师的 &ldquo;Bug 地狱&rdquo;。由于其状态极其复杂、多节点交织，传统测试和单体 LLM 对硬核的 Deep Bug（深层逻辑漏洞） 几乎束手无策。 近日，最新 ICML&nbsp; 2026 中稿论文，来自 0G Labs 以及 新加坡国立大学 、北京大学、北京邮电大学等顶尖学术与产业团队的研究人员提出首个将领域知识与大模型多 Agent 协同深度融合的自动化测试框架 &mdash;&mdash; Agora 。 该框架通过创新的架构，直击协议痛点，在 Raft、EPaxos、HotStuff、BullShark 等工业级和学术界核心协议中， 一口气狂砍 15 个前所未知的协议级 Deep Bug！ 相比之下，强如 GPT-5.2、Claude 4.5 等原生大模型纷纷折戟，挂了零蛋。在多智能体（Multi-Agent）系统与&rdquo; 智能体化安全审计&rdquo;（Agentic Quality Control）双双成为 2026 年最热赛道的当下，Agora 给出的不只是一篇论文，更是一套可落地的工业级解法。 论文：《Agora: Toward Autonomous Bug Detection in Production-Level Consensus Protocols with LLM Agents》 链接：https://arxiv.org/abs/2605.29910v1 1. 背景 &nbsp;0G 与 NUS 强强联手，长期系统知识积累与 Multi-Agent 范式的跨界跨代融合 分布式共识协议的演进，既是天才的创新史，又是无数顶尖工程师血淋淋的踩坑史。正如图灵奖得主 Lampor",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/5fdcd3ba-62e5-422e-bc61-1567dcbafc23",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/5fdcd3ba-62e5-422e-bc61-1567dcbafc23/0__99_.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "谷歌开源26B文本扩散MoE，劈柴：生成速度像赛马一样快",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-5",
+      "published": "2026-06-11T06:22:00+00:00",
+      "published_ts": 1781158920,
+      "summary": "今天一早，谷歌又发新模型了！ Gemmna 家族有了新成员 &mdash;&mdash; DiffusionGemma，一个探索文本扩散的实验性开源模型，在文本生成任务上速度极快 。 根据官方介绍，DiffusionGemma 采用了 Apache 2.0 许可证发布，是一个 26B 规模的混合专家模型（MoE）。 该模型没有沿用典型自回归大语言模型（LLM）那种按顺序、逐 token 生成的方式，而是可以同时生成整块文本，在 GPU 上，文本生成速度最高可提升至 4 倍。 DiffusionGemma 建立在 Gemma 4 家族业界领先的「每参数智能水平」之上，同时吸收了 Gemini Diffusion 的前沿研究成果。它引入了一种全新的扩散式输出头，目标很明确：尽可能提高生成速度。 需要说明的是，自回归版本的 Gemma 4 仍然是高质量生产级输出的首选。而 DiffusionGemma 更适合研究人员和开发者探索那些对速度要求极高、强调本地交互体验的工作流 ，比如行内编辑、快速迭代，以及生成非线性的文本结构。 谷歌 CEO 皮查伊表示，「DiffusionGemma 是一款开放的实验性模型，它把我们的文本扩散研究带到了 Gemma 4 上。速度像赛马一样快 🏇：通过一次性生成整块文本，而不是逐 token 预测输出，推理速度最高可以提升至 4 倍。」 为开发者创造新的价值 对实时交互式 AI 应用开发者来说，本地推理最大的痛点之一就是延迟。DiffusionGemma 正是针对这个问题而来，但也做出了一些取舍。 首先是 推理速度非常快 。 DiffusionGemma 将解码瓶颈从内存带宽转向计算本身，因此在专用 GPU 上，token 输出速度最高可提升至 4 倍。在单张 NVIDIA H100 上，它可以达到每秒 1000+ tokens；在 NVIDIA G",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/a22d362a-697a-4be0-8fd5-a3e1e13ecf52",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/a22d362a-697a-4be0-8fd5-a3e1e13ecf52/0__98_.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "ACL 2026 Oral｜语义推理如鲠在喉：大模型被「短语」难住了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-11-2",
+      "published": "2026-06-11T06:14:00+00:00",
+      "published_ts": 1781158440,
+      "summary": "研究发表于 ACL 2026 主会，并获选为 Oral 论文，核心作者为北京通用人工智能研究院的研究者刘洋和北京科技大学的本科生李鸿铭，指导老师为北京科技大学外国语学院教授秦晓惠以及计算机与通信工程学院副教授刘乾坤和黄超。 论文标题：Revisiting a Pain in the Neck: A Semantic Reasoning Benchmark for Language Models 项目主页：https://semanticqa.github.io 论文链接：https://arxiv.org/pdf/2604.16593 评测实现：https://github.com/jacklanda/SemanticQA 引言：当语言理解成为假象 AI 的能力边界正在不断被刷新。从数学推理到代码生成，再到数字化白领，语言模型和语言智能体在诸多基准测试中已展现出超越人类专家的表现。一个看似顺理成章的判断早已成为共识：语言模型已经具备了扎实的语言理解和语义推理能力。然而， ACL 2026 Oral 的一项研究工作从一个更基础的层面重新审视了这个问题： 语言模型真的理解（短语）语义吗？ 问题的起点，是一类经典的语言现象。 「Kick the Bucket」不是「踢桶」，「Rocket Science」并非「火箭科学」，「Alarm Clock Rings」也远不止字面意义上的「闹铃」 。这类多词表达（Multiword Expressions，简称为 MWE）在自然语言中无处不在，它们的含义往往无法从各个组成词语中直接推导，需要结合语境、惯例乃至世界知识才能准确理解。长期以来，这被视为自然语言处理的经典难题，如鲠在喉（ A Pain in the Neck for NLP ）[1] 。 时至今日，这道难题依旧摆在了前沿模型面前。 来自北京通用人工智能研究院与北京科技大学的研究",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/497e9443-991b-4746-a3d1-ff035bff9cd3",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/497e9443-991b-4746-a3d1-ff035bff9cd3/0_-_2026-06-11T102235.300.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    }
+  ]
+}

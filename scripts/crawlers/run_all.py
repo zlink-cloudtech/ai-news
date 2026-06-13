@@ -22,13 +22,16 @@ from _utils import get_logger
 
 LOG = get_logger("crawl_all")
 
-# 首期 7 源，按"默认/网络受限/可选"分类
+# 首期 8 源（5 英文 + 3 中文），按"默认/网络受限/可选"分类
 DEFAULT_SOURCES = [
     "crawl_openai",
     "crawl_deepmind",
     "crawl_langchain",
     "crawl_replicate",
     "crawl_runway",
+    "crawl_36kr",
+    "crawl_qbitai",
+    "crawl_jiqizhixin",
 ]
 
 # 网络受限：本机 DNS 污染 / 代理拦截；部署到正确网络时启用

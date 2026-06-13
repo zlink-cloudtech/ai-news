@@ -1,0 +1,311 @@
+{
+  "source": "jiqizhixin",
+  "date": "2026-06-12",
+  "saved_at": "2026-06-13T20:47:47+08:00",
+  "count": 14,
+  "meta": {
+    "graphql": "https://www.jiqizhixin.com/graphql",
+    "window": [
+      "2026-06-12T00:00:00+08:00",
+      "2026-06-12T23:59:59.999999+08:00"
+    ],
+    "list_total": 30,
+    "detail_fetched": 14
+  },
+  "items": [
+    {
+      "title": "2026智源大会：一场技术硬核的AI年度盛会",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-14",
+      "published": "2026-06-12T15:13:00+00:00",
+      "published_ts": 1781277180,
+      "summary": "2024 年，AI 证明了自己能完成单项任务；2025 年，AI 学会了跑通完整工作流；2026 年，AI 正在叩响 &ldquo;触达实体世界&rdquo; 的大门。 当人工智能迎来从 &ldquo;Next-Token Prediction（预测下一个词元）&rdquo; 到 &ldquo;Next Physical State Prediction（预测下一个物理状态）&rdquo; 的范式革命，当 AI 从单纯的 &ldquo;推理&rdquo; 向具备编排能力的 &ldquo;智能体 AI&rdquo; 和触达实体世界的 &ldquo;物理 AI&rdquo; 全面进化，全球 AI 创新的风向标再次指向北京。6 月 12 日，第八届北京智源大会在北京中关村国际创新中心启幕，以 &ldquo;技术前沿、国际视野、青年人才&rdquo; 为底色，汇聚两位图灵奖得主、40 余位 AI 企业 CEO 与首席科学家、200 余位顶尖专家学者，以及 30 余位 30 岁以下青年科学家，中国 AI 产业世界模型与 Agent 领域最具代表性的创新力量首次集中同台，围绕世界模型、通用智能体、具身智能三大核心方向，正式划定下一代人工智能从数字世界迈向物理世界的演进路线。 作为中国 AI 领域公认的 &ldquo;内行学术盛会&rdquo;，智源大会自创办以来，已累计汇聚 14 位图灵奖得主、过千位产学研顶尖专家，吸引全球 30 多个国家和地区超千万人次专业人士参与。今年，大会带来 25 场论坛、200 + 场重磅演讲，不仅首次实现中国 AI 产业世界模型与 Agent 领域最具代表性创新力量的集中同台，更推出 &ldquo;智能体听会&rdquo; 的全新参会体验，让全球观众直观感受 AI 落地真实场景的前沿成果。 全球顶配阵容集结 &nbsp;图灵奖得主解码下一代 AI 核心命题",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff/0_-_2026-06-12T230416.581.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "Claude Fable 5最难档零分！智能体的最后考试来了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-13",
+      "published": "2026-06-12T15:09:00+00:00",
+      "published_ts": 1781276940,
+      "summary": "这几天，Anthropic 的最新模型 Claude Fable 5 发布之后，在 AI 圈激起了不小的震动。 今天一早，大模型评测平台 Arena 放出了智能体基准测试（Agent Arena）的成绩：Fable 5（High）排名第一，OpenAI 的 GPT-5.5（xHigh）屈居第二。另外，在「确认成功率」和「可引导性」等两项指标上，Fable 5（High）也稳压 GPT-5.5（xHigh）。 从 Agent Arena 的跑分来看，Fable 5 的性能强悍可见一斑。该基准通过数百万个真实世界的长周期智能体任务来评估模型，需要调用网页搜索、文件系统、终端等工具，完成写代码、制作幻灯片、网页研究、构建应用以及分析文档等复杂工作流。&nbsp; 但与此同时，在另一个智能体基准测试中，Fable 5 败给了一个多月前发布的 GPT-5.5。 它是加州大学伯克利分校宋晓东（Dawn Song）教授团队开发的 ALE，全称为 Agents&#39; Last Exam（智能体的最后考试），用来衡量 AI 智能体是否真的能够在广泛的真实世界领域中完成具有经济价值的工作。 &nbsp; ALE 测试涵盖 55 个非体力职业，包含 1500 + 项任务，由来自 100 + 机构的 300+ 位专家贡献，覆盖科学、工程、医学、法律、金融、教育等多个领域。另外，该基准提供完整的 GUI + CLI 环境，并基于最终结果进行可验证评估。 在 ALE 中，团队 评测了 Fable 5、GPT-5.5、Composer 2.5 以及其他前沿 Agent 系统 。结果既令人印象深刻，也足够让人冷静： 现在的 Agent 已经能够解决相当一部分专业任务，但当我们看向最难的那一类任务，也就是那些需要持续推理、深厚领域知识，以及长周期可靠执行的任务时，它们距离人类水平仍然很远。「有用的 Ag",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/7e528d48-7c08-466e-945b-efdf056ce31f",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/7e528d48-7c08-466e-945b-efdf056ce31f/0_-_2026-06-12T230412.288.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "入围CVPR 2026最佳论文决选，ViT³用「测试时训练」突破Transformer复杂度瓶颈",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-12",
+      "published": "2026-06-12T09:26:00+00:00",
+      "published_ts": 1781256360,
+      "summary": "编辑｜+0 CVPR 2026 刚在美国丹佛落下帷幕。16092 篇投稿中，15 篇杀入最佳论文决选（Best Paper Finalists），入围率不足千分之一。 其中一篇来自阿里巴巴与清华大学的合作研究：《 ViT&sup3; : Unlocking Test-Time Training in Vision 》。 它要解决的，是当前视觉模型领域最普遍的一类痛点：当图像分辨率越来越高、视频越来越长、多模态输入越来越复杂时，Transformer 逐渐算不动了。 ViT&sup3; 给出了一条不同的路线。 在 RTX 3090 上处理 1248 &times; 1248 分辨率图像时，ViT&sup3;-T 的推理速度达到 DeiT-T 的 4.6 倍，GPU 显存消耗降低了 90.3%。 换句话说，它只使用接近十分之一的显存，却实现了更高的处理速度。 但这篇论文的意义，并不只是让视觉模型跑得更快。 它真正尝试改变的，是视觉模型保存和调用上下文信息的方式：不再单纯依赖固定公式压缩信息，而是在处理当前输入时，通过一次快速的在线学习，把上下文写入一个紧凑的内部模型。 这条路线建立在近年来受到关注的 Test-Time Training（TTT，测试时训练）框架之上，而 ViT&sup3; 则进一步将其系统引入视觉领域，并梳理出一套可复用的设计原则。 论文地址：https://arxiv.org/pdf/2512.01643 代码： https://github.com/LeapLabTHU/ViTTT 阿里巴巴长期关注多模态大模型与新一代交互体验。随着 AI 逐渐进入真实生活场景，模型需要处理的视觉信息正在变得越来越复杂：更高清的图片、更长的视频，以及持续增长的多模态上下文。 如何在控制算力成本的同时，让模型看得更清楚、理解得更完整，已经成为多模态技术走向实际应用时必须面对的",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/93e6cda8-97ce-4e69-9a72-945c5dc6d1e9",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/93e6cda8-97ce-4e69-9a72-945c5dc6d1e9/0_-_2026-06-12T170942.148.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "5秒攻破，仅需1次对话：Fable 5最强安全机制被华人团队破解",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-11",
+      "published": "2026-06-12T09:22:00+00:00",
+      "published_ts": 1781256120,
+      "summary": "不是提示注入，不是角色扮演，也不是把恶意请求伪装成正常问题。这一次，风险出现在智能体自主完成任务的过程中。 Fable 5 是 Anthropic 面向公众开放的 Mythos 级模型，不仅具备极强的综合能力，还在模型外围引入了新一代安全分类器（Safety Classifier）作为安全防线。按照官方设计，当用户请求涉及网络安全、生物、化学、模型蒸馏等高风险领域时，系统会优先进行风险识别，并根据风险等级直接拒绝请求，或切换至更加保守的 Opus 4.8 模型处理。 大量用户测试发现，过去广泛采用的对抗提示、角色扮演、编码绕行以及隐晦表达等越狱攻击技术，在该安全机制面前几乎全部失效，显示出其在意图级风险拦截方面的强大能力。 然而，就在 Fable 5 发布当天，一个由复旦大学、迪肯大学、香港城市大学、墨尔本大学、新加坡管理大学以及伊利诺伊大学厄巴纳-香槟分校等机构组成的国际联合研究团队宣布，他们已成功突破 Fable 5 的安全防护机制。该攻击方法由迪肯大学博士生 Yutao Wu 主导设计。 整套攻击仅需一次对话、耗时不到5秒，即可绕过前置安全分类器，诱导模型生成违规有害内容。 流量分析结果进一步表明，相关有害输出直接来自 Fable 5 本身，而非触发安全机制后自动切换的 Opus 4.8 模型。这意味着，该攻击不仅成功绕过了安全分类器的检测，也实质性突破了 Fable 5 的安全防线。 值得一提的是，知名黑客 Pliny the Liberator 近期也公开了针对 Fable 5 安全分类器的绕过。而复旦 &amp; 迪肯团队此次所采用的技术路线并不是简答的组合式探索，而是发现了 Fable 5 这一类超级智能体系统的根本性缺陷。据悉，团队早在今年 3 月便已完成预研并公开发布。该研究并非针对 Fable 5 单一系统设计，而是面向新一代超级智能体普遍采用的&ldq",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/26aff1f8-5d14-49f0-a43f-7375ac3ae8bf",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/26aff1f8-5d14-49f0-a43f-7375ac3ae8bf/0_-_2026-06-12T170934.676.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "RSS 2026 | 别再让机器人看错重点，GuidedVLA给动作解码器装上可控可解释的注意力专家",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-10",
+      "published": "2026-06-12T09:17:00+00:00",
+      "published_ts": 1781255820,
+      "summary": "具身智能要想真正走进复杂真实场景，VLA（Vision-Language-Action，视觉 - 语言 - 动作）模型只会「看图听话再出动作」还不够。更关键的问题是：当机器人伸手之前，它到底看向了哪里？ 如果模型真的盯住了目标物，理解了当前操作阶段，也掌握了空间几何，动作自然更稳。但在很多端到端训练的 VLA 中，动作解码器仍然像一个黑箱。它可能在关注杯子，也可能在关注背景纹理、相机伪影、光照变化，甚至只是记住了训练场景里的摆放习惯。 一换场景，就容易「看错重点」。 针对这一问题，复旦大学可信具身智能研究院、上海交通大学、香港大学 OpenDriveLab 等机构提出了 GuidedVLA。它的核心思路非常直接：不要再让动作解码器自己在黑箱里「悟」该看什么，而是显式指定不同 attention head 的职责，让它们分别学习物体定位、空间几何和任务阶段。 说白了，GuidedVLA 给 VLA 的动作解码器写了一张「注意力分工表」。 这让机器人动作生成不只是更强，也变得更可控、更可解释：哪个头看物体，哪个头看深度，哪个头判断任务走到哪一步，都有明确分工。 目前，该工作已被 RSS 2026 接收，代码、模型和数据集均已开源。 论文标题：GuidedVLA: Specifying Task-Relevant Factors via Plug-and-Play Action Attention Specialization 论文链接：https://arxiv.org/abs/2605.12369 项目主页：https://guidedvla.github.io/project_page/ GuidedVLA 真机与仿真演示：研究团队把可控、可解释的注意力头专门化机制接入 &pi;0 基座，在多类操作任务中验证了其泛化能力。 01 机器人失败时，它到底看错了什么？ 当前 VL",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/75d14bfb-6924-46f5-926a-5bf1a4ba7a28",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/75d14bfb-6924-46f5-926a-5bf1a4ba7a28/0_-_2026-06-12T170926.077.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "2026北京智源大会开幕 | 从“悟道”到“悟界”，智源研究院推动人工智能、物理世界和生命科学“三体互动”",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-9",
+      "published": "2026-06-12T08:45:00+00:00",
+      "published_ts": 1781253900,
+      "summary": "2026 年 6 月 12 日，第八届 &ldquo;北京智源大会&rdquo; 在中关村国际创新中心开幕。 北京智源大会是智源研究院主办的 &ldquo;AI 内行学术盛会&rdquo;，以 &ldquo;技术前沿、国际视野、青年人才&rdquo; 为特色，汇聚海内外研究者分享研究成果、探寻前沿知识、交流实践经验。本届大会，现代数字安全体系奠基者 Whitfield Diffie 线下参会，聚焦 Agent 时代的安全与可信挑战；强化学习奠基人 Andrew Barto 追问 &ldquo;交互驱动智能&rdquo; 对于下一代 AI 系统的意义。30 余位 30 岁以下青年科学家，40 余位 AI 企业 CEO、创始人与首席科学家，200 余位顶尖专家学者将齐聚北京，中国 AI 产业世界模型与 Agent 领域最具代表性的创新力量首次集中同台。20 余家全球顶尖科技企业及高校科研机构，包括 Meta、英伟达、哈佛、MIT 等，将与阿里、腾讯、小米、生数科技、面壁智能、清华、北大、人大等中国 AI 行业最核心的创新力量同场交流。同时，大会还汇聚数百位全球 AI 领域学术中坚力量，一同围绕世界模型、通用智能体、具身智能、AI 安全、AI Native 教育、Token 经济与 OPC、智能计算底层架构等前沿方向展开精彩演讲和前瞻性对话。 开幕式由智源研究院理事长黄铁军主持。 智源研究院院长王仲远做 2026 年研究进展报告，发布智源研究院在基座大模型、智能体、基础软硬件生态等前沿技术领域的探索成果和开源生态建设的最新动态。 自 2018 年成立以来，智源研究院先后发布了 &ldquo;悟道&rdquo; 系列大模型和 &ldquo;悟界&rdquo; 系列大模型，构建了自底向上的全栈大模型开源技术体系。无论是在大模型发展的早期，还是在物理 AI 的全新时期，智源研究院始终在",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/5894b73e-10fd-4b72-a475-3fd270d1561c",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/5894b73e-10fd-4b72-a475-3fd270d1561c/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20260612164509_2874_32.png",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "埃夫特亮相全省推进会：以通用技术底座承载机器人产业进阶",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-8",
+      "published": "2026-06-12T07:02:00+00:00",
+      "published_ts": 1781247720,
+      "summary": "6月11日，安徽省机器人和具身智能产业高质量发展推进会在芜湖拉开序幕。作为安徽省机器人行业协会会长单位、机器人产业链链主企业，埃夫特深度参与此次大会。本次会议是安徽省布局机器人未来产业的核心高规格会议，汇聚院士专家、高校院所、300余家行业龙头企业及金融机构代表，共商产业跃迁路径。大会选址芜湖，既是对当地十余年深耕机器人产业、建成&ldquo;核心零部件 - 整机 - 系统集成 - 应用场景&rdquo;全链条产业集群的充分肯定。 行业洞见：破解瓶颈，重塑范式 此次会议，埃夫特董事长兼总经理游玮博士受邀分享了关于机器人创新发展的演讲，他直指行业核心痛点：&ldquo; 当前具身智能&lsquo;大脑&rsquo;能力进展缓慢，本质是高质量数据获取与跨构型迁移、高效低门槛自主可控技能开发平台两大痛点待解。&rdquo; 游玮博士提出， &ldquo;实干技能的本源要蒸馏人类的&lsquo;言&rsquo;与&lsquo;行&rsquo;，以真人直采全模态数据破解硬件耦合难题，打造机器人界的&lsquo;安卓&rsquo;底座。&rdquo; 其重点介绍的智能机器人通用技术底座项目，已获批本轮次国家科技重大专项单体最大支持，成为行业技术攻关的核心标杆。 新品发布：源头筑牢安全，多模态蒸馏技能 与此同时，本次大会埃夫特正式发布两款重磅新品： 全新升级的EXR系列原厂防爆机器人，摒弃行业常见的防爆改装方案，从源头消除点火源，全系搭载机械多圈无电池编码器，通过气体防爆核心（Ex db ib pxb IIC T6 Gb）与粉尘防爆核心（Ex ib pxb tb IIIC T80&deg;C Db）双重最高等级认证，适配易燃易爆全场景，为高危行业安全生产筑牢防线； HALO人类全模态数据采集服，遵循&ldquo;以人为中心的4D世界理解&rdquo;范式，同步采集动作、视觉、力觉、语音等",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/5c4eaf46-75d7-4200-9b9c-9d4aeb0e1b75",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/5c4eaf46-75d7-4200-9b9c-9d4aeb0e1b75/1__1_.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "华为云，换一种打法",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-7",
+      "published": "2026-06-12T05:36:00+00:00",
+      "published_ts": 1781242560,
+      "summary": "编辑｜吴昕 这一年多来，Agent「外挂」几乎快把打工人 「 爽 」 上天。 只需一句话，它就能秒级吐出数万字深度报告，甚至直接交付一款软件。把孩子照片剪成 Vlog 发给老公，或者替你操控浏览器订机票、填表单，也不在话下。 如今，这种「起飞」的丝滑体感正在反向挤压底层云服务，掀起一场「土地 」风暴。 「 4 年前做 AI 要买算力卡，3 年前要卷大模型，而今天，做 AI 就是开发和用好智能体。」在 6 月 5 日的 INSPIRE 创想者大会上，华为公司董事、华为云 CEO 周跃峰用一句话点破了行业拐点，并将一个新概念推向台前&mdash;&mdash;硅基黑土地。 &nbsp; &nbsp; &nbsp; 华为公司董事、华为云CEO周跃峰 过去，云服务被称为「算力黑土地」。企业要种 AI，先得有地、有水、有电，也就是算力、存储、网络和数据库。但 Agent 时代，它必须变成适合「种植」智能体的「硅基黑土地。」 也是在这一天，华为云一口气砸下四大层面、十余款 Agentic AI 新品。 从「算力」到「硅基」，两字之变，背后是大厂解题思路的重要转向：不再倒卖散装算力，而是重新定义 Agent 时代智能体生长和进化的底层土壤。 先把 Agentic Infra 这层土壤变厚 当一批数字「劳动力」进入企业流程，一次看似简单的任务，背后可能是几十次模型调用、多个工具链切换、一串沙箱环境启动、长时间上下文保存，以及 CPU、NPU、存储、网络之间连续不断的资源调度。 这时候，仅仅死磕模型参数、 GPU 数量，远远不够。谁能把 Token 效率、记忆、调度、安全这些底层能力做得扎实，才有可能让上面的 Agent 真正长出来。 这正是华为云提出「硅基黑土地」的原因。 在这次 INSPIRE 创想者大会上，华为云正式提出 Agentic Infra 新范式： 高效&nbsp; Toke",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/ec4d75e1-cc98-42b2-a7c7-4124bad26eb0",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/ec4d75e1-cc98-42b2-a7c7-4124bad26eb0/0_-_2026-06-12T131940.065.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "ICML 2026 观点论文 | Transformer 能解决任意可计算问题？人大团队指出上限取决于上下文管理",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-6",
+      "published": "2026-06-12T05:32:00+00:00",
+      "published_ts": 1781242320,
+      "summary": "随着大语言模型能力不断演进，很多研究宣称证明 Transformer 具有解决任意可计算问题的能力。但这篇 ICML 2026 观点论文想先追问一个更基础的问题：这些研究里的 Transformer，是一个固定部署的模型，还是一族会随输入变长而变大的模型？在固定部署的模型里， 系统的能力上限事实上取决于一个常被当成工程细节的部分：上下文管理（context management） 。 过去一段时间，基于 Transformer 的大语言模型的能力飞速进化，再加上一系列宣称证明&ldquo;Transformer 是图灵完备的&rdquo;或者&ldquo;Transformer 能模拟图灵机&rdquo;的研究， &ldquo;只要中间推理步骤足够多，Transformer 的计算能力就没有上限&rdquo; 这一说法在 AI 社区的讨论中被进一步放大。 &nbsp; &nbsp; &nbsp; 近年宣称 Transformer 图灵完备或者能模拟图灵机的部分报道 &nbsp; &nbsp; &nbsp; 近年宣称 Transformer 图灵完备或者能模拟图灵机的研究时间线 这个结论读起来很吸引人，仿佛我们天天用的大语言模型已经无所不能。但仔细检查这些文章会发现，&ldquo;Transformer&rdquo;一词其实并不总是指同一个对象。它可以指你此刻正在使用的 GPT、Claude、DeepSeek 这类模型，也就是那些 上下文窗口长度固定、权重固定、数值精度固定 的大语言模型；也可以指一个 随输入长度增加而不断变大 的理论模型族。 这个区别正是中国人民大学高瓴人工智能学院魏哲巍教授团队的一篇 ICML 2026 观点论文想要厘清的问题。 论文标题：Position: The Turing-Completeness of Autoregressive Transfo",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/857c8861-61f2-4fc4-b451-4d120349e3d0",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/857c8861-61f2-4fc4-b451-4d120349e3d0/0_-_2026-06-12T131931.727.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "机器人等不来一个「ChatGPT」时刻：可能不会有机器人领域单一的突破革命",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-5",
+      "published": "2026-06-12T04:50:00+00:00",
+      "published_ts": 1781239800,
+      "summary": "编辑丨% 在接下来的几十年里，数十亿台由 AI 驱动的自主机器人将与人类并肩工作：它们会在工厂里干活，在仓库里做枯燥的任务，照护老人，进入危险的灾区，递送包裹和餐食，最终也会在家里帮我们分担工作。 这些机器人部分形似人类，但更多更具特色。不论外形如何，它们都将高度依赖 AI，才能在现实世界里创造真正的价值。这篇发表在 IEEE Spectrum 的文章认为，AI 机器人将迎来一个关键拐点，但这不会来自某个单一的「ChatGPT 式」突破，而会来自一整套协同工作的 AI 工具与系统。 文章指出，2025 年机器人公司总投资达到创纪录的 407 亿美元，约占全部风险投资的 9%。在这样的背景下，真正的问题就变成了：AI 机器人究竟要怎样才能开始产生足够大的经济影响？今天许多机器人公司都在做出大胆承诺，比如说人形机器人很快就会进入家庭，但承诺与现实之间仍然有很大鸿沟。 让机器人与我们一起生活、工作的愿景已然流行了很久，许多程序员也一直试图把这个愿景变成现实，但物理世界实在太复杂，传统程序根本无法处理它所呈现出的无穷细节。正因为有了 AI，机器人不再只是被「编程」，它们开始通过学习来适应真实世界。 该文章的两位作者分别来自机器人学与 AI 机器人产业的一线：一位是俄勒冈州立大学机器人学教授，同时也是 Agility Robotics 的联合创始人和首席机器人官；另一位曾在 Google X 担任 Everyday Robots 项目的副总裁，主导过相关 moonshot 项目。 基于他们在真实场景中部署 AI 机器人的经验，作者认为：AI 在复杂机器人系统中的确会带来巨大收益，但真正推动机器人进步的，不会是某个单点的「顿悟时刻」，而是多种 AI 工具组合起来、经过精心工程化后的系统能力。 他们接着提出，围绕 AI 机器人有五个「硬道理」。 YouTube 演示与现实世界之间的鸿沟是",
+      "author": "ScienceAI",
+      "tags": [
+        "jiqizhixin",
+        "入门"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/935c1d0e-72b1-4c69-aba4-a0376a7f54d2",
+        "category": "入门",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/935c1d0e-72b1-4c69-aba4-a0376a7f54d2/iShot_2026-06-12_12.49.03.png",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "给造火箭的做饭也能一夜暴富，马斯克SpaceX创史上最大IPO",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-4",
+      "published": "2026-06-12T03:39:00+00:00",
+      "published_ts": 1781235540,
+      "summary": "纽约不愧是大城市啊（笑）。 时代广场上一个长相怪异的气球冉冉升起。定睛一看这不马斯克吗？ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 图源 小红书 @大华超级市场 这似乎是在时代广场对马斯克的抗议，抗议者反对马斯克 Grok 生成涉儿童色情内容，为此升起了一个极其吸睛的丑气球。 抗议者特意选择了 SpaceX 上市 IPO 价格公布的时候，讽刺的是，这反而为 SpaceX 的 IPO 吸引了更多的关注度。 6 月 11 日， SpaceX 正式宣布其 IPO 定价为每股 135 美元 ，发行约 5.56 亿股， 总募资额达到 750 亿美元 。 这意味着公司上市即获得 1.77 万亿美元 的估值，超越 Meta、伯克希尔・哈撒韦和摩根大通，直接跻身美国上市公司市值第七名。 股票将于周五在纳斯达克开始交易，代码为 SPCX 。 文档链接：https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX_PricingAnnouncement.pdf SpaceX 此次 IPO 打破了 2019 年沙特阿美创下的 256 亿美元（经通胀调整后为 332 亿美元）全球纪录。无论是募资规模还是上市估值，SpaceX 都刷新了人类资本市场的天花板。 一张气泡图，展示了美国规模最大的几家 IPO 公司上市时的相对规模及其盈利情况。 值得注意的是，SpaceX 这轮 IPO 的操作方式也相当「马斯克」。 定价在路演之前就已确定，打破了华尔街几十年的惯例。而且 30% 的份额专门留给了散户投资者，这在大型 IPO 中极为罕见。 根据 SpaceX 的披露文件，马斯克持",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/2269eeba-97eb-400f-becc-effcc5392da8",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/2269eeba-97eb-400f-becc-effcc5392da8/0_-_2026-06-12T112432.769.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "Anthropic警告的递归AI，田渊栋新公司刚刚走出了「第一步」",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-3",
+      "published": "2026-06-12T03:36:00+00:00",
+      "published_ts": 1781235360,
+      "summary": "编辑｜Panda 前些天，Anthropic 发布了一篇题为「 When AI Builds Itself 」（当 AI 构建自身）的文章，迅速引发广泛讨论。文章揭示了一组令人侧目的内部数据：截至 2026 年 5 月，Anthropic 代码库中超过 80%的代码已由 Claude 撰写，工程师每日合并的代码量是 2024 年的 8 倍；在一项内部测试中，Claude 将一段训练代码的运行速度从基准提升了约 52 倍，而一名有经验的人类研究员通常需要 4 到 8 小时才能达到 4 倍加速。 Anthropic 将这条轨迹指向一个更深的目的地：「 递归自我改进 」&mdash;&mdash;AI 系统自主设计、构建和训练自身后继版本，人类不再驱动每一步。值得关注的是，该公司还呼吁行业协调，在递归自我改进时刻到来时拥有暂缓乃至临时叫停前沿 AI 开发的选项。并且 Anthropic 已经在这么做了： 限制最新的 Claude Fable 5 被用于研发前沿 AI 。 而现在，Recursive Superintelligence 宣布 向自动化 AI 研究走出了第一步 。 这家由田渊栋联合创立的新公司刚刚结束隐身状态仅一个月，如今就发布了第一项公开技术成果。他们打造了一个开放式的自动化知识发现系统，并在三个基准测试上取得了 SOTA 结果。简单来说，他们成功做到了让 AI 替你跑实验。 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; https://x.com/tydsh/status/2065062838255649082 第一步成果：让 AI 替你跑实验 Recursive 这第一项公开技术成果名为 「First Steps Toward Automated AI Research」（迈向自动化 AI 研究的",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/3865d1fb-646e-455a-99b4-1234eb700ce6",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/3865d1fb-646e-455a-99b4-1234eb700ce6/0_-_2026-06-12T112424.690.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "CVPR 2026 | 视觉脑机迈向双向交互！神经流模型 NeuroFlow 打通视觉与神经的双向通道",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12-2",
+      "published": "2026-06-12T03:28:00+00:00",
+      "published_ts": 1781234880,
+      "summary": "视觉脑机接口的终极目标，是建立大脑神经皮层与外部视觉感知的双向交互通道，从&ldquo; 单向理解 &rdquo;走向&ldquo; 双向交互 &rdquo;，既能从大脑神经活动中重建出视觉信息（读脑），也能把视觉信息自然写入神经皮层（写脑），同时保证&ldquo;读脑&rdquo;与&ldquo;写脑&rdquo;过程的可交互性与双向一致性。 来自上海人工智能实验室、香港大学、香港中文大学等机构的研究团队，提出 首个基于统一神经流模型的视觉-神经双向建模框架NeuroFlow ，相关成果入选&nbsp; CVPR 2026。 它首次将视觉编码（写脑）与解码（读脑）整合到同一可逆流结构中，打通视觉感知与神经活动之间的双向通路，为理解人类视觉认知机制、构建下一代 通用视觉假体 与 双向脑机接口 提供了全新范式。 论文标题：NeuroFlow: Toward Unified Visual Encoding and Decoding from Neural Activity 论文地址：https://arxiv.org/abs/2604.09817 主页地址：https://michaelmaiii.github.io/NeuroFlow-S 本文第一作者为香港大学PhD麦伟健，相关研究工作于上海人工智能实验室科研实习期间完成；共同通讯作者分别为伍佳敏，Andrew F. Luo 和宋纯锋。该工作已经被 CVPR 2026 会议接收。 视觉神经建模困境：从&ldquo;割裂单向&rdquo;到&ldquo;统一双向&rdquo;的范式转变需求 在人类视觉感知系统中，外界视觉刺激可 激活大脑产生神经响应（编码） ，同时大脑神经响应能够用于 重建相应的感知内容（解码） ，二者形成互补的信息处理通路。但长期以来，视觉神经建模面临难以突破的瓶颈： 1） 编码与解码长期割裂： 两类任务被视",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/8ab88f3e-379e-4b28-866b-1b14fc17de14",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/8ab88f3e-379e-4b28-866b-1b14fc17de14/0_-_2026-06-12T112416.397.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    },
+    {
+      "title": "高考志愿Agent发布后，对话千问总裁吴嘉：如何「抹平」信息差，走进「真实人生决策」？",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-12",
+      "published": "2026-06-12T02:17:00+00:00",
+      "published_ts": 1781230620,
+      "summary": "编辑｜Youli 6 月 10 日下午，今年的全国高考到这里就要正式结束了，但考验还在继续。 在踏出考场的那一刻，考生和家长就要面临着，在有限时间里，面对近 3000 所高校、2000 多个专业，不同省份、批次、选科要求下的复杂规则，以及考生个人喜好、就业规划等众多因素组合而成的超上亿种理论组合中，做出「抉择」，这并非易事。 对于学生和千万家庭来说，这是一场庞大的「信息战」，更是一场关于未来方向的「决策大考」。当然，市面上不乏志愿填报咨询服务，但动辄数千元的高昂费用，注定不是每个家庭都能承担，无形中更是放大了城乡、地域之间的信息鸿沟。 那么，在 AI Agent 重构一切的当下，在高考志愿填报这一场景，Agent 是不是也可以做点什么？ 6月10日，千问上线国内首个全周期高考志愿填报 Agent，并宣布免费向全国考生开放，提供志愿填报和咨询服务。 资料显示，这一志愿填报 Agent 是基于千问高考志愿大模型和夸克 8 年高考数据经验打造，具备「志愿报告」「志愿日历」「志愿问答」三项核心能力，从头到尾跟进考生的高考志愿填报全流程，相当于为每位考生配备了一位贴身的 AI 高考志愿填报专家。 而在这背后有着众多值得追问的问题：当 AI 从聊天框走向人生决策场景，它到底能做什么？是否能真正抹平志愿填报中的信息差？在这样一个高风险场景里，AI 又该如何保证准确、可靠、可信和 克制？ 带着这些问题，在发布会后，机器之心第一时间和 阿里巴巴集团副总裁、千问事业部总裁吴嘉 聊了聊。 以下为吴嘉和媒体交流实录，在不改变原意的情况下，部分内容略有删减： 提问：从夸克到今天的千问高考志愿填报 Agent，阿里做高考服务已有 8 年，初心是什么？ 吴嘉： 8 年前我们做这件事是希望夸克能成为年轻人的「智能助理」，进入 AI 时代，千问的使命更加直接：不仅是一个 ChatBot、工具角色，更希望是一",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/3b6746f3-5eda-4e67-be92-a5c7a276e7e0",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/3b6746f3-5eda-4e67-be92-a5c7a276e7e0/0_-_2026-06-12T101206.663.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-13T20:47:22+08:00"
+    }
+  ]
+}

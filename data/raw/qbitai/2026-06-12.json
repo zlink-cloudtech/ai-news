@@ -1,0 +1,142 @@
+{
+  "source": "qbitai",
+  "date": "2026-06-12",
+  "saved_at": "2026-06-13T20:47:21+08:00",
+  "count": 7,
+  "meta": {
+    "feed": "https://www.qbitai.com/feed",
+    "window": [
+      "2026-06-12T00:00:00+08:00",
+      "2026-06-12T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "神了，世界杯第一天真按千问剧本踢了",
+      "url": "https://www.qbitai.com/2026/06/435321.html",
+      "published": "2026-06-12T16:45:23+00:00",
+      "published_ts": 1781282723,
+      "summary": "比分、红牌、绝杀全押中",
+      "author": "梦瑶",
+      "tags": [
+        "资讯",
+        "千问"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435321.md",
+        "article_chars": 2781
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    },
+    {
+      "title": "千里收购了一家毫米波雷达公司",
+      "url": "https://www.qbitai.com/2026/06/435196.html",
+      "published": "2026-06-12T09:13:14+00:00",
+      "published_ts": 1781255594,
+      "summary": "布局全栈闭环",
+      "author": "杰西卡",
+      "tags": [
+        "智能车参考",
+        "千里科技",
+        "车圈最新认知"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435196.md",
+        "article_chars": 3037
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    },
+    {
+      "title": "耐心资本护航创新，2026SuperLink开启创投价值共生新时代",
+      "url": "https://www.qbitai.com/2026/06/435192.html",
+      "published": "2026-06-12T07:31:55+00:00",
+      "published_ts": 1781249515,
+      "summary": "助力LP与GP高效合",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "投资界"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435192.md",
+        "article_chars": 2394
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    },
+    {
+      "title": "Anthropic老大的唯一 -1，就是AI股神的未婚妻",
+      "url": "https://www.qbitai.com/2026/06/433717.html",
+      "published": "2026-06-12T07:29:59+00:00",
+      "published_ts": 1781249399,
+      "summary": "那位被OpenAI开除的股神",
+      "author": "闻乐",
+      "tags": [
+        "资讯",
+        "Anthropic",
+        "Claude",
+        "Dario"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/433717.md",
+        "article_chars": 2457
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    },
+    {
+      "title": "2026奇点智能产品大会首批嘉宾官宣：在 AI 的“可交付的时代”，看一线专家如何拆解真实落地闭环！",
+      "url": "https://www.qbitai.com/2026/06/435105.html",
+      "published": "2026-06-12T07:27:14+00:00",
+      "published_ts": 1781249234,
+      "summary": "7 月 17-18 日",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "csdn"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435105.md",
+        "article_chars": 1493
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    },
+    {
+      "title": "“智能体最后的考试”，Fable 5竟然不敌GPT 5.5",
+      "url": "https://www.qbitai.com/2026/06/434774.html",
+      "published": "2026-06-12T04:13:23+00:00",
+      "published_ts": 1781237603,
+      "summary": "最难档通通零蛋",
+      "author": "一水",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/434774.md",
+        "article_chars": 4392
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    },
+    {
+      "title": "BEV 杀入具身智能：跨维把机器人数据带上 Scaling 快车道",
+      "url": "https://www.qbitai.com/2026/06/434761.html",
+      "published": "2026-06-12T04:11:02+00:00",
+      "published_ts": 1781237462,
+      "summary": "",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/434761.md",
+        "article_chars": 3994
+      },
+      "fetched_at": "2026-06-13T20:47:15+08:00"
+    }
+  ]
+}

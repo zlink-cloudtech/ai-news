@@ -197,6 +197,17 @@ def parse_rss(url: str, *, source: str, limit: int | None = None) -> list[Item]:
         if not link or not title:
             continue
         pub_dt = parse_any_datetime(e.get("published") or e.get("updated"))
+        # 兜底：部分非标准 RSS（如 36kr "2026-06-13 16:37:21  +0800"）无法被
+        # parsedate_to_datetime 解析，但 feedparser 通常能拿到 published_parsed
+        # 注意：feedparser 已把时间转 UTC，struct_time 里的小时是 UTC 小时，
+        # 必须用 calendar.timegm（按 UTC 解释）而不是 mktime（按本地时间）
+        if pub_dt is None and e.get("published_parsed"):
+            try:
+                import calendar
+                ts = calendar.timegm(e["published_parsed"])
+                pub_dt = datetime.fromtimestamp(ts, tz=UTC)
+            except Exception:
+                pass
         summary = clean_html(
             e.get("summary") or e.get("description") or ""
         )
