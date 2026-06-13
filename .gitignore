@@ -30,3 +30,12 @@ logs/
 data/cache/
 data/temp/
 
+# LLM 密钥（配置公开，密钥私密；.secrets.example 入 git 供格式参考）
+.secrets
+*.secrets
+secrets/
+config/.secrets
+
+# LLM 调用缓存（按需提交，体积可能较大）
+data/llm_cache/
+
