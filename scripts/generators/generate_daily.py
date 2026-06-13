@@ -575,7 +575,7 @@ def render_daily_report(
     lines.append("## 📊 昨日速览")
     lines.append("")
     lines.append("| 话题板块 | 条数 | 🔴 高优 | 🟡 中等 | 🟢 一般 | 主题词 |")
-    lines.append("|---------|------|--------|--------|-------|")
+    lines.append("|---------|------|--------|--------|-------|--------|")
     for board in BOARD_ORDER:
         items = groups.get(board, [])
         meta = BOARD_META.get(board, BOARD_META["其他"])
