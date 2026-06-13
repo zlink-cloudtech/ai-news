@@ -1,0 +1,19 @@
+# 操作系统/工具产生的临时文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+*.tmp
+
+# 编辑器
+.vscode/
+.idea/
+*.iml
+
+# 日志
+*.log
+
+# 草稿（按需取消注释）
+# 草稿/
+# *.draft.md
