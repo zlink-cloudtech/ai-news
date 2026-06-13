@@ -25,7 +25,20 @@ AI资讯追踪/
 │   ├── 待预研/
 │   └── 已废弃/
 ├── scripts/                   # 工具脚本
-│   └── news-commit.sh         # 一键 commit + push
+│   ├── news-commit.sh         # 一键 commit + push
+│   └── crawlers/              # 信息源抓取脚本（首期 7 源）
+│       ├── README.md
+│       ├── _utils.py
+│       ├── crawl_openai.py
+│       ├── crawl_deepmind.py
+│       ├── crawl_huggingface.py
+│       ├── crawl_langchain.py
+│       ├── crawl_github_trending.py
+│       ├── crawl_replicate.py
+│       ├── crawl_runway.py
+│       └── run_all.py
+├── data/                      # 抓取数据（JSON）
+│   └── raw/<source>/YYYY-MM-DD.json
 └── .gitignore / .gitattributes
 ```
 
@@ -57,6 +70,7 @@ AI资讯追踪/
 - **Git LFS**：管理图片/视频/文档等二进制资源
 - **模板驱动**：所有资讯/汇总都按统一模板生成
 - **源管理**：所有信息源在 `资讯源管理/` 集中管理、状态追踪
+- **抓取脚本**：`scripts/crawlers/` 提供 7 源抓取，统一数据落 `data/raw/`
 
 ## 快速开始
 
@@ -68,6 +82,12 @@ open https://github.com/zlink-cloudtech/ai-news/tree/main/每日资讯
 # git 拉取
 git pull origin main
 ls 每日资讯/
+```
+
+手动触发抓取（默认 5 源；加 --with-hf/--with-github 启用受限源）：
+```bash
+pip install feedparser trafilatura cloudscraper beautifulsoup4 lxml html2text
+python3 scripts/crawlers/run_all.py
 ```
 
 手动提交变更：

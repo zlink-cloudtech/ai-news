@@ -1,0 +1,75 @@
+{
+  "source": "langchain",
+  "date": "2026-06-12",
+  "saved_at": "2026-06-13T13:32:45+08:00",
+  "count": 2,
+  "meta": {
+    "list_url": "https://www.langchain.com/blog",
+    "total_discovered": 14,
+    "total_parsed": 14,
+    "window": [
+      "2026-06-12T00:00:00+08:00",
+      "2026-06-12T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "How Benchling builds agents when the smartest AI isn&#39;t smart enough",
+      "url": "https://www.langchain.com/blog/benchling-max-agency-podcast",
+      "published": "2026-06-11T19:41:00+00:00",
+      "published_ts": 1781206860,
+      "summary": "Discover how Benchling, the R&amp;D data platform, leverages AI agents to accelerate scientific discovery. In this episode of Max Agency, Head of AI Nicholas Larus-Stone and host Harrison Chase discuss the complexities of building agents for life sciences, including the use of multi-model architectures, production trace reviews, and strategies for verifiable scientific tasks.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "benchling-max-agency-podcast",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ]
+      },
+      "fetched_at": "2026-06-13T13:32:22+08:00"
+    },
+    {
+      "title": "How to Choose the Right Sandbox for Your Agent",
+      "url": "https://www.langchain.com/blog/how-to-choose-the-right-sandbox-for-your-agent",
+      "published": "2026-06-12T15:00:00+00:00",
+      "published_ts": 1781276400,
+      "summary": "Learn how to choose a secure sandbox for AI agents, with guidance on filesystem isolation, network access, resource limits, and microVMs.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "how-to-choose-the-right-sandbox-for-your-agent",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ]
+      },
+      "fetched_at": "2026-06-13T13:32:34+08:00"
+    }
+  ]
+}

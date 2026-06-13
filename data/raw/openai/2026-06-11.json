@@ -1,0 +1,83 @@
+{
+  "source": "openai",
+  "date": "2026-06-11",
+  "saved_at": "2026-06-13T13:32:17+08:00",
+  "count": 5,
+  "meta": {
+    "feed": "https://openai.com/blog/rss.xml",
+    "window": [
+      "2026-06-11T00:00:00+08:00",
+      "2026-06-11T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "Supporting Europe’s work in ensuring a trustworthy AI ecosystem",
+      "url": "https://openai.com/index/supporting-eu-trustworthy-ai-ecosystem",
+      "published": "2026-06-11T00:00:00+00:00",
+      "published_ts": 1781136000,
+      "summary": "OpenAI supports the EU Code of Practice on AI content transparency, advancing provenance standards and tools to help people understand AI-generated content.",
+      "author": null,
+      "tags": [
+        "Global Affairs"
+      ],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    },
+    {
+      "title": "BBVA puts AI at the core of banking with OpenAI",
+      "url": "https://openai.com/index/bbva",
+      "published": "2026-06-11T00:00:00+00:00",
+      "published_ts": 1781136000,
+      "summary": "Learn how BBVA scaled ChatGPT Enterprise to 100,000 employees and partnered with OpenAI to accelerate AI-powered banking transformation worldwide.",
+      "author": null,
+      "tags": [],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    },
+    {
+      "title": "OpenAI to acquire Ona",
+      "url": "https://openai.com/index/openai-to-acquire-ona",
+      "published": "2026-06-11T00:00:00+00:00",
+      "published_ts": 1781136000,
+      "summary": "OpenAI plans to acquire Ona to expand Codex with secure, persistent cloud environments, enabling long-running AI agents across enterprise workflows.",
+      "author": null,
+      "tags": [
+        "Company"
+      ],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    },
+    {
+      "title": "How an astrophysicist uses Codex to help simulate black holes",
+      "url": "https://openai.com/index/using-codex-to-simulate-black-holes",
+      "published": "2026-06-11T00:00:00+00:00",
+      "published_ts": 1781136000,
+      "summary": "Discover how astrophysicist Chi-kwan Chan uses Codex to build black hole simulations, helping scientists study extreme physics and test Einstein’s theory of general relativity.",
+      "author": null,
+      "tags": [
+        "Applied AI"
+      ],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    },
+    {
+      "title": "Access OpenAI models and Codex through your Oracle cloud commitment",
+      "url": "https://openai.com/index/openai-on-oracle-cloud",
+      "published": "2026-06-10T20:00:00+00:00",
+      "published_ts": 1781121600,
+      "summary": "Access OpenAI models and Codex through Oracle Cloud, using existing commitments to build and deploy AI with enterprise security and governance.",
+      "author": null,
+      "tags": [
+        "Company"
+      ],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "source": "openai",
+  "date": "2026-06-12",
+  "saved_at": "2026-06-13T13:32:17+08:00",
+  "count": 2,
+  "meta": {
+    "feed": "https://openai.com/blog/rss.xml",
+    "window": [
+      "2026-06-12T00:00:00+08:00",
+      "2026-06-12T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "New OpenAI Academy courses for the next era of work",
+      "url": "https://openai.com/index/academy-courses-applying-ai-at-work",
+      "published": "2026-06-12T10:00:00+00:00",
+      "published_ts": 1781258400,
+      "summary": "OpenAI introduces three Academy courses that help people build practical AI skills, create repeatable workflows, and apply agents in everyday work.",
+      "author": null,
+      "tags": [
+        "AI Adoption"
+      ],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    },
+    {
+      "title": "How Preply combines AI and human tutors to personalize learning",
+      "url": "https://openai.com/index/preply",
+      "published": "2026-06-12T00:00:00+00:00",
+      "published_ts": 1781222400,
+      "summary": "Preply uses OpenAI to launch AI-generated lesson summaries, providing personalised feedback and language learning exercises.",
+      "author": null,
+      "tags": [],
+      "source": "openai",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:17+08:00"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "source": "deepmind",
+  "date": "2026-06-11",
+  "saved_at": "2026-06-13T13:32:18+08:00",
+  "count": 1,
+  "meta": {
+    "feed": "https://deepmind.google/blog/rss.xml",
+    "window": [
+      "2026-06-11T00:00:00+08:00",
+      "2026-06-11T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "DiffusionGemma: 4x faster text generation",
+      "url": "https://deepmind.google/blog/diffusiongemma-4x-faster-text-generation/",
+      "published": "2026-06-10T16:24:11+00:00",
+      "published_ts": 1781108651,
+      "summary": "",
+      "author": null,
+      "tags": [],
+      "source": "deepmind",
+      "extra": {},
+      "fetched_at": "2026-06-13T13:32:18+08:00"
+    }
+  ]
+}

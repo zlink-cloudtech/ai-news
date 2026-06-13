@@ -1,0 +1,75 @@
+{
+  "source": "langchain",
+  "date": "2026-06-11",
+  "saved_at": "2026-06-13T13:32:45+08:00",
+  "count": 2,
+  "meta": {
+    "list_url": "https://www.langchain.com/blog",
+    "total_discovered": 14,
+    "total_parsed": 14,
+    "window": [
+      "2026-06-11T00:00:00+08:00",
+      "2026-06-11T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "The Missing Link Between Agents and Applications",
+      "url": "https://www.langchain.com/blog/agents-and-applications",
+      "published": "2026-06-10T18:00:00+00:00",
+      "published_ts": 1781114400,
+      "summary": "Most AI agent tools run on servers, limiting access to browser APIs, device capabilities, and frontend state. Discover how LangChain headless tools enable secure client-side tool execution for modern agent applications.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "agents-and-applications",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ]
+      },
+      "fetched_at": "2026-06-13T13:32:20+08:00"
+    },
+    {
+      "title": "Full Text Search in SmithDB: Designing an Inverted Index for Object Storage",
+      "url": "https://www.langchain.com/blog/full-text-search-in-smithdb-designing-an-inverted-index-for-object-storage",
+      "published": "2026-06-10T16:15:00+00:00",
+      "published_ts": 1781108100,
+      "summary": "SmithDB supports full-text search and JSON filtering over agent traces with a median (P50) latency of 400 ms, even though the underlying data consists of large, deeply nested JSON documents stored in object storage.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "full-text-search-in-smithdb-designing-an-inverted-index-for-object-storage",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ]
+      },
+      "fetched_at": "2026-06-13T13:32:27+08:00"
+    }
+  ]
+}
