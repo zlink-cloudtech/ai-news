@@ -1,7 +1,7 @@
 """
 抓取 Replicate Blog (RSS)
 板块: 🧍 数字人
-源详情: 资讯源管理/待对接/数字人_Replicate-Blog.md
+源详情: 资讯源管理/已对接/数字人_Replicate-Blog.md
 
 注意: Replicate 实际 RSS 路径是 /blog/rss（不是 .xml）
 """
@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _utils import (
     add_date_args, get_logger, parse_rss, filter_window,
-    resolve_dates, save_items,
+    resolve_dates, save_items, enrich_items,
 )
 
 SOURCE = "replicate"
@@ -38,6 +38,8 @@ def main() -> int:
 
     for date_str, start, end in resolve_dates(args):
         in_win = filter_window(items, start, end)
+        if in_win and not getattr(args, "no_article", False):
+            in_win = enrich_items(in_win, SOURCE, log=LOG, delay=0.5)
         path = save_items(SOURCE, date_str, in_win,
                           meta={"feed": FEED_URL, "window": [start.isoformat(), end.isoformat()]})
         LOG.info(f"[{date_str}] 窗口内 {len(in_win)} 条 -> {path}")

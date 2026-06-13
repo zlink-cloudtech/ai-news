@@ -1,7 +1,7 @@
 """
 抓取 Runway Research (网页抓取 + JSON-LD)
 板块: 🧍 数字人
-源详情: 资讯源管理/待对接/数字人_Runway-Research.md
+源详情: 资讯源管理/已对接/数字人_Runway-Research.md
 
 策略:
 1. 抓 /research 列表页，提取所有 /research/<slug> 链接
@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _utils import (
     add_date_args, get_logger, Item, fetch_url, filter_window,
     resolve_dates, save_items, make_session, parse_any_datetime,
-    CST,
+    CST, enrich_items,
 )
 
 SOURCE = "runway"
@@ -144,6 +144,8 @@ def main() -> int:
     # 3. 窗口过滤 + 落盘
     for date_str, start, end in resolve_dates(args):
         in_win = filter_window(items, start, end)
+        if in_win and not getattr(args, "no_article", False):
+            in_win = enrich_items(in_win, SOURCE, log=LOG, delay=args.delay)
         path = save_items(SOURCE, date_str, in_win,
                           meta={
                               "list_url": LIST_URL,

@@ -1,7 +1,7 @@
 """
 抓取 OpenAI Blog (RSS)
 板块: 🧠 LLM 发展
-源详情: 资讯源管理/待对接/LLM_OpenAI-Blog.md
+源详情: 资讯源管理/已对接/LLM_OpenAI-Blog.md
 """
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _utils import (
     add_date_args, get_logger, parse_rss, filter_window,
-    resolve_dates, save_items,
+    resolve_dates, save_items, enrich_items,
 )
 
 SOURCE = "openai"
@@ -34,16 +34,14 @@ def main() -> int:
 
     LOG.info(f"RSS 解析: {len(items)} 条")
 
-    saved: list[str] = []
     for date_str, start, end in resolve_dates(args):
         in_win = filter_window(items, start, end)
+        if in_win and not getattr(args, "no_article", False):
+            in_win = enrich_items(in_win, SOURCE, log=LOG, delay=0.5)
         path = save_items(SOURCE, date_str, in_win,
                           meta={"feed": FEED_URL, "window": [start.isoformat(), end.isoformat()]})
         LOG.info(f"[{date_str}] 窗口内 {len(in_win)} 条 -> {path}")
-        saved.append(str(path))
 
-    if not saved:
-        LOG.warning("未生成任何文件")
     return 0
 
 

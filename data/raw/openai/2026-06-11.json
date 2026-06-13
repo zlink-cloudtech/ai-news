@@ -1,7 +1,7 @@
 {
   "source": "openai",
   "date": "2026-06-11",
-  "saved_at": "2026-06-13T13:32:17+08:00",
+  "saved_at": "2026-06-13T16:15:55+08:00",
   "count": 5,
   "meta": {
     "feed": "https://openai.com/blog/rss.xml",
@@ -22,8 +22,11 @@
         "Global Affairs"
       ],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/supporting-eu-trustworthy-ai-ecosystem.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     },
     {
       "title": "BBVA puts AI at the core of banking with OpenAI",
@@ -34,8 +37,11 @@
       "author": null,
       "tags": [],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/bbva.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     },
     {
       "title": "OpenAI to acquire Ona",
@@ -48,8 +54,11 @@
         "Company"
       ],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/openai-to-acquire-ona.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     },
     {
       "title": "How an astrophysicist uses Codex to help simulate black holes",
@@ -62,8 +71,11 @@
         "Applied AI"
       ],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/using-codex-to-simulate-black-holes.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     },
     {
       "title": "Access OpenAI models and Codex through your Oracle cloud commitment",
@@ -76,8 +88,11 @@
         "Company"
       ],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/openai-on-oracle-cloud.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     }
   ]
 }

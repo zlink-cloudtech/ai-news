@@ -124,6 +124,7 @@ class ScoredItem:
     score: int
     grade: str               # 🔴/🟡/🟢
     matched_tags: list[str] = field(default_factory=list)
+    extra: dict = field(default_factory=dict)   # 透传 item.extra（如 article_path）
 
 
 # ============== 清洗 ==============
@@ -289,6 +290,90 @@ def extract_keywords(items: list[ScoredItem], top_n: int = 4) -> list[str]:
             counter[tag] = counter.get(tag, 0) + 1
     sorted_kw = sorted(counter.items(), key=lambda x: (-x[1], x[0]))
     return [k for k, _ in sorted_kw[:top_n]]
+
+
+# ============== 主线信号聚合 ==============
+
+# 跨板块权重更高的"主线级"标签
+SIGNAL_LEVEL_TAGS = {
+    "capital-acq", "capital-fund", "capital-valuation",  # 资本
+    "release-GA", "release",                            # 重大产品
+    "开源", "GPT", "Claude", "Gemini", "Llama", "Sora", # 模型
+    "enterprise",                                       # 企业落地
+    "监管", "安全",                                     # 监管/安全
+    "agent",                                            # Agent 工程化
+}
+
+# 主题信号显示名（用于报告）
+SIGNAL_DISPLAY = {
+    "capital-acq":      "💰 行业并购",
+    "capital-fund":     "💰 行业融资",
+    "capital-valuation":"💰 估值/上市",
+    "release-GA":       "🚀 重大发布（GA）",
+    "release":          "🚀 产品发布",
+    "开源":             "🧩 开源动作",
+    "GPT":              "🧠 GPT 相关",
+    "Claude":           "🧠 Claude 相关",
+    "Gemini":           "🧠 Gemini 相关",
+    "Llama":            "🧠 Llama 相关",
+    "Sora":             "🎬 Sora / 视频",
+    "enterprise":       "🏢 企业落地",
+    "监管":             "⚖️ 监管/合规",
+    "安全":             "🛡️ 安全/对齐",
+    "agent":            "🤖 Agent 工程化",
+}
+
+
+def extract_main_signals(items: list[ScoredItem], top_n: int = 3,
+                         min_items: int = 2) -> list[dict]:
+    """从全量 items 中聚合出"主线信号"。
+
+    聚合规则：
+    1. 每条 item 取其最高权重主线标签
+    2. 同一主线标签的 item 聚为一组
+    3. 输出按"组内 items 数量 × 评分总和"降序，取 top N
+    4. 单组少于 min_items 跳过（避免偶然信号当成主线）
+
+    返回: [{tag, display, count, sources, items, primary, all_titles}, ...]
+    """
+    # 每条 item 的"主线标签"
+    primary_tag: dict[int, str | None] = {}
+    for it in items:
+        cands = [t for t in it.matched_tags if t in SIGNAL_LEVEL_TAGS]
+        if cands:
+            # 选最相关的（这里直接取第一个；后续可按权重排序）
+            primary_tag[id(it)] = cands[0]
+        else:
+            primary_tag[id(it)] = None
+
+    # 分组
+    groups: dict[str, list[ScoredItem]] = {}
+    for it in items:
+        tag = primary_tag.get(id(it))
+        if not tag:
+            continue
+        groups.setdefault(tag, []).append(it)
+
+    # 排序 + 过滤
+    ranked: list[dict] = []
+    for tag, group in groups.items():
+        if len(group) < min_items:
+            continue
+        # 组内按 score 排序
+        group_sorted = sorted(group, key=lambda x: (-x.score, -x.published_dt.timestamp()))
+        ranked.append({
+            "tag": tag,
+            "display": SIGNAL_DISPLAY.get(tag, f"🏷 {tag}"),
+            "count": len(group),
+            "sources": sorted({it.source for it in group}),
+            "items": group_sorted,
+            "primary": group_sorted[0],
+            "all_titles": [it.title for it in group_sorted],
+        })
+
+    # 排序：组内数量 desc, 组内总分 desc
+    ranked.sort(key=lambda g: (-g["count"], -sum(it.score for it in g["items"])))
+    return ranked[:top_n]
 
 
 # ============== 板块归类 ==============

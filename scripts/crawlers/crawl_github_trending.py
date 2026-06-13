@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _utils import (
     add_date_args, get_logger, parse_rss, filter_window,
-    resolve_dates, save_items,
+    resolve_dates, save_items, enrich_items,
 )
 
 SOURCE = "github_trending"
@@ -79,6 +79,8 @@ def main() -> int:
 
     for date_str, start, end in resolve_dates(args):
         in_win = filter_window(deduped, start, end)
+        if in_win and not getattr(args, "no_article", False):
+            in_win = enrich_items(in_win, SOURCE, log=LOG, delay=0.3)
         path = save_items(SOURCE, date_str, in_win,
                           meta={
                               "rsshub_base": RSSHUB_BASE,

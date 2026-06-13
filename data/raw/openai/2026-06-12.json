@@ -1,7 +1,7 @@
 {
   "source": "openai",
   "date": "2026-06-12",
-  "saved_at": "2026-06-13T13:32:17+08:00",
+  "saved_at": "2026-06-13T16:15:53+08:00",
   "count": 2,
   "meta": {
     "feed": "https://openai.com/blog/rss.xml",
@@ -22,8 +22,11 @@
         "AI Adoption"
       ],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/academy-courses-applying-ai-at-work.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     },
     {
       "title": "How Preply combines AI and human tutors to personalize learning",
@@ -34,8 +37,11 @@
       "author": null,
       "tags": [],
       "source": "openai",
-      "extra": {},
-      "fetched_at": "2026-06-13T13:32:17+08:00"
+      "extra": {
+        "article_path": "data/articles/openai/preply.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T16:15:52+08:00"
     }
   ]
 }

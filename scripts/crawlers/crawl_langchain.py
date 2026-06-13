@@ -1,7 +1,7 @@
 """
 抓取 LangChain Blog（网页抓取 + JSON-LD）
 板块: 💻 编程 Agent
-源详情: 资讯源管理/待对接/Agent_LangChain-Blog.md
+源详情: 资讯源管理/已对接/Agent_LangChain-Blog.md
 
 原计划: 用 RSS（blog.langchain.com/rss/）
 现状: 2026-06 验证已不可用（重定向到 www.langchain.com/blog 返回 HTML）
@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _utils import (
     add_date_args, get_logger, Item, fetch_url, filter_window,
     resolve_dates, save_items, make_session, parse_any_datetime,
+    enrich_items,
 )
 
 SOURCE = "langchain"
@@ -132,6 +133,8 @@ def main() -> int:
 
     for date_str, start, end in resolve_dates(args):
         in_win = filter_window(items, start, end)
+        if in_win and not getattr(args, "no_article", False):
+            in_win = enrich_items(in_win, SOURCE, log=LOG, delay=args.delay)
         path = save_items(SOURCE, date_str, in_win,
                           meta={
                               "list_url": LIST_URL,

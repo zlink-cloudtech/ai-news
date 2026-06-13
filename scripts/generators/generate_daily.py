@@ -33,6 +33,7 @@ from _utils_gen import (  # noqa: E402
     classify_board,
     clean_text,
     extract_keywords,
+    extract_main_signals,
     fmt_clock,
     fmt_time_cn,
     generate_impact,
@@ -41,18 +42,14 @@ from _utils_gen import (  # noqa: E402
 )
 
 
-# 板块输出顺序（从 _utils_gen 导入）
-# BOARD_ORDER = ["LLM", "Agent", "数字人", "其他"]
-
-
 # ============== 数据读取 ==============
 
-def load_raw_items(date_iso: str, raw_root: Path) -> list[dict]:
+def load_raw_items(date_iso: str, raw_root: Path) -> tuple[list[dict], dict[str, int]]:
     """读取 data/raw/*/date_iso.json 中所有非空 items"""
     items: list[dict] = []
     per_source: dict[str, int] = {}
     if not raw_root.exists():
-        return items
+        return items, per_source
     for src_dir in sorted(raw_root.iterdir()):
         if not src_dir.is_dir():
             continue
@@ -100,6 +97,7 @@ def build_scored_items(raw_items: list[dict], date_iso: str) -> list[ScoredItem]
             score=score,
             grade=grade,
             matched_tags=matched,
+            extra=dict(it.get("extra") or {}),
         ))
     return out
 
@@ -116,9 +114,44 @@ def group_by_board(items: list[ScoredItem]) -> dict[str, list[ScoredItem]]:
     return groups
 
 
+# ============== 全文读取（渲染折叠区） ==============
+
+def _read_article_path(it: ScoredItem, repo_root: Path) -> Path | None:
+    """从 item.extra.article_path 解析成绝对 Path（文件存在时返回）"""
+    extra = it.extra if isinstance(it.extra, dict) else {}
+    p = extra.get("article_path")
+    if not p:
+        return None
+    full = repo_root / p
+    return full if full.exists() else None
+
+
+def _read_article_block(it: ScoredItem, repo_root: Path, max_chars: int = 4000) -> str | None:
+    """读取 article_path 对应的 markdown 文件，渲染为 <details> 折叠块"""
+    p = _read_article_path(it, repo_root)
+    if not p:
+        return None
+    try:
+        raw = p.read_text(encoding="utf-8")
+    except Exception:
+        return None
+    # 去掉 frontmatter 注释头
+    raw = re.sub(r"^<!--.*?-->\s*\n", "", raw, count=1, flags=re.DOTALL)
+    if len(raw) > max_chars:
+        raw = raw[:max_chars] + "\n\n*[... 已截断，点击顶部链接看全文]*"
+    rel = p.relative_to(repo_root)
+    return (
+        f"<details>\n"
+        f"<summary>📄 展开原文摘录（[GitHub 原文]({rel})）</summary>\n\n"
+        f"{raw}\n"
+        f"\n</details>"
+    )
+
+
 # ============== 渲染 ==============
 
-def render_board_section(board: str, items: list[ScoredItem], date_iso: str) -> str:
+def render_board_section(board: str, items: list[ScoredItem], date_iso: str,
+                        repo_root: Path) -> str:
     """渲染单个板块的 Markdown 段"""
     meta = BOARD_META.get(board, BOARD_META["其他"])
     emoji = meta["emoji"]
@@ -130,7 +163,7 @@ def render_board_section(board: str, items: list[ScoredItem], date_iso: str) -> 
     lines.append("")
 
     if not items:
-        lines.append(f"> 昨日无新增。")
+        lines.append("> 昨日无新增。")
         lines.append("")
         return "\n".join(lines)
 
@@ -147,6 +180,12 @@ def render_board_section(board: str, items: list[ScoredItem], date_iso: str) -> 
         lines.append(f"- **标签**：{tag_md}")
     lines.append("")
 
+    # 头条：折叠全文（如果 article_path 存在且文件可读）
+    article_block = _read_article_block(head, repo_root)
+    if article_block:
+        lines.append(article_block)
+        lines.append("")
+
     # 2-N：简版列表
     if len(items) > 1:
         lines.append(f"### 其余 {len(items) - 1} 条（简版）")
@@ -156,12 +195,36 @@ def render_board_section(board: str, items: list[ScoredItem], date_iso: str) -> 
             if it.matched_tags:
                 tag_md = " " + " ".join(f"`#{t}`" for t in it.matched_tags[:3])
             short_summary = it.summary[:120] + ("…" if len(it.summary) > 120 else "")
+            article_marker = " 📄" if _read_article_path(it, repo_root) else ""
             lines.append(
                 f"{idx}. **{it.grade}** [{it.title}]({it.url}) — {it.source} · "
-                f"{fmt_time_cn(it.published_dt)} — {short_summary}{tag_md}"
+                f"{fmt_time_cn(it.published_dt)} — {short_summary}{tag_md}{article_marker}"
             )
         lines.append("")
 
+    return "\n".join(lines)
+
+
+def render_main_signals(main_signals: list[dict]) -> str:
+    """渲染主线信号段"""
+    if not main_signals:
+        return ""
+    lines: list[str] = ["## 🔥 主线信号", ""]
+    for idx, sig in enumerate(main_signals, 1):
+        primary = sig["primary"]
+        src_md = "、".join(f"`{s}`" for s in sig["sources"])
+        lines.append(
+            f"{idx}. **{sig['display']}**（{sig['count']} 条 · 涉及 {src_md}）"
+        )
+        # 头条链接
+        lines.append(
+            f"   - 头条：[{primary.title}]({primary.url}) — {primary.source} · {fmt_time_cn(primary.published_dt)}"
+        )
+        # 关联条目
+        others = [it for it in sig["items"] if it is not primary]
+        for oth in others:
+            lines.append(f"   - 关联：[{oth.title}]({oth.url}) — {oth.source} · {fmt_time_cn(oth.published_dt)}")
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -170,18 +233,21 @@ def render_daily_report(
     groups: dict[str, list[ScoredItem]],
     per_source: dict[str, int],
     fetched_at: str,
+    repo_root: Path,
 ) -> str:
     """渲染完整每日资讯 Markdown"""
     total = sum(len(v) for v in groups.values())
-    high = sum(1 for v in groups.values() for it in v if it.grade == "🔴")
-    mid = sum(1 for v in groups.values() for it in v if it.grade == "🟡")
-    low = sum(1 for v in groups.values() for it in v if it.grade == "🟢")
+    total_high = total_mid = total_low = 0
 
     # 提取主题词（按板块）
     board_keywords: dict[str, list[str]] = {}
     for board, items in groups.items():
         kws = extract_keywords(items, top_n=4)
         board_keywords[board] = kws
+
+    # 主线信号（跨板块聚合）
+    all_items = [it for v in groups.values() for it in v]
+    main_signals = extract_main_signals(all_items, top_n=3, min_items=2)
 
     lines: list[str] = []
     lines.append(f"# 🤖 AI每日资讯 | {date_iso}（昨日）")
@@ -198,7 +264,6 @@ def render_daily_report(
     lines.append("")
     lines.append("| 话题板块 | 条数 | 🔴 高优 | 🟡 中等 | 🟢 一般 | 主题词 |")
     lines.append("|---------|------|--------|--------|--------|-------|")
-    total_high = total_mid = total_low = 0
     for board in BOARD_ORDER:
         items = groups.get(board, [])
         meta = BOARD_META.get(board, BOARD_META["其他"])
@@ -213,8 +278,14 @@ def render_daily_report(
     lines.append(f"| **合计** | **{total}** | **{total_high}** | **{total_mid}** | **{total_low}** | — |")
     lines.append("")
 
+    # 主线信号段
+    if main_signals:
+        lines.append(render_main_signals(main_signals))
+        lines.append("---")
+        lines.append("")
+
     # 一句话总结（基于实际数据动态生成）
-    summary_line = build_one_line_summary(date_iso, groups, per_source)
+    summary_line = build_one_line_summary(date_iso, groups, per_source, main_signals)
     lines.append(f"> **昨日一句话总结**：{summary_line}")
     lines.append("")
     lines.append("---")
@@ -223,7 +294,7 @@ def render_daily_report(
     # 各板块
     for board in BOARD_ORDER:
         items = groups.get(board, [])
-        lines.append(render_board_section(board, items, date_iso))
+        lines.append(render_board_section(board, items, date_iso, repo_root))
 
     # 跨话题洞察（动态）
     lines.append("## 💡 跨话题洞察")
@@ -260,7 +331,6 @@ def render_daily_report(
         meta = BOARD_META.get(board, BOARD_META["其他"])
         name = meta["name"]
         items = groups.get(board, [])
-        # 找出该板块对应的源
         src_in_board = sorted({it.source for it in items})
         all_srcs = [s for s, b in [(s, classify_board(s)) for s in per_source.keys()] if b == board]
         if not src_in_board and not all_srcs:
@@ -277,18 +347,22 @@ def render_daily_report(
     return "\n".join(lines)
 
 
-def build_one_line_summary(date_iso: str, groups: dict[str, list[ScoredItem]], per_source: dict[str, int]) -> str:
+def build_one_line_summary(date_iso: str, groups: dict[str, list[ScoredItem]],
+                          per_source: dict[str, int],
+                          main_signals: list[dict] | None = None) -> str:
     """生成一句话总结"""
     total = sum(len(v) for v in groups.values())
     if total == 0:
         return f"{date_iso} 全网 AI 资讯较少，主要源（OpenAI/DeepMind/LangChain/Replicate/Runway）均无新增。"
 
-    high_items = [it for v in groups.values() for it in v if it.grade == "🔴"]
     parts: list[str] = []
-    if high_items:
+    if main_signals:
+        first_sig = main_signals[0]
+        parts.append(f"**主线**：{first_sig['display']}（{first_sig['count']} 条）")
+    high_items = [it for v in groups.values() for it in v if it.grade == "🔴"]
+    if high_items and not main_signals:
         first = high_items[0]
         parts.append(f"重点关注 [{first.source}]({first.url}) 发布的「{first.title}」")
-    # 板块覆盖
     boards_with_items = [b for b in BOARD_ORDER if groups.get(b)]
     if boards_with_items:
         board_names = "、".join(BOARD_META[b]["name"] for b in boards_with_items)
@@ -304,12 +378,10 @@ def build_cross_insights(groups: dict[str, list[ScoredItem]]) -> list[str]:
     llm_items = groups.get("LLM", [])
     agent_items = groups.get("Agent", [])
 
-    # LLM × Agent 交叉
     if llm_items and agent_items:
         insights.append("**LLM × 编程 Agent**：昨日 LLM 官方源（OpenAI）与 Agent 框架源（LangChain）均有动作，"
                         "提示基础模型能力正在向应用层（Agent 工具调用、沙箱隔离）继续渗透。")
 
-    # 数字人 × 视频生成
     avatar_items = groups.get("数字人", [])
     avatar_video = any(
         any(re.search(r"video|视频|avatar|数字人|runway", it.title + it.summary, re.I) for it in avatar_items)
@@ -318,13 +390,11 @@ def build_cross_insights(groups: dict[str, list[ScoredItem]]) -> list[str]:
     if avatar_video and llm_items:
         insights.append("**LLM × 数字人**：数字人 / 视频生成类内容持续更新，与多模态基础模型演进形成正反馈。")
 
-    # 行业宏观（基于是否有头部厂商动作）
     has_top = any(it.source in {"openai", "deepmind", "anthropic"} for it in llm_items)
     if has_top:
         insights.append("**行业宏观**：头部模型厂商持续输出（OpenAI Academy / 案例研究等），"
                         "AI 行业重心从「能力突破」逐步转向「企业落地与培训」。")
 
-    # 风险提示
     risks = []
     for it in (llm_items + agent_items):
         blob = (it.title + it.summary).lower()
@@ -358,7 +428,6 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="只打印到 stdout，不落盘")
     args = parser.parse_args()
 
-    # 默认日期 = 昨天（CST）
     if args.date:
         date_iso = args.date
     else:
@@ -374,7 +443,6 @@ def main():
         print(f"[ERROR] 抓取数据根目录不存在: {raw_root}", file=sys.stderr)
         return 1
 
-    # 加载 + 评分 + 分组
     raw_items, per_source = load_raw_items(date_iso, raw_root)
     if not raw_items:
         print(f"[WARN] {date_iso} 窗口内无任何抓取数据（请确认已运行抓取脚本）", file=sys.stderr)
@@ -382,7 +450,7 @@ def main():
     groups = group_by_board(scored)
 
     fetched_at = datetime.now(ZoneInfo("Asia/Shanghai")).isoformat()
-    md = render_daily_report(date_iso, groups, per_source, fetched_at)
+    md = render_daily_report(date_iso, groups, per_source, fetched_at, _REPO_ROOT)
 
     if args.dry_run:
         print(md)
