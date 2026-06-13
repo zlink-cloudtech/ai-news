@@ -317,8 +317,8 @@ def group_by_board(items: list[ScoredItem]) -> dict[str, list[ScoredItem]]:
         groups[it.board].append(it)
     for board in groups:
         groups[board].sort(key=lambda x: (-x.score, -x.published_dt.timestamp()))
-        # 每个板块限 Top 10
-        groups[board] = groups[board][:10]
+        # 注：Top 10 截断下放到 render_daily_report 渲染板块详情时做
+        # 速览表 / 合计 / 跨话题洞察 / 信息源记录 需用全量真实条数，不能在分组时截断
     return groups
 
 
@@ -612,10 +612,11 @@ def render_daily_report(
     lines.append("---")
     lines.append("")
 
-    # 各板块
+    # 各板块（详情限 Top 10；速览表/合计/跨话题洞察/信息源记录用全量 groups）
     for board in BOARD_ORDER:
         items = groups.get(board, [])
-        lines.append(render_board_section(board, items, date_iso, repo_root, llm, usage))
+        items_top10 = items[:10]
+        lines.append(render_board_section(board, items_top10, date_iso, repo_root, llm, usage))
 
     # 跨话题洞察（LLM 优先，规则降级）
     lines.append("## 💡 跨话题洞察")
