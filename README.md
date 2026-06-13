@@ -26,17 +26,21 @@ AI资讯追踪/
 │   └── 已废弃/
 ├── scripts/                   # 工具脚本
 │   ├── news-commit.sh         # 一键 commit + push
-│   └── crawlers/              # 信息源抓取脚本（首期 7 源）
+│   ├── crawlers/              # 信息源抓取脚本（首期 7 源）
+│   │   ├── README.md
+│   │   ├── _utils.py
+│   │   ├── crawl_openai.py
+│   │   ├── crawl_deepmind.py
+│   │   ├── crawl_huggingface.py
+│   │   ├── crawl_langchain.py
+│   │   ├── crawl_github_trending.py
+│   │   ├── crawl_replicate.py
+│   │   ├── crawl_runway.py
+│   │   └── run_all.py
+│   └── generators/            # 资讯生成器（读抓取数据 → 输出 Markdown）
 │       ├── README.md
-│       ├── _utils.py
-│       ├── crawl_openai.py
-│       ├── crawl_deepmind.py
-│       ├── crawl_huggingface.py
-│       ├── crawl_langchain.py
-│       ├── crawl_github_trending.py
-│       ├── crawl_replicate.py
-│       ├── crawl_runway.py
-│       └── run_all.py
+│       ├── _utils_gen.py
+│       └── generate_daily.py
 ├── data/                      # 抓取数据（JSON）
 │   └── raw/<source>/YYYY-MM-DD.json
 └── .gitignore / .gitattributes
