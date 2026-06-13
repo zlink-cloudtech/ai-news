@@ -1,7 +1,7 @@
 {
   "source": "jiqizhixin",
   "date": "2026-06-13",
-  "saved_at": "2026-06-13T20:47:57+08:00",
+  "saved_at": "2026-06-13T20:55:28+08:00",
   "count": 7,
   "meta": {
     "graphql": "https://www.jiqizhixin.com/graphql",
@@ -10,7 +10,7 @@
       "2026-06-13T23:59:59.999999+08:00"
     ],
     "list_total": 30,
-    "detail_fetched": 0
+    "detail_fetched": 7
   },
   "items": [
     {
@@ -18,7 +18,7 @@
       "url": "https://www.jiqizhixin.com/articles/2026-06-13-5",
       "published": "2026-06-13T03:19:00+00:00",
       "published_ts": 1781320740,
-      "summary": "",
+      "summary": "Anthropic 最新模型 Fable 5 和 Mythos 5 再起风波。 据媒体 Axios 爆料，美国特朗普（Trump）政府正式援引国家安全权力，对 AI 独角兽企业 Anthropic 最先进的 AI 模型 &mdash;&mdash;Fable 5 和 Mythos 5，实施了极为严厉的出口管制， 全面禁止外国政府、企业和个人的访问权限 。 这无疑是在说， 美国正在升级对前沿 AI 系统的管控，并将其视为国家安全资产 。 Axios 称，美国商务部长霍华德・卢特尼克周五致信 Anthropic CEO Dario Amodei，称 Mythos 5 和 Fable 5 两款模型将受到出口管制，管制范围包括 美国境外任何地点，以及美国境内的所有外国人 。 换句话说，这不是简单的「禁止海外用户订阅 Claude」，而是把最前沿模型放进了类似高端芯片、敏感软件那样的出口管制框架里。 据一名政府官员透露，之所以做出这一举措，是因为美国商务部得知，另一家公司声称已经成功越狱 Mythos，这一事件让政府对潜在国家安全风险感到担忧。 此前，在 Anthropic 发布最新模型前，美国政府曾试图让其暂停发布，但未能成功，于是发出了这封出口管制信。 而 Reuters 报道，本月早些时候，特朗普曾签署行政令，要求领先 AI 开发者在向公众发布最强模型之前，自愿提交给政府做网络安全测试。 该官员表示，在美国政府的国家安全体系完成加固之前，这些模型必须继续被封锁，这可能会在未来几周内完成。 这也就意味着，Anthropic 模型的出口、再出口，或在美国境内向外国主体转让，都需要获得许可。此外，Anthropic 还必须额外提交申请，以获得逐项验证的许可证。如果不遵守相关要求，Anthropic 将面临经济处罚和民事处罚。 目前，Anthropic已针对管控发表声明： 而结合此前 ",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -28,16 +28,18 @@
       "extra": {
         "node_id": "Article/19632695-36d4-4974-b18d-2e763769f136",
         "category": "产业",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/19632695-36d4-4974-b18d-2e763769f136/0_-_2026-06-13T104141.996.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/19632695-36d4-4974-b18d-2e763769f136/0_-_2026-06-13T104141.996.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     },
     {
       "title": "交白卷也排第一？Fable 5二百题全部拒答，却登顶最严AI编程基准",
       "url": "https://www.jiqizhixin.com/articles/2026-06-13-4",
       "published": "2026-06-13T03:16:00+00:00",
       "published_ts": 1781320560,
-      "summary": "",
+      "summary": "编辑｜Panda 太离谱了！ 是的，本文的主角还是前些天刚发布了 Claude Fable 5 的 Anthropic。 Fable 5 发布时的排面是真的足。SWE-Bench Pro 得分 80.3%，把第二名甩出 11 个百分点；Andrej Karpathy 直接喊出「deserves a major version bump」；Stripe 拿它在 5000 万行 Ruby 代码库里跑了一整天的迁移，顶上了原本需要整个团队两个月才能完成的工作量。势头之猛，让人一度以为 AI 编程进入了新纪元。 然而，Fable 5 刚开香槟，就被自己的「安全护栏」绊了个大跟头。 其系统卡中明确表示，Fable 5 被设计成：一旦检测到用户正在从事前沿 AI 研发工作（比如训练流水线、分布式训练基础设施、ML 加速器设计），模型会悄悄降低自己的回答质量&mdash;&mdash;而且不通知用户。也就是说，你花着 Fable 5 的钱，收到的可能是 Opus 4.8 级别的活，还没有任何提示。 Anthropic 为此用了提示词修改、转向向量等技术手段，让模型在特定查询下悄悄变笨，整个过程对用户完全不透明。 这一操作在研究社区炸了锅。许多学者和开发者纷纷发声批评，称此举严重损害了用户信任，本质上是背刺付费用户。舆论压力之下，Anthropic 被迫在发布后数小时内宣布政策调整：还是会降智，只是不再偷偷来了&mdash;&mdash;触发安全拦截时，模型将明确通知用户，并切换到 Opus 4.8 进行回答。至少他们是这么说的。参阅《 刚刚，Anthropic 道歉了 》。 然后，更尴尬的来了。 也正因为 Fable 5 现在的降智操作变得「透明」了，一些有趣的情况随之浮出水面。 其中最让人无语的，就是 Fable 5 在 ProgramBench 基准测试上的「表现」。 Program",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -47,16 +49,18 @@
       "extra": {
         "node_id": "Article/24d43a2c-c16f-4d29-97c0-87d715889822",
         "category": "工程",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/24d43a2c-c16f-4d29-97c0-87d715889822/0_-_2026-06-13T104138.700.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/24d43a2c-c16f-4d29-97c0-87d715889822/0_-_2026-06-13T104138.700.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     },
     {
       "title": "ICML 2026｜一句无关问题也能劫持Agent，港科大&复旦提出首个语义缓存键碰撞攻击",
       "url": "https://www.jiqizhixin.com/articles/2026-06-13-3",
       "published": "2026-06-13T03:11:00+00:00",
       "published_ts": 1781320260,
-      "summary": "",
+      "summary": "本文第一作者张芝翔为复旦大学本科四年级学生，即将前往香港科技大学CSE系攻读博士，研究方向为AI Security&amp;Trustworthy AI。通讯作者是香港科技大学佘东冬教授。 在当前大语言模型（LLM）与 AI 智能体（AI Agent）风头正劲的当下，如何降低高昂的推理成本和延迟成为了端侧及云端部署的核心痛点。 为此，诸如 AWS、微软（Azure）等云服务商以及各类开源框架，广泛引入了语义缓存（Semantic Caching）的应用层技术。通过将用户的查询语句转化为嵌入向量（Embedding Vector）作为缓存键（Cache Key），系统能够对语义相似的请求直接命中并返回缓存结果，从而免去重复的 LLM 计算。 &nbsp; 然而，这种为了追求效率而引入的「模糊匹配」机制，是否隐藏着致命的安全隐患？ 来自 香港科技大学与复旦大学 的安全研究团队在机器学习国际顶级会议&nbsp; ICML 2026 &nbsp;上发表了最新成果：《From Similarity to Vulnerability: Key Collision Attack on LLM Semantic Caching》。 论文链接: https://arxiv.org/pdf/2601.23088 该研究系统性地剖析了语义缓存机制在完整性（Integrity）层面的固有漏洞，并提出了自动化黑盒攻击框架 &mdash;&mdash;CacheAttack。实验表明，该攻击在多租户及智能体场景下，能够以高达 86% 的成功率劫持 AI 系统的响应。相关实验已覆盖包括 AWS、微软 Azure 在内的多家主流云服务商。 &nbsp; &nbsp; &nbsp; 图 1: 语义缓存碰撞攻击示意图 研究背景：当「近朱者赤」的语义相似性变成漏洞 以往针对 LLM 缓存系统的安全研究，大多集中",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -66,16 +70,18 @@
       "extra": {
         "node_id": "Article/710d9efc-0b2b-46c4-90c1-b685a5d0bb6e",
         "category": "工程",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/710d9efc-0b2b-46c4-90c1-b685a5d0bb6e/0_-_2026-06-13T104132.633.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/710d9efc-0b2b-46c4-90c1-b685a5d0bb6e/0_-_2026-06-13T104132.633.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     },
     {
       "title": "一次三篇！李飞飞的空间智能公司，发论文了",
       "url": "https://www.jiqizhixin.com/articles/2026-06-13-2",
       "published": "2026-06-13T03:06:00+00:00",
       "published_ts": 1781319960,
-      "summary": "",
+      "summary": "编辑｜Panda 今天，由李飞飞联合创立的空间智能公司 World Labs 在同一天发布了三篇技术论文！ 三篇论文分别由公司内部实习生主导完成，研究方向各异，但共享同一个核心命题：借助已在海量图片数据上训练成熟的 2D 生成模型，降低 3D 内容生成的难度门槛。 值得注意的是，正如 World Labs 联合创始人 Justin Johnson 所言，尽管该公司此前已有成果展示，但这三篇论文确是该公司的首批论文（first-ever papers）。 回到这三篇论文的主题： 3D 内容生成 。这是一个长期以来「说起来简单、做起来极难」的领域。 现实世界是三维的，但训练数据绝大多数是二维的（包括照片、视频、图像），而不是带有体积、深度和遮挡关系的完整空间结构。一旦转入三维，训练数据骤减，几何一致性的维护变得指数级复杂。 过去数年，研究者们已经找到了一条可行路径：不从头训练 3D 生成模型，而是将 2D 扩散模型的强大先验能力迁移到 3D 生成任务中。 World Labs 这次发布的三篇论文，分别从不同角度延伸了这条思路。 三项研究的具体切入点各有侧重： World Tracing&nbsp; 解决的是「从单张图像恢复可见表面之外的完整三维几何」问题； Modality Forcing 探索的是「如何让一个文生图模型同时具备深度感知和 3D 推理能力」； Flex4DHuman 则将问题延伸到时间维度，尝试从普通单目视频中提升出可合成的动态 4D 人体。 值得注意的是，就在论文发布的同一天，World Labs 联合创始人 Christoph Lassner 在社交媒体上宣布因病将离开公司，为这场学术亮相增添了一丝人事变局的注脚。 下面我就来具体看看 World Labs 的首批论文。 World Tracing &nbsp;让每一个像素，都指向一个完整的 3D 世界 如果",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -85,16 +91,18 @@
       "extra": {
         "node_id": "Article/ed49be67-0e32-480d-8125-1bf354a2301b",
         "category": "产业",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/ed49be67-0e32-480d-8125-1bf354a2301b/0_-_2026-06-13T104129.175.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/ed49be67-0e32-480d-8125-1bf354a2301b/0_-_2026-06-13T104129.175.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     },
     {
       "title": "30分钟人类第一人称视频，零样本教会机器人双臂操作｜马里兰大学提出HumanEgo",
       "url": "https://www.jiqizhixin.com/articles/2026-06-13",
       "published": "2026-06-13T03:00:00+00:00",
       "published_ts": 1781319600,
-      "summary": "",
+      "summary": "过去要 30 天机器人遥操作，现在只要戴上一副眼镜走一走。 当机器人的数据接口从实验室搬到日常生活，制约 scale 的瓶颈就不再是数据量，而是数据接口本身。 HumanEgo 总览：人类戴 Aria 眼镜采集第一人称视频（左），转化为交互中心表征并训练 flow matching 策略（中），策略零样本迁移到机器人&mdash;&mdash;不受环境、相机、本体限制（右）。 视觉-语言大模型这几年的成功，本质上吃的是一个廉价、可无限扩展的数据接口&mdash;&mdash;互联网。任何人写博客、拍照片，都在为下一代大模型喂数据。 但机器人学习一直没有这样的接口。当前 SOTA 操作策略依赖 机器人遥操作（teleoperation）数据 ：专业操作员通过控制器远程操作机器人，把每一次抓取、放置手动&quot;演示&quot;给机器人。这条路又贵又慢，必须在装备齐全的实验室里完成，而且数据和机器人硬件强耦合&mdash;&mdash; 换一个机器人、换一个工作站，数据几乎完全不能复用。 最近一年，学界开始尝试把人类第一人称视频当作机器人的训练数据，从 EgoMimic、EgoZero 到 AINA，不同团队都在探索这条路。但已有工作大多沿着两条路线展开：要么用人类视频与机器人数据做 协同训练（co-training） ，要么先在数千小时视频上做 大规模预训练 &mdash;&mdash;两者都还没有完全摆脱对机器人数据的依赖。一个自然的问题随之而来： 一个普通人，只拿一副智能眼镜、几分钟视频，能不能直接训练出一个可部署的机器人策略？ 来自马里兰大学（UMD）的团队提出新框架 HumanEgo ，给出了肯定的答案： 只用 30 分钟人类第一人称视频，不需要任何机器人数据、不需要针对机器人的后训练、不需要互联网级预训练 ，就能在 4 个真实世界双手协作任务上达到 &nbsp;9",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -104,16 +112,18 @@
       "extra": {
         "node_id": "Article/0f9cc292-6137-4068-b245-f23ac1c84f9c",
         "category": "工程",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/0f9cc292-6137-4068-b245-f23ac1c84f9c/0_-_2026-06-13T104124.639.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/0f9cc292-6137-4068-b245-f23ac1c84f9c/0_-_2026-06-13T104124.639.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     },
     {
       "title": "2026智源大会：一场技术硬核的AI年度盛会",
       "url": "https://www.jiqizhixin.com/articles/2026-06-12-14",
       "published": "2026-06-12T15:13:00+00:00",
       "published_ts": 1781277180,
-      "summary": "",
+      "summary": "2024 年，AI 证明了自己能完成单项任务；2025 年，AI 学会了跑通完整工作流；2026 年，AI 正在叩响 &ldquo;触达实体世界&rdquo; 的大门。 当人工智能迎来从 &ldquo;Next-Token Prediction（预测下一个词元）&rdquo; 到 &ldquo;Next Physical State Prediction（预测下一个物理状态）&rdquo; 的范式革命，当 AI 从单纯的 &ldquo;推理&rdquo; 向具备编排能力的 &ldquo;智能体 AI&rdquo; 和触达实体世界的 &ldquo;物理 AI&rdquo; 全面进化，全球 AI 创新的风向标再次指向北京。6 月 12 日，第八届北京智源大会在北京中关村国际创新中心启幕，以 &ldquo;技术前沿、国际视野、青年人才&rdquo; 为底色，汇聚两位图灵奖得主、40 余位 AI 企业 CEO 与首席科学家、200 余位顶尖专家学者，以及 30 余位 30 岁以下青年科学家，中国 AI 产业世界模型与 Agent 领域最具代表性的创新力量首次集中同台，围绕世界模型、通用智能体、具身智能三大核心方向，正式划定下一代人工智能从数字世界迈向物理世界的演进路线。 作为中国 AI 领域公认的 &ldquo;内行学术盛会&rdquo;，智源大会自创办以来，已累计汇聚 14 位图灵奖得主、过千位产学研顶尖专家，吸引全球 30 多个国家和地区超千万人次专业人士参与。今年，大会带来 25 场论坛、200 + 场重磅演讲，不仅首次实现中国 AI 产业世界模型与 Agent 领域最具代表性创新力量的集中同台，更推出 &ldquo;智能体听会&rdquo; 的全新参会体验，让全球观众直观感受 AI 落地真实场景的前沿成果。 全球顶配阵容集结 &nbsp;图灵奖得主解码下一代 AI 核心命题",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -123,16 +133,18 @@
       "extra": {
         "node_id": "Article/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff",
         "category": "产业",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff/0_-_2026-06-12T230416.581.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/f80a4baa-1bc4-4ff8-9908-b2a7a4c6aaff/0_-_2026-06-12T230416.581.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     },
     {
       "title": "Claude Fable 5最难档零分！智能体的最后考试来了",
       "url": "https://www.jiqizhixin.com/articles/2026-06-12-13",
       "published": "2026-06-12T15:09:00+00:00",
       "published_ts": 1781276940,
-      "summary": "",
+      "summary": "这几天，Anthropic 的最新模型 Claude Fable 5 发布之后，在 AI 圈激起了不小的震动。 今天一早，大模型评测平台 Arena 放出了智能体基准测试（Agent Arena）的成绩：Fable 5（High）排名第一，OpenAI 的 GPT-5.5（xHigh）屈居第二。另外，在「确认成功率」和「可引导性」等两项指标上，Fable 5（High）也稳压 GPT-5.5（xHigh）。 从 Agent Arena 的跑分来看，Fable 5 的性能强悍可见一斑。该基准通过数百万个真实世界的长周期智能体任务来评估模型，需要调用网页搜索、文件系统、终端等工具，完成写代码、制作幻灯片、网页研究、构建应用以及分析文档等复杂工作流。&nbsp; 但与此同时，在另一个智能体基准测试中，Fable 5 败给了一个多月前发布的 GPT-5.5。 它是加州大学伯克利分校宋晓东（Dawn Song）教授团队开发的 ALE，全称为 Agents&#39; Last Exam（智能体的最后考试），用来衡量 AI 智能体是否真的能够在广泛的真实世界领域中完成具有经济价值的工作。 &nbsp; ALE 测试涵盖 55 个非体力职业，包含 1500 + 项任务，由来自 100 + 机构的 300+ 位专家贡献，覆盖科学、工程、医学、法律、金融、教育等多个领域。另外，该基准提供完整的 GUI + CLI 环境，并基于最终结果进行可验证评估。 在 ALE 中，团队 评测了 Fable 5、GPT-5.5、Composer 2.5 以及其他前沿 Agent 系统 。结果既令人印象深刻，也足够让人冷静： 现在的 Agent 已经能够解决相当一部分专业任务，但当我们看向最难的那一类任务，也就是那些需要持续推理、深厚领域知识，以及长周期可靠执行的任务时，它们距离人类水平仍然很远。「有用的 Ag",
       "author": "机器之心",
       "tags": [
         "jiqizhixin",
@@ -142,9 +154,11 @@
       "extra": {
         "node_id": "Article/7e528d48-7c08-466e-945b-efdf056ce31f",
         "category": "产业",
-        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/7e528d48-7c08-466e-945b-efdf056ce31f/0_-_2026-06-12T230412.288.jpg"
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/7e528d48-7c08-466e-945b-efdf056ce31f/0_-_2026-06-12T230412.288.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
       },
-      "fetched_at": "2026-06-13T20:47:57+08:00"
+      "fetched_at": "2026-06-13T20:55:21+08:00"
     }
   ]
 }

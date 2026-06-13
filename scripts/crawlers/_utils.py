@@ -135,14 +135,27 @@ def parse_any_datetime(s: str | None) -> datetime | None:
 
 
 def in_window(dt: datetime | None, start: datetime, end: datetime,
-              tolerance_hours: int = 1) -> bool:
-    """是否在 [start, end] 窗口内（带 ±1h 容差）"""
+              tolerance_hours: int = 0) -> bool:
+    """是否在 [start, end] 窗口内
+
+    边界：默认容差 0（严格按 start/end 切割）。
+    之前默认 1h 容易导致"刚跨日的文章被两个日期窗口都捕获"
+    （如 6-12 23:00 同时被 6-12 和 6-13 抓到）。
+    抓全部 8 源 + 多日窗口时这个重复问题更明显。
+    实际跨时区发布的偏移（如 UTC vs CST）由 start/end 的时区吸收。
+    """
     if dt is None:
         return False
     dt_utc = dt.astimezone(UTC)
     start_utc = start.astimezone(UTC) - timedelta(hours=tolerance_hours)
     end_utc = end.astimezone(UTC) + timedelta(hours=tolerance_hours)
     return start_utc <= dt_utc <= end_utc
+
+
+# 兼容旧调用：保留 1h 容差别名（极少使用）
+def in_window_with_tolerance(dt: datetime | None, start: datetime, end: datetime,
+                             tolerance_hours: int = 1) -> bool:
+    return in_window(dt, start, end, tolerance_hours=tolerance_hours)
 
 
 # ---------- 数据结构 ----------
@@ -227,8 +240,8 @@ def parse_rss(url: str, *, source: str, limit: int | None = None) -> list[Item]:
 
 
 def filter_window(items: Iterable[Item], start: datetime, end: datetime,
-                  tolerance_hours: int = 1) -> list[Item]:
-    """按发布时间窗口过滤"""
+                  tolerance_hours: int = 0) -> list[Item]:
+    """按发布时间窗口过滤（严格按 start/end 切割，不带默认容差）"""
     out: list[Item] = []
     for it in items:
         if not it.published_ts:

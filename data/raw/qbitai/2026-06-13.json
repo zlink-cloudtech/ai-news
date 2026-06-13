@@ -1,7 +1,7 @@
 {
   "source": "qbitai",
   "date": "2026-06-13",
-  "saved_at": "2026-06-13T20:47:56+08:00",
+  "saved_at": "2026-06-13T20:55:21+08:00",
   "count": 4,
   "meta": {
     "feed": "https://www.qbitai.com/feed",
@@ -23,8 +23,11 @@
         "华为云"
       ],
       "source": "qbitai",
-      "extra": {},
-      "fetched_at": "2026-06-13T20:47:56+08:00"
+      "extra": {
+        "article_path": "data/articles/qbitai/435455.md",
+        "article_chars": 4774
+      },
+      "fetched_at": "2026-06-13T20:55:18+08:00"
     },
     {
       "title": "2026智源大会开幕：推动AI、物理世界和生命科学“三体互动”",
@@ -38,8 +41,11 @@
         "智源研究院"
       ],
       "source": "qbitai",
-      "extra": {},
-      "fetched_at": "2026-06-13T20:47:56+08:00"
+      "extra": {
+        "article_path": "data/articles/qbitai/435394.md",
+        "article_chars": 9612
+      },
+      "fetched_at": "2026-06-13T20:55:18+08:00"
     },
     {
       "title": "马斯克远程敲钟穿了老黄的皮衣！SpaceX员工集体穿上绿鞋",
@@ -53,8 +59,11 @@
         "马斯克"
       ],
       "source": "qbitai",
-      "extra": {},
-      "fetched_at": "2026-06-13T20:47:56+08:00"
+      "extra": {
+        "article_path": "data/articles/qbitai/435339.md",
+        "article_chars": 4641
+      },
+      "fetched_at": "2026-06-13T20:55:18+08:00"
     },
     {
       "title": "神了，世界杯第一天真按千问剧本踢了",
@@ -68,8 +77,11 @@
         "千问"
       ],
       "source": "qbitai",
-      "extra": {},
-      "fetched_at": "2026-06-13T20:47:56+08:00"
+      "extra": {
+        "article_path": "data/articles/qbitai/435321.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-13T20:55:18+08:00"
     }
   ]
 }

@@ -43,6 +43,10 @@ SOURCE_TO_BOARD: dict[str, str] = {
     "runway":    "数字人",
     "heygen":    "数字人",
     "synthesia": "数字人",
+    # 行业动态（中文 AI 资讯源）
+    "36kr":      "行业",
+    "qbitai":    "行业",
+    "jiqizhixin": "行业",
     # 其他（兜底）
 }
 
