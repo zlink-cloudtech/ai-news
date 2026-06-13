@@ -63,15 +63,17 @@ SOURCE_WEIGHT: dict[str, int] = {
 }
 
 # 板块中文标签 + emoji
+# impact_hint 写得宽，覆盖：架构 / 工具链 / 行业应用 / 安全标准化
 BOARD_META: dict[str, dict] = {
-    "LLM":   {"name": "LLM 发展",   "emoji": "🧠", "impact_hint": "对基础模型 / 行业格局 / 监管的影响"},
-    "Agent": {"name": "编程 Agent", "emoji": "💻", "impact_hint": "对开发者工具链 / IDE / 企业研发流程的影响"},
+    "LLM":   {"name": "LLM 发展",   "emoji": "🧠", "impact_hint": "对基础模型 / 行业格局 / 监管 / 企业落地的影响"},
+    "Agent": {"name": "Agent 框架与工具", "emoji": "💻", "impact_hint": "对 Agent 架构 / 工具链 / 行业应用落地的影响"},
     "数字人": {"name": "数字人",     "emoji": "🧍", "impact_hint": "对数字人产品 / 内容创作 / 商业化的影响"},
+    "行业":  {"name": "行业动态",   "emoji": "🏢", "impact_hint": "对 AI 行业格局 / 投融资 / 政策监管 / 企业战略的影响"},
     "其他":  {"name": "其他",       "emoji": "📦", "impact_hint": "对行业其他领域的影响"},
 }
 
 # 板块输出顺序（生成器消费此顺序渲染）
-BOARD_ORDER: list[str] = ["LLM", "Agent", "数字人", "其他"]
+BOARD_ORDER: list[str] = ["LLM", "Agent", "数字人", "行业", "其他"]
 
 # ============== 评分 ==============
 
@@ -195,6 +197,21 @@ def score_item(item: dict, date_iso: str) -> tuple[int, str, list[str]]:
     # 标签数量奖励
     if len(tags) >= 2:
         score += 3
+
+    # 量化数据加权（P8）：title/summary 里的数字密度（百分比 / 美元 / 万/千/百万 等）
+    # 例: "95%" / "94% 工程师" / "$1B" / "10万用户" / "3 门课程"
+    quant_pat = (
+        r"\d+(?:\.\d+)?\s?%|"           # 95% / 95 %
+        r"\$\d+(?:\.\d+)?\s?[KkMmBb]|"  # $1B / $10M
+        r"\d+(?:\.\d+)?\s?(?:万|亿|千)|"  # 10万 / 1.5亿
+        r"\d+\s?(?:倍|x|X)|"             # 10x
+        r"\d+(?:\.\d+)?\s?(?:K|k|M|m|B|b)\b"  # 1.5K / 10M
+    )
+    quant_hits = len(re.findall(quant_pat, text_blob))
+    if quant_hits >= 3:
+        score += 10  # 多个量化点 = 数据密度极高
+    elif quant_hits >= 1:
+        score += 5   # 至少 1 个量化点
 
     # 评级
     if score >= 60:

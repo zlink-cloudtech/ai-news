@@ -18,6 +18,7 @@ import argparse
 import json
 import re
 import sys
+import time
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -70,6 +71,20 @@ PROMPT_IMPACT_USER_TMPL = (
     "输出："
 )
 
+# 简版 P0 改：每个非头条条目 1-2 句，含 1-2 个量化数据点
+PROMPT_BRIEF_SYSTEM = (
+    "你是一个 AI 资讯编辑，需要把一条 RSS 摘要压缩成 1-2 句中文简版。"
+    "要求：① 总字数 ≤ 80 字 ② 必须保留 1-2 个量化数据点（如有数字、百分比、用户数）"
+    " ③ 直接陈述事实 ④ 不用'OpenAI 宣布/据悉/本文/作者'等套话 ⑤ 句末加句号"
+)
+
+PROMPT_BRIEF_USER_TMPL = (
+    "标题：{title}\n"
+    "摘要：{summary}\n"
+    "标签：{tags}\n"
+    "请输出 1-2 句简版："
+)
+
 PROMPT_ONE_LINE_SYSTEM = (
     "你是一个 AI 行业分析师，擅长用 1 句中文总结今日 AI 资讯全貌。"
     "要求：① 60 字以内 ② 突出主线/重要动态（哪个领域/什么方向） ③ 不写'今日/据悉'开头"
@@ -80,14 +95,36 @@ PROMPT_ONE_LINE_USER_TMPL = (
     "输出："
 )
 
+# 跨话题洞察 P3 改：先列 5 条候选 → 维度多样 + 主语不同 + 压缩到 2-3 条
 PROMPT_INSIGHTS_SYSTEM = (
     "你是一个 AI 行业分析师，擅长从多板块 AI 资讯中提炼跨话题洞察。"
-    "要求：① 输出 2-3 条洞察 ② 每条 30-50 字 ③ 找共同主题/上下游关系/对偶关系"
+    "硬性规则：\n"
+    "① 必须先列 5 条候选洞察（覆盖不同维度：产品 / 技术 / 趋势 / 行业 / 资本）\n"
+    "② 再去重压缩到 2-3 条最终洞察\n"
+    "③ 最终每条 30-50 字\n"
+    "④ 禁止 2 条洞察用相同主语开头（如不能 2 条都以'OpenAI'开头）\n"
+    "⑤ 至少 1 条必须真正'跨话题'（同时涉及 2 个板块）\n"
+    "⑥ 禁词：'本文'、'据悉'、'今日'、'作者'、'该文章'"
 )
 
 PROMPT_INSIGHTS_USER_TMPL = (
     "各板块 Top 资讯：\n{context}\n"
-    "输出（每条 1 行，编号）："
+    "请按规则输出 2-3 条最终洞察（每条 1 行，编号）："
+)
+
+# 待跟进 P6 改：生成"主语+动词+具体动作"的 action 清单
+PROMPT_FOLLOWUP_SYSTEM = (
+    "你是一个 AI 行业分析师，需要基于今日 AI 资讯生成 2-3 条读者可执行的 action。"
+    "硬性规则：\n"
+    "① 每条都是「主语（读者/团队/某角色） + 动词（做什么） + 具体动作」的祈使句\n"
+    "② 动作必须可立即执行（不是'跟进 XX'这种空话）\n"
+    "③ 字数 25-50 字\n"
+    "④ 输出不带 markdown 编号"
+)
+
+PROMPT_FOLLOWUP_USER_TMPL = (
+    "今日 Top 资讯：\n{context}\n"
+    "请输出 2-3 条可执行 action（每条 1 行，祈使句）："
 )
 
 
@@ -99,6 +136,7 @@ class LLMUsage:
     def __init__(self) -> None:
         self.calls: int = 0
         self.failed: int = 0
+        self.cache_hits: int = 0
         self.last_provider: str = ""
         self.last_model: str = ""
 
@@ -114,19 +152,29 @@ class LLMUsage:
         if self.calls == 0 and self.failed == 0:
             return "未启用 LLM（无 .secrets 配置或 --no-llm）"
         base = f"{self.calls} 次调用"
+        if self.cache_hits:
+            base += f"（{self.cache_hits} 次缓存命中）"
         if self.failed:
-            base += f"（{self.failed} 次降级到规则渲染）"
+            base += f"，{self.failed} 次降级到规则渲染"
         return f"{base} · {self.last_provider}/{self.last_model}"
 
 
 def _safe_llm(usage: LLMUsage, client: LLMClient | None,
               system: str, user: str) -> str | None:
-    """调一次 LLM；未配置 / 失败均返 None（调用方降级到规则）"""
+    """调一次 LLM；未配置 / 失败均返 None（调用方降级到规则）
+
+    注：缓存命中算成功（不重复计数 cache_hits 由 chat() 内部统计）
+    """
     if client is None:
         usage.add_fail()
         return None
     try:
+        # 探测缓存命中（在 add_call 前）
+        cache_key = client._cache_key(system, user)
+        was_cached = client._cache_get(cache_key) is not None
         usage.add_call(client.provider, client.model)
+        if was_cached:
+            usage.cache_hits += 1
         return client.chat(system, user)
     except LLMError as e:
         print(f"[WARN] LLM 调用失败，降级到规则: {e}", file=sys.stderr)
@@ -153,6 +201,17 @@ def llm_impact(client: LLMClient | None, summary: str, article: str,
     return _safe_llm(usage, client, sys_msg, user_msg)
 
 
+def llm_brief(client: LLMClient | None, title: str, summary: str,
+              tags: list[str], usage: LLMUsage) -> str | None:
+    """简版 — 1-2 句中文，含 1-2 个量化数据点"""
+    user_msg = PROMPT_BRIEF_USER_TMPL.format(
+        title=title or "（无标题）",
+        summary=summary or "（无摘要）",
+        tags="、".join(tags or []) or "（无标签）",
+    )
+    return _safe_llm(usage, client, PROMPT_BRIEF_SYSTEM, user_msg)
+
+
 def llm_one_line_summary(client: LLMClient | None, context: str,
                          usage: LLMUsage) -> str | None:
     """一句话总结"""
@@ -167,11 +226,26 @@ def llm_cross_insights(client: LLMClient | None, context: str,
                     PROMPT_INSIGHTS_USER_TMPL.format(context=context))
     if not raw:
         return None
-    # 按行拆；去 "1. " / "1、" 编号
+    # 按行拆；去 "1. " / "1、" 编号；丢弃"候选 1/2/3/4/5"中间过程（如有）
     lines: list[str] = []
     for line in raw.splitlines():
         s = re.sub(r"^\s*\d+[\.、]\s*", "", line).strip()
-        if s:
+        if s and not s.startswith("候选") and "→" not in s[:5]:
+            lines.append(s)
+    return lines[:3] if lines else None
+
+
+def llm_followup_actions(client: LLMClient | None, context: str,
+                         usage: LLMUsage) -> list[str] | None:
+    """待跟进 action 清单 — 返 list[str]（每条 1 行，祈使句）"""
+    raw = _safe_llm(usage, client, PROMPT_FOLLOWUP_SYSTEM,
+                    PROMPT_FOLLOWUP_USER_TMPL.format(context=context))
+    if not raw:
+        return None
+    lines: list[str] = []
+    for line in raw.splitlines():
+        s = re.sub(r"^\s*[\-\*]?\s*\d+[\.、]?\s*", "", line).strip()
+        if s and len(s) >= 8:  # 过滤过短的无意义行
             lines.append(s)
     return lines[:3] if lines else None
 
@@ -351,7 +425,7 @@ def render_board_section(board: str, items: list[ScoredItem], date_iso: str,
         lines.append(article_block)
         lines.append("")
 
-    # 2-N：简版列表
+    # 2-N：简版列表（P0 改：LLM 改写 1-2 句）
     if len(items) > 1:
         lines.append(f"### 其余 {len(items) - 1} 条（简版）")
         lines.append("")
@@ -359,11 +433,19 @@ def render_board_section(board: str, items: list[ScoredItem], date_iso: str,
             tag_md = ""
             if it.matched_tags:
                 tag_md = " " + " ".join(f"`#{t}`" for t in it.matched_tags[:3])
-            short_summary = it.summary[:120] + ("…" if len(it.summary) > 120 else "")
+
+            # 简版内容：LLM 改写 1-2 句（含量化数据）> RSS summary 截断 100 字
+            short_text = ""
+            if llm:
+                llm_b = llm_brief(llm, it.title, it.summary, it.tags, usage)
+                if llm_b:
+                    short_text = llm_b
+            if not short_text:
+                short_text = it.summary[:120] + ("…" if len(it.summary) > 120 else "")
             article_marker = " 📄" if _read_article_path(it, repo_root) else ""
             lines.append(
                 f"{idx}. **{it.grade}** [{it.title}]({it.url}) — {it.source} · "
-                f"{fmt_time_cn(it.published_dt)} — {short_summary}{tag_md}{article_marker}"
+                f"{fmt_time_cn(it.published_dt)} — {short_text}{tag_md}{article_marker}"
             )
         lines.append("")
 
@@ -424,6 +506,35 @@ def _build_insights_context(groups: dict[str, list[ScoredItem]]) -> str:
     return "\n".join(parts) if parts else "（无数据）"
 
 
+def _build_followup_context(groups: dict[str, list[ScoredItem]]) -> str:
+    """给 LLM 准备待跟进 action 的上下文（只取头部前 5 条）"""
+    parts: list[str] = []
+    for board in BOARD_ORDER:
+        items = groups.get(board, [])
+        if not items:
+            continue
+        meta = BOARD_META.get(board, BOARD_META["其他"])
+        for it in items[:3]:
+            parts.append(f"- [{meta['name']}] {it.title}（{it.source}）— {it.summary[:100]}")
+    return "\n".join(parts[:8]) if parts else "（无数据）"
+
+
+def _calc_grade_distribution(groups: dict[str, list[ScoredItem]]) -> tuple[int, int, int, int]:
+    """计算总条数 / 🔴/🟡/🟢 分布"""
+    total = 0
+    h = m = l = 0
+    for v in groups.values():
+        for it in v:
+            total += 1
+            if it.grade == "🔴":
+                h += 1
+            elif it.grade == "🟡":
+                m += 1
+            else:
+                l += 1
+    return total, h, m, l
+
+
 def render_daily_report(
     date_iso: str,
     groups: dict[str, list[ScoredItem]],
@@ -432,10 +543,10 @@ def render_daily_report(
     repo_root: Path,
     llm: LLMClient | None = None,
     usage: LLMUsage | None = None,
+    elapsed_seconds: float = 0.0,
 ) -> str:
     """渲染完整每日资讯 Markdown"""
-    total = sum(len(v) for v in groups.values())
-    total_high = total_mid = total_low = 0
+    total, total_high, total_mid, total_low = _calc_grade_distribution(groups)
 
     # 提取主题词（按板块）
     board_keywords: dict[str, list[str]] = {}
@@ -454,8 +565,8 @@ def render_daily_report(
     lines.append(f"# 🤖 AI每日资讯 | {date_iso}（昨日）")
     lines.append("")
     lines.append(f"> **数据范围**：{date_iso} 00:00 ~ {date_iso} 23:59（昨日全天，不含当日）")
-    lines.append(f"> **话题板块**：🧠 LLM 发展 · 💻 编程 Agent · 🧍 数字人 · 📦 其他（可扩展）")
-    lines.append(f"> **每版块条数**：Top 10（按\"重要度 + 时新性 + 影响力\"综合排序；不足 10 条则按实际条数展示）")
+    lines.append("> **话题板块**：🧠 LLM 发展 · 💻 Agent 框架与工具 · 🧍 数字人 · 🏢 行业动态 · 📦 其他（可扩展）")
+    lines.append("> **每版块条数**：Top 10（按\"重要度 + 时新性 + 影响力\"综合排序；不足 10 条则按实际条数展示）")
     lines.append("")
     lines.append("---")
     lines.append("")
@@ -473,7 +584,6 @@ def render_daily_report(
         h = sum(1 for it in items if it.grade == "🔴")
         m = sum(1 for it in items if it.grade == "🟡")
         l = sum(1 for it in items if it.grade == "🟢")
-        total_high += h; total_mid += m; total_low += l
         kws = "、".join(board_keywords.get(board, [])) or "—"
         lines.append(f"| {emoji} {name} | {len(items)} | {h} | {m} | {l} | {kws} |")
     lines.append(f"| **合计** | **{total}** | **{total_high}** | **{total_mid}** | **{total_low}** | — |")
@@ -487,7 +597,7 @@ def render_daily_report(
 
     # 一句话总结（LLM 优先，规则降级）
     if total == 0:
-        summary_line = f"{date_iso} 全网 AI 资讯较少，主要源（OpenAI/DeepMind/LangChain/Replicate/Runway）均无新增。"
+        summary_line = f"{date_iso} 全网 AI 资讯较少，已对接的源均无新增。"
     else:
         summary_line = None
         if llm:
@@ -525,10 +635,15 @@ def render_daily_report(
     lines.append("---")
     lines.append("")
 
-    # 待跟进
+    # 待跟进（P6 改：LLM action 化 > 规则降级）
     lines.append("## 📌 待跟进")
     lines.append("")
-    todos = build_todos(groups)
+    todos: list[str] | None = None
+    if llm and total > 0:
+        ctx = _build_followup_context(groups)
+        todos = llm_followup_actions(llm, ctx, usage)
+    if not todos:
+        todos = build_todos(groups)
     if todos:
         for t in todos:
             lines.append(f"- [ ] {t}")
@@ -538,7 +653,7 @@ def render_daily_report(
     lines.append("---")
     lines.append("")
 
-    # 信息源记录（动态生成）
+    # 信息源记录
     lines.append("## 📎 信息源记录")
     lines.append("")
     lines.append("| 板块 | 抓取来源 | 命中条数 | 状态 |")
@@ -548,7 +663,7 @@ def render_daily_report(
         name = meta["name"]
         items = groups.get(board, [])
         src_in_board = sorted({it.source for it in items})
-        all_srcs = [s for s, b in [(s, classify_board(s)) for s in per_source.keys()] if b == board]
+        all_srcs = [s for s in per_source.keys() if classify_board(s) == board]
         if not src_in_board and not all_srcs:
             continue
         for s in (src_in_board or all_srcs):
@@ -557,7 +672,20 @@ def render_daily_report(
             lines.append(f"| {name} | {s} | {count} | {mark} |")
     lines.append("")
 
-    # 底部 LLM 成本 log
+    # 📈 元信息（P11 新增）
+    lines.append("## 📈 元信息")
+    lines.append("")
+    n_sources_configured = len(per_source)
+    n_sources_hit = sum(1 for v in per_source.values() if v > 0)
+    hit_rate = (n_sources_hit / n_sources_configured * 100) if n_sources_configured else 0
+    lines.append(f"- **数据源**：{n_sources_configured} 个配置 / {n_sources_hit} 个命中 / 命中率 {hit_rate:.0f}%")
+    lines.append(f"- **总条数**：{total}（🔴 {total_high} / 🟡 {total_mid} / 🟢 {total_low}）")
+    lines.append(f"- **LLM 精炼**：{usage.to_footer()}")
+    if elapsed_seconds > 0:
+        lines.append(f"- **生成耗时**：{elapsed_seconds:.1f}s")
+    lines.append("")
+
+    # 底部 log
     lines.append(
         f"*采集时间：{fmt_clock(datetime.fromisoformat(fetched_at).astimezone(ZoneInfo('Asia/Shanghai')))} · "
         f"信息源数量：{len(per_source)} · "
@@ -575,7 +703,7 @@ def build_one_line_summary(date_iso: str, groups: dict[str, list[ScoredItem]],
     """规则版一句话总结（LLM 不可用时的降级方案）"""
     total = sum(len(v) for v in groups.values())
     if total == 0:
-        return f"{date_iso} 全网 AI 资讯较少，主要源（OpenAI/DeepMind/LangChain/Replicate/Runway）均无新增。"
+        return f"{date_iso} 全网 AI 资讯较少，已对接的源均无新增。"
 
     parts: list[str] = []
     if main_signals:
@@ -630,13 +758,14 @@ def build_cross_insights(groups: dict[str, list[ScoredItem]]) -> list[str]:
 
 
 def build_todos(groups: dict[str, list[ScoredItem]]) -> list[str]:
-    """生成待跟进事项"""
+    """规则版待跟进事项（LLM 不可用时的降级方案）"""
     todos: list[str] = []
     high_items = [it for it in (it for v in groups.values() for it in v) if it.grade == "🔴"]
     for it in high_items[:3]:
-        todos.append(f"跟进 [{it.source}]「{it.title}」后续影响与生态反应")
+        todos.append(f"读完 [{it.source}]({it.url})「{it.title}」全文，整理 3 条要点分享给团队")
     if not high_items:
-        todos.append("昨日无高优条目，可考虑扩大抓取源覆盖（如 HF / GitHub Trending）")
+        todos.append("评估是否需补充抓取源（如 36Kr / 量子位 / 机器之心）以提升日报覆盖")
+        todos.append("抽样近 3 天日报，对比 LLM 精炼版 vs 模板版，评估是否需要调整 prompt")
     return todos
 
 
@@ -681,6 +810,7 @@ def main():
         else:
             print(f"[i] LLM 客户端已加载: {llm!r}", file=sys.stderr)
 
+    t0 = time.time()
     raw_items, per_source = load_raw_items(date_iso, raw_root)
     if not raw_items:
         print(f"[WARN] {date_iso} 窗口内无任何抓取数据（请确认已运行抓取脚本）", file=sys.stderr)
@@ -689,7 +819,7 @@ def main():
 
     fetched_at = datetime.now(ZoneInfo("Asia/Shanghai")).isoformat()
     md = render_daily_report(date_iso, groups, per_source, fetched_at, _REPO_ROOT,
-                             llm=llm, usage=usage)
+                             llm=llm, usage=usage, elapsed_seconds=time.time() - t0)
 
     if args.dry_run:
         print(md)
