@@ -1,0 +1,227 @@
+{
+  "source": "jiqizhixin",
+  "date": "2026-06-14",
+  "saved_at": "2026-06-15T01:05:24+08:00",
+  "count": 10,
+  "meta": {
+    "graphql": "https://www.jiqizhixin.com/graphql",
+    "window": [
+      "2026-06-14T00:00:00+08:00",
+      "2026-06-14T23:59:59.999999+08:00"
+    ],
+    "list_total": 30,
+    "detail_fetched": 10
+  },
+  "items": [
+    {
+      "title": "Claude Fable 5四日惊魂",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-10",
+      "published": "2026-06-14T08:29:00+00:00",
+      "published_ts": 1781425740,
+      "summary": "编辑｜Panda 从万众期待的「AI 封神时刻」，到美国政府一纸禁令强制下线 &mdash;&mdash; 这个名字中有 5 的模型，没活过 5 天。 让我们先停下来，感受一下这件事的荒诞程度。 2026 年 6 月 9 日，Anthropic 将它最强大的模型 Claude Fable 5 对外正式发布。那一天，开发者社群沸腾了，评测帖子在 𝕏 上刷屏，有人说它「碾压一切」，有人说它「改写了 AI 的上限」。Anthropic 的 Mythos 系列，这个此前只对五六家机构开放的神秘模型家族，终于向普通公众打开了一道门缝。 然后，四天后，这扇门被人从外面焊死了。 6 月 12 日，美国商务部长霍华德・卢特尼克（Howard Lutnick）向 Anthropic CEO Dario Amodei 寄出一封信：以「国家安全」为由，禁止 Fable 5 和 Mythos 5 向任何外国公民开放访问 &mdash;&mdash; 无论这些人身处美国境内还是境外，甚至包括 Anthropic 内部的外籍员工。Anthropic 当晚收到指令的时间，是美东时间下午 5 点 21 分。 到晚上，Fable 5 在全球范围内下线。 四天。96 个小时。一场从高光到猝死的极速坠落。 第一天：神话降临 Fable 这个词来自拉丁语 fabula，意为「被讲述的故事」，与希腊语 mythos 同根。Anthropic 在命名上颇费心思：Mythos 系列是为少数精英保留的神话，Fable 则是普罗大众可以听到的那个故事。 6 月 9 日，Anthropic 发布了 Claude Fable 5，这是其 Mythos 模型的首个公开版本，该公司称其在软件工程、知识工作和视觉方面表现卓越，但附带严格的安全限制。与此同时，Anthropic 还发布了一款双胞胎产品：Claude Mythos 5&",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/c7b1a44b-4e51-4ae7-9894-c2f5fc064e2e",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/c7b1a44b-4e51-4ae7-9894-c2f5fc064e2e/0_-_2026-06-14T160245.491.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "BudgetMem：给Runtime Agent Memory装上「预算路由器」，让记忆系统学会按需分配运行成本",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-9",
+      "published": "2026-06-14T08:27:00+00:00",
+      "published_ts": 1781425620,
+      "summary": "Haozhen Zhang 现为 Nanyang Technological University（NTU）博士生，导师 Wenya Wang 为 NTU 计算机与数据科学学院助理教授。团队研究聚焦 LLM Agent Memory、LLM Interpretability 与高效智能体系统，关注大语言模型在 reasoning、memory 与 multimodal grounding 等方面的能力构建，致力于发展更可解释、高效且具备泛化能力的大模型系统。本工作同时与香港科技大学（广州）Chengwei Qin 老师合作完成；Chengwei Qin 现为香港科技大学（广州）人工智能学域助理教授，主要关注大语言模型智能体、多模态学习以及模型的高效学习。 BudgetMem：给 Runtime Agent Memory 装上 &ldquo;预算路由器&rdquo; 让记忆系统学会按需分配运行成本 当 LLM Agent 处理长期对话、多轮交互和复杂文档时，Memory 已经成为不可或缺的核心模块。它帮助智能体保存历史、检索信息、维持个性化上下文，并支撑跨时间的推理能力。 但一个现实问题常常被忽视： Agent Memory 到底应该花多少成本来处理历史？ 如果一个 query 只需要简单事实，是否有必要调用昂贵的 LLM 进行复杂总结？如果一个 query 依赖跨时间、跨实体、跨主题的多条证据，低成本检索和粗粒度摘要又是否足够？ 对此，研究团队提出 BudgetMem: Learning Query-Aware Budget-Tier Routing for Runtime Agent Memory ，旨在让 Agent Memory 从固定的记忆处理流水线，转向 query-aware 的动态预算分配机制：对于简单 query 使用低成本处理路径，对于复杂 query 则",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/464c8e35-09d7-4898-9a43-0d180bfc58e8",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/464c8e35-09d7-4898-9a43-0d180bfc58e8/0_-_2026-06-14T160242.409.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "AI圈懵了：一家巴西市政IT公司开源的大模型，杀进了全球第一梯队",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-8",
+      "published": "2026-06-14T08:21:00+00:00",
+      "published_ts": 1781425260,
+      "summary": "今天，除了全球（非美）被禁的 Claude Fable 5，AI 社区还被一个开源模型刷屏了。 有推特博主发现，一个由巴西里约热内卢市政府旗下 IT 公司开源的模型 &nbsp;Rio 3.5 397B，在多项基准测试中超越了 Qwen 3.7 Plus 等开源模型，而这个模型的基础模型还是 Qwen3.5-397B-A17B 。 另一位推特博主「Chubby」对此表示不可思议，「一个以前从来没听过的模型现在成了开源 SOTA，甚至超过了 Qwen 3.7。」 「这让所有人都挺意外。直到今天，巴西当地从业者几乎没人知道这个模型的存在。」 这已经是本周第二个基于 Qwen3.5 做后训练、并跻身前沿水平的模型了。另一个是 Nex-N2-Pro 397B，同样基于 Qwen3.5-397B-A17B 构建，性能可比肩 GPT-5.5 和 Opus 4.7 等顶级模型。 Rio 3.5 的崛起让 Huggingface 联合创始人兼 CEO Clem Delangue 发出了感叹，「AI 的未来没有什么是注定的。接下来会发生，我们每个人都有选择和行动的空间：路径一：闭源 API，权力集中，未来由硅谷和华盛顿少数人决定。路径二：开源 AI，让每个人都能参与、拥有并共同构建，包括里约市这样的机构。选你的路吧，朋友。」 接下来，我们来了解一下 Rio 3.5 397B 模型的技术细节。 Huggingface 地址：https://huggingface.co/prefeitura-rio/Rio-3.5-Open-397B #rio -35-open-397b Rio 3.5 Open 397B 是一款前沿级通用 AI 模型，由里约热内卢市政府旗下的市政 IT 公司 IplanRIO 开发。 该模型基于 Qwen 3.5 397B 进行后训练，在智能体编程、数学、STEM、多语言和多",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/360dd352-9266-42d6-a4e8-e7cbf052e5bf",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/360dd352-9266-42d6-a4e8-e7cbf052e5bf/0_-_2026-06-14T155944.609.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "图片越糊越危险？西湖大学发现多模态大模型「攻击舒适区」",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-7",
+      "published": "2026-06-14T08:16:00+00:00",
+      "published_ts": 1781424960,
+      "summary": "多模态大模型越来越会读图中文字，但最新研究显示，「读得出来」并不等于「防得住」。西湖大学 AGI Lab 的研究团队发现，当有害文本被渲染成低清、模糊或带噪图片后，模型在一个特定清晰度区间内反而更容易被越狱。该论文已被 ACL 2026 Findings 接收，并开源代码与核心数据。 如果把一段长文本压缩成图片，再交给多模态大模型处理，会发生什么？ 在长上下文成为大模型基础能力之后，这个问题正在变得现实。DeepSeek-OCR、Glyph 等工作已经展示了一条颇具吸引力的路线：把文本渲染成高密度图像，用更少视觉 token 承载更多上下文。换句话说，模型不再只是「看图」，也开始用视觉通道「读文档」。 但安全问题也随之而来：当文本被压缩进图像，尤其是图像变得低清、模糊、带噪声之后，模型的安全对齐还能像处理纯文本时一样稳定吗？ 西湖大学 AGI Lab 的一项新研究给出了一个反直觉答案：在某些「刚好还能看清、但识别起来很费力」的视觉退化区间里，多模态大模型的安全防线会明显变脆。论文已被 ACL 2026 Findings 接收。 论文的第一作者为西湖大学 AGI 实验室研究助理宋志学，指导老师为西湖大学助理教授张驰。 论文标题： Hard to Read, Easy to Jailbreak: How Visual Degradation Bypasses MLLM Safety Alignment 论文链接：https://arxiv.org/pdf/2605.07250 代码与数据：https://github.com/Westlake-AGI-Lab/ACZ-Jailbreak &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 清晰输入通常会触发安全拒绝；视觉退化后的同类文本更容易绕过安全检查。 不是越模糊越",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/5a9683b7-d39d-4517-a994-9b20bbed382f",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/5a9683b7-d39d-4517-a994-9b20bbed382f/0_-_2026-06-14T155934.053.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "Fable 5被特朗普禁止幕后黑手曝光？Karpathy可能也用不了了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-6",
+      "published": "2026-06-14T08:12:00+00:00",
+      "published_ts": 1781424720,
+      "summary": "昨天，美国特朗普政府对 Anthropic 的 &nbsp;Fable 5 和 Mythos 5 模型开启禁令 ，全面禁止外国政府、企业和个人的访问权限。 在发布仅仅 4 天后，Fable 5 就已经结束了其「神话」。 这次的管制范围包括 美国境外任何地点，以及美国境内的所有外国人 。也就是说，已经加入 Anthropic 进行研发工作的 Andrej Karpathy 或许也被禁止使用其最新模型。 当然，此类消息准确性存疑。Karpathy 持有 EB-1 杰出人才绿卡，是合法永久居民，根据出口管制法，他被归类为美国人，尽管他出生在斯洛文尼亚，但很可能因此不受限制。 LeCun 表示， Dario Amodei 为自己无故散布恐慌而导致美国境内的外国雇员无法使用 Fable 模型的结果付出了代价。 昨天的报道中我们提到，据一名政府官员透露，美国商务部得知，「另一家公司」声称已经成功越狱 Mythos，这一事件让政府对潜在国家安全风险感到担忧。 最新内幕消息释出，导致特朗普政府封禁 Fable 5 和 Mythos 5 的直接原因来自于亚马逊。 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Axios 报道 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; WSJ 报道 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 路透社报道 据 Axios 报道，亚马逊向政府官员递交了一份研究报告，声称其研究人员通过一系列提示词成功「越狱」了 Fable 5，",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/5e4edf4a-9aad-4e51-956d-e26008b9e0b6",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/5e4edf4a-9aad-4e51-956d-e26008b9e0b6/0_-_2026-06-14T155852.711.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "CVPR 2026 | GaussianDWM：用3D高斯表示统一自动驾驶场景理解与多模态生成",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-5",
+      "published": "2026-06-14T08:08:00+00:00",
+      "published_ts": 1781424480,
+      "summary": "自动驾驶世界模型的研究目标已经从单纯预测未来视觉帧，扩展到构建可用于场景理解、空间定位和后续决策的世界表示。如果模型只能生成外观上合理的未来图像，却无法回答场景中有哪些目标、目标位于何处，以及不同视角下的空间结构如何变化，那么它仍然缺少对三维驾驶环境的显式建模能力。 GaussianDWM 关注的正是这一问题：在统一的 3D 场景表示中同时支持理解任务和生成任务。 作者：Tianchen Deng, Xuefeng Chen, Yi Chen, Qu Chen, Yuyao Xu, Lijin Yang, Le Xu, Yu Zhang, Bo Zhang, Wuxiong Huang, Hesheng Wang 机构：上海交通大学、清华大学、旷视科技、Mach Drive&nbsp; 论文名称：GaussianDWM: 3D Gaussian Driving World Model for Unified Scene Understanding and Multi-Modal Generation 开源地址：https://github.com/dtc111111/GaussianDWM GaussianDWM 试图把这两件事放到同一个框架里：一边做驾驶场景理解，一边完成空间生成、时间生成和 RGB-D 生成。它的核心选择是把 3D Gaussian scene representation 放在世界模型中间，用同一种 3D 表示同时承载几何、外观和语言语义。 面向场景理解的自动驾驶世界模型 过去几年，Driving World Model 的讨论大多围绕生成能力展开。一个典型目标是：给定当前或历史观测，模型预测未来的驾驶场景，或者在车辆发生位姿变化时合成新的视角。这类能力对仿真、数据生成和闭环评测都很有价值，但它并没有覆盖自动驾驶系统真正需要面对的全部问题。 在真实驾驶",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/421718f2-e07e-4a39-8f76-ac7a278cc930",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/421718f2-e07e-4a39-8f76-ac7a278cc930/0_-_2026-06-14T155819.446.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "支付宝政务AI助手“晓政”服务突破1亿次",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-4",
+      "published": "2026-06-14T02:40:00+00:00",
+      "published_ts": 1781404800,
+      "summary": "6月12日，支付宝宣布，旗下政务AI助手&ldquo;晓政&rdquo;累计服务次数突破1亿次。 2025年9月，支付宝正式推出政务AI助手&ldquo;晓政&rdquo;，聚焦群众办事痛点，助力各地政务服务提质增效，推动便民服务&ldquo;高效办成一件事&rdquo;。截至目前，&ldquo;晓政&rdquo;服务已覆盖16000项服务事项，成功落地助力70余家部委及省级政务机构，业务场景全面覆盖公积金、人社、公安、不动产等高频民生领域。依托AI技术，助力政务服务从传统&ldquo;人找服务&rdquo;的货架式查询模式，升级为&ldquo;服务找人、对话即办&rdquo;的智能化新模式，大幅提升群众办事便捷度。 基于多年数字政务服务深耕经验，&ldquo;晓政&rdquo;打造多项智能服务能力，全方位优化群众办事体验。针对社保查询、公积金查询及提取、高考查分、话费充值等民生热点服务，实现了&ldquo;即问即查、一句话办事&rdquo;，用户无需跳转菜单，对话间即可完成办理；面对流程长、材料多的办事事项，创新提供&ldquo;智能浮层引导&rdquo;、&ldquo;AI辅助填表&rdquo;以及&ldquo;边办边问&rdquo;（智能识屏、主动解答）等辅助办理能力。它像一位贴心的&ldquo;政务助理&rdquo;，在用户办事的每一步都提供实时指引，让复杂变简单，让办事更有温度。 &ldquo;1亿次服务的背后，是1亿次&lsquo;少跑腿&rsquo;的民生便利。&rdquo;支付宝数字民生事业部负责人李毅强表示。目前，&ldquo;晓政&rdquo;已形成可复制、可推广、可持续迭代的智能政务标准化解决方案，持续助力各地数字政务体系升级以及智慧政务普惠落地。 未来，支付宝&ldquo;晓政&rdquo;将持续深耕技术创新、拓展服务场景，持续优化极简办事体验。用户",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/4ccd938a-8237-4557-9654-425c353e687d",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/4ccd938a-8237-4557-9654-425c353e687d/%E5%9B%BE%E7%89%871.png",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "DeepMind震撼报告：四条通往超级人工智能之路",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-3",
+      "published": "2026-06-14T02:01:00+00:00",
+      "published_ts": 1781402460,
+      "summary": "编辑｜Panda 今年 2 月，谷歌 DeepMind CEO 德米斯&middot;哈萨比斯在印度 AI 峰会上发表了一番令人屏息的预言：「AGI 到来后，将产生工业革命十倍的影响，但以十倍的速度发生&mdash;&mdash;大概在十年内展开，而不是一个世纪。」他还认为， AGI 可能将在 5 年内到 来。 这不是科幻小说的台词。说这话的人是亲手打造 AlphaGo、AlphaFold 的那个人。 而在哈萨比斯的身旁，还有另一个更耐人寻味的存在&mdash;&mdash;他的联合创始人&nbsp; Shane Legg ，自 2009 年起就在公开场合声称：「AGI 在 2028 年到来的概率是 50%。」这个预测，他坚持了 17 年。 &nbsp; &nbsp; &nbsp; 节选自 Shane Legg 去年底参加的播客《The arrival of AGI》 就在前两天，这位 Legg 与十余位谷歌 DeepMind 顶尖研究员联手发布了一份长达 57 页的报告：《 从 AGI 到 ASI 》。报告的核心问题不再是「AGI 何时到来」，而是当我们真的造出了与普通人类认知水平相当的 AI 之后，会发生什么？ 这是一个比「AGI 何时到来」更难回答、也更值得认真对待的问题。 论文标题：From AGI to ASI 论文地址：https://arxiv.org/abs/2606.12683 一道被跳过的追问 过去几年，「AGI 时间线」几乎成了科技圈最热的话题游戏。马斯克说 2026 年就是奇点之年，OpenAI 的奥特曼预测 2028 年，就连一向持怀疑态度的 LeCun 也将自己的预测从「遥远未来」拉近到了 2030~2035 年。 但在这场预测竞赛中，有一个问题几乎没人认真回答：就算 AGI 真的来了，它会停在那里吗？ 人类历史上，每一种可以自我强化的技术从未真",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/8c9ad9c9-6a53-404c-b471-68c333990c4f",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/8c9ad9c9-6a53-404c-b471-68c333990c4f/0_-_2026-06-14T094434.284.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "员工骂高管、限token使用量、扎克伯格承认犯错：Meta内部炸锅了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14-2",
+      "published": "2026-06-14T01:56:00+00:00",
+      "published_ts": 1781402160,
+      "summary": "真是大反转啊！ 就在今年春天，Meta 还在公司内部搞出了一套 token 消耗排行榜，甚至催生出一种名为 tokenmaxxing 的玩法：员工们通过大量使用 AI、疯狂消耗 token，来证明自己是 AI 重度用户。 没成想，几个月后，风向彻底变了。当内部 AI 使用成本开始冲向数十亿美元，Meta 不得不从 tokenmaxxing 转向 Tokenminimizing： 不再鼓励员工拼命烧 token 。 没错， 为了削减成本，Meta 开始限制员工的 token 使用量了 。 内部 AI 成本，正在冲向数十亿美元 据 The Information 看到的一份内部备忘录显示，Meta 正在搭建一个内部平台，用于 实时追踪员工的 AI 使用情况和相关支出，设定预算，并对员工的 token 花费设置上限 。Meta 将这份备忘录分享给了约 6000 名员工。 文章地址：https://www.theinformation.com/articles/tokenminimizing-meta-moves-curb-employee-ai-usage-ai-costs-reach-billions 备忘录写道： 我们看到 AI 使用量呈指数级增长，照目前趋势， 仅内部使用一项在 2026 年就将花费数十亿美元 。与此同时，个人和团队对于自己如何使用 AI、花费多少，缺乏足够的可见性和控制力。到 2027 年，我们预计 Meta 将以更结构化的方式管理 AI token，包括预算、分配决策和配套工具。 作为压缩支出的一部分，一个由产品开发人员和工程师组成的团队已经创建了一个名为 AI Gateway 的中央仪表盘，用于集中监控使用情况和支出。 备忘录显示，Meta 还将推出自动提醒机制，用于提示异常的支出激增。该团队也在跟踪当前成本，以预测未来支出，从而规划算力容量，并与供应",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "产业"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/39d9cf34-b790-4a17-8fd6-496dde344ec5",
+        "category": "产业",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/39d9cf34-b790-4a17-8fd6-496dde344ec5/0_-_2026-06-14T094430.895.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    },
+    {
+      "title": "PEFT方法评测不能只看下游分：通用能力损失也该被量化",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-14",
+      "published": "2026-06-14T01:51:00+00:00",
+      "published_ts": 1781401860,
+      "summary": "以 LoRA 为代表的参数高效微调（Parameter-Efficient Fine-Tuning，PEFT）已成为大模型适配与后训练的主流选择。相比全量微调，PEFT 仅更新少量参数，训练开销更低，也更容易在不同任务间快速部署。 然而，在 PEFT 方法的评测中， 目标任务性能仍然是最常被强调的指标 ；相比之下，微调过程中模型遗忘了什么，往往缺少系统评估。 一个方法在提升数学正确率的同时，是否会显著削弱模型的指令遵循、事实回忆或通用推理能力？不同 PEFT 方法在下游适配与通用能力保留之间，究竟表现如何？这正是 PEFT-Arena 试图深入的问题。 近期，来自 香港中文大学、西湖大学、德国马普所 等机构的研究者提出了 PEFT-Arena &mdash;&mdash; 一个从 稳定性‑可塑性权衡 （stability&ndash;plasticity trade-off）视角重新审视 PEFT 方法的评测基准与分析框架。该工作已在 ICLR 2026 相关 workshop 上进行了展示，并开源了完整代码。 其中 第一作者黄洋逸是香港中文大学计算机系博士生，共同一作彭若天是西湖大学博士生，通信作者是香港中文大学计算机系助理教授刘威杨。 论文标题：PEFT-Arena: Understanding Parameter-Efficient Finetuning from a Stability-Plasticity Perspective 项目主页：https://spherelab.ai/PEFT-Arena 论文链接：https://arxiv.org/abs/2605.28819 代码链接：https://github.com/Sphere-AI-Lab/PEFT-Arena 只看下游准确率，为什么不够？ 传统 PEFT 评测的核心问题通常是：微调后，下游任务准确率提",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin",
+        "工程"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "node_id": "Article/84cb9220-294f-4d6e-8339-148f6989dd40",
+        "category": "工程",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/84cb9220-294f-4d6e-8339-148f6989dd40/0_-_2026-06-14T094426.773.jpg",
+        "detail_fetched": true,
+        "has_full_content": true
+      },
+      "fetched_at": "2026-06-15T01:05:14+08:00"
+    }
+  ]
+}
