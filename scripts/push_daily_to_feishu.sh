@@ -68,10 +68,12 @@ echo "✅ 报告已生成: $REPORT_FILE ($(wc -c < "$REPORT_FILE") bytes)"
 
 # ========== 创建飞书云文档 ==========
 echo "📄 创建飞书云文档..."
+# 注意：lark-cli docs +create 的 --content 支持 @file 语法读取文件内容
+# 传裸路径会被当成字面字符串塞进文档（这是个已踩过的坑）
 DOC_OUTPUT=$(LARK_CLI_NO_PROXY=1 $LARK_CLI docs +create \
     --as user \
     --doc-format markdown \
-    --content "$REPORT_FILE" 2>&1)
+    --content "@$REPORT_FILE" 2>&1)
 echo "   $DOC_OUTPUT" | head -3
 
 # 提取 document_id 和 url
