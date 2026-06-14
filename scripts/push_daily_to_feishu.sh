@@ -95,15 +95,9 @@ echo "✅ 云文档已创建: $DOC_URL"
 echo "📤 构造 webhook text payload..."
 
 TEXT_MSG=$(cat << EOF
-📰 AI资讯日报 · ${TARGET_DATE}（飞书云文档 · 完美渲染）
+📰 AI 资讯日报 · ${TARGET_DATE}
 
-✅ 点开看完整报告：
-${DOC_URL}
-
-📌 表格 / 标题 / 链接 / 标签全部原生渲染
-📌 历史报告：https://github.com/zlink-cloudtech/ai-news/tree/main/每日资讯
-
-来源：zlink-cloudtech/ai-news · AI资讯追踪
+完整报告：${DOC_URL}
 EOF
 )
 
