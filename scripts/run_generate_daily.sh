@@ -48,6 +48,21 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 cd "$REPO_ROOT"
 echo "📂 仓库根目录: $REPO_ROOT"
 
+# ========== 抓取 raw json ==========
+# 教训：2026-06-15 1:00 首跑时没调 crawlers，导致先生成 2K 空模板
+# → 后面手动补抓 + amend commit 才补上 18 条数据
+# 修复：脚本里强制先跑一次 crawlers/run_all.py（默认包含 36kr/机器之心等中文源）
+# 抓取失败不 abort（warn 即可，让生成器读已有 raw json 继续跑）
+echo "🕷️  抓取 raw json..."
+RAW_DIR="data/${TARGET_DATE}"
+mkdir -p "$RAW_DIR"
+# 不加 --with-hf/--with-github（沙箱内 HF 不通 + GitHub Trending 需 RSSHub 部署）
+if python3 scripts/crawlers/run_all.py --date "$TARGET_DATE" 2>&1 | tail -20; then
+    echo "✅ 抓取完成"
+else
+    echo "⚠️  抓取失败（部分源可能不通），继续用已有 raw json 跑生成"
+fi
+
 # ========== 跑生成器 ==========
 echo "🔧 生成日报..."
 if [[ -n "$NO_LLM_FLAG" ]]; then
