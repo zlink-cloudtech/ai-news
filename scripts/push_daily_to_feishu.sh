@@ -22,7 +22,7 @@
 set -e
 
 # ========== 配置 ==========
-WEBHOOK_URL="https://open.feishu.cn/open-apis/bot/v2/hook/6313a73f-dfaf-4ce5-857c-2e05edd38897"
+WEBHOOK_URL="https://open.feishu.cn/open-apis/bot/v2/hook/1e1bc2dc-49fc-4289-8d58-a2799d766607"
 KEYWORD="AI资讯"  # 用户在自定义机器人里设置的校验词
 TZ_LABEL="Asia/Shanghai"
 LARK_CLI="lark-cli"  # 沙箱已预装
