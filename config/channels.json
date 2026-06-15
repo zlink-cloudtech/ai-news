@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-06-15T09:47:00+08:00",
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "type": "feishu",
+      "webhook_url": "https://open.feishu.cn/open-apis/bot/v2/hook/1e1bc2dc-49fc-4289-8d58-a2799d766607",
+      "webhook_secret": "8dKqNySUpcxjL7eeONK9Kb",
+      "keyword": "AI资讯"
+    },
+    "wecom": {
+      "enabled": true,
+      "type": "wecom",
+      "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3faeed76-0761-4201-b22f-acaf6b434b4f"
+    }
+  }
+}
