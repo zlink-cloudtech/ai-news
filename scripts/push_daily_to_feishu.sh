@@ -135,17 +135,14 @@ echo "   $(echo "$DOC_OUTPUT" | head -1)"
 DOC_URL=$(echo "$DOC_OUTPUT" | python3 -c "
 import sys, json
 raw = sys.stdin.read()
-lines = raw.split('\n')
-for line in lines:
-    line = line.strip()
-    if line.startswith('{'):
-        try:
-            data = json.loads(line)
-            if data.get('ok') and 'data' in data:
-                print(data['data']['document']['url'])
-                sys.exit(0)
-        except json.JSONDecodeError:
-            pass
+# lark-cli 输出是 multi-line pretty JSON，逐行解析会失败；改为整段解析
+try:
+    data = json.loads(raw)
+    if data.get('ok') and 'data' in data and 'document' in data['data']:
+        print(data['data']['document']['url'])
+        sys.exit(0)
+except (json.JSONDecodeError, KeyError, TypeError) as e:
+    print(f'PARSE_ERROR: {e}', file=sys.stderr)
 sys.exit(1)
 ")
 
@@ -160,7 +157,7 @@ echo "✅ 云文档已创建: $DOC_URL"
 echo "📤 构造 webhook text payload..."
 
 TEXT_MSG=$(cat << EOF
-📰 AI 资讯日报 · ${TARGET_DATE}
+📰 AI资讯日报 · ${TARGET_DATE}
 
 完整报告：${DOC_URL}
 EOF
