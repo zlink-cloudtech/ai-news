@@ -23,6 +23,7 @@ set -e
 
 # ========== 配置 ==========
 WEBHOOK_URL="https://open.feishu.cn/open-apis/bot/v2/hook/1e1bc2dc-49fc-4289-8d58-a2799d766607"
+WEBHOOK_SECRET="8dKqNySUpcxjL7eeONK9Kb"  # 飞书自定义机器人签名校验 secret（6-15 09:00 主人开启）
 KEYWORD="AI资讯"  # 用户在自定义机器人里设置的校验词
 TZ_LABEL="Asia/Shanghai"
 LARK_CLI="lark-cli"  # 沙箱已预装
@@ -172,13 +173,25 @@ fi
 
 echo "$TEXT_MSG" > /tmp/feishu_push_text.txt
 
-python3 << 'PYEOF' > /tmp/feishu_push_payload.json
-import json
+# ---- 飞书签名校验（飞书特有算法：key=timestamp+"\n"+secret, msg=空字符串）----
+TS=$(date +%s)
+python3 - "$TS" "$WEBHOOK_SECRET" > /tmp/feishu_push_payload.json << 'PYEOF'
+import json, sys, hmac, hashlib, base64
+ts, secret = sys.argv[1], sys.argv[2]
 with open("/tmp/feishu_push_text.txt", "r", encoding="utf-8") as f:
     text = f.read()
-payload = {"msg_type": "text", "content": {"text": text}}
+# 关键：飞书签名是 HMAC-SHA256(key="ts\nsecret", msg="")
+key = f"{ts}\n{secret}".encode("utf-8")
+sign = base64.b64encode(hmac.new(key, b"", hashlib.sha256).digest()).decode("utf-8")
+payload = {
+    "timestamp": ts,
+    "sign": sign,
+    "msg_type": "text",
+    "content": {"text": text}
+}
 print(json.dumps(payload, ensure_ascii=False))
 PYEOF
+echo "🔐 签名: ts=$TS sign=$(python3 -c "import json; print(json.load(open('/tmp/feishu_push_payload.json'))['sign'][:16])")..."
 
 # ---- 推送 ----
 echo "🚀 推送 webhook..."
