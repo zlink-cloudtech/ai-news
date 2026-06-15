@@ -1,7 +1,10 @@
 #!/bin/bash
 # AI 资讯追踪 - 每日 8:30 推送昨日 AI 资讯日报到多渠道
 #
-# 支持渠道（config/channels.json 控制开关 + 参数）：
+# 支持渠道（config/channels.json 控制开关 + 参数 + message_types 过滤）：
+#
+# 高级用法：CHANNELS_CONFIG 环境变量可覆盖默认 config/channels.json
+#   例：CHANNELS_CONFIG=/tmp/test.json bash scripts/push_daily_to_feishu.sh 2026-06-14
 #   - feishu: 飞书自定义机器人 webhook（带签名 + 校验词）
 #   - wecom:  企业微信群机器人 webhook（markdown，key 已在 URL）
 #
@@ -26,9 +29,17 @@
 #   - 日志 schema 见 docs/log_schema.md
 #
 # 扩展新渠道：
-#   1) config/channels.json 加一个 channel（含 enabled=true + type=xxx）
+#   1) config/channels.json 加一个 channel（含 enabled=true + type=xxx + message_types=[...])
 #   2) 本脚本的 PUSHERS dict 加 push_xxx 函数
 #   3) 改 inspect 探针读 push.json 逻辑（如有需要）
+#
+# 消息类型（message_types）控制：
+#   - "all"     特殊值，匹配任意报告类型
+#   - "daily"   每日资讯/<date>.md
+#   - "weekly"  周报/<date>.md
+#   - "special" 专题/<date>.md
+#   - 字段缺失或 [] = 该渠道不推送（默认安全）
+#   未来加新类型：1) push.sh 的 REPORT_TYPE case 加分支  2) channels.json 配 message_types
 
 set -e
 
@@ -36,7 +47,7 @@ set -e
 TZ_LABEL="Asia/Shanghai"
 LARK_CLI="lark-cli"
 SCHEMA_VERSION="1.0"
-CHANNELS_CONFIG="config/channels.json"
+CHANNELS_CONFIG="${CHANNELS_CONFIG:-config/channels.json}"   # 优先取环境变量（测试/调度覆盖用），默认走 config/channels.json
 
 # ========== 状态变量（供 trap 写日志用） ==========
 TARGET_DATE=""
@@ -142,21 +153,46 @@ if [[ ! -f "$REPORT_FILE" ]]; then
 fi
 echo "✅ 报告已就绪: $REPORT_FILE ($(wc -c < "$REPORT_FILE") bytes)"
 
+# ---- 推断报告类型（用于按 message_types 过滤渠道）----
+# 未来加新类型改这里：每日资讯/→daily、周报/→weekly、专题/→special
+case "$REPORT_FILE" in
+    每日资讯/*) REPORT_TYPE="daily" ;;
+    周报/*)     REPORT_TYPE="weekly" ;;
+    专题/*)     REPORT_TYPE="special" ;;
+    *)          REPORT_TYPE="unknown" ;;
+esac
+echo "🏷️  报告类型: $REPORT_TYPE"
+
 # ---- 估算推送条数 ----
 ITEMS_PUSHED=$(grep -cE '(\*\*重要程度\*\*|\*\*[🔴🟡🟢🔵]\*\*)' "$REPORT_FILE" 2>/dev/null || echo "0")
 
-# ---- 加载 enabled 渠道列表 ----
+# ---- 加载 enabled + message_types 匹配的渠道列表 ----
+# 规则（per owner 2026-06-15 决策）：
+#   1) channel.enabled = true 是前提
+#   2) message_types 字段缺失或 [] = 不推（默认不推送）
+#   3) message_types 含 "all" = 推所有类型
+#   4) message_types 含 REPORT_TYPE = 推当前类型
 ENABLED_CHANNELS=($(python3 -c "
 import json
 cfg = json.load(open('$CHANNELS_CONFIG'))
-print(' '.join(n for n, c in cfg.get('channels', {}).items() if c.get('enabled')))
+report_type = '$REPORT_TYPE'
+result = []
+for name, c in cfg.get('channels', {}).items():
+    if not c.get('enabled'):
+        continue
+    types = c.get('message_types', [])
+    if not types:
+        continue
+    if 'all' in types or report_type in types:
+        result.append(name)
+print(' '.join(result))
 "))
 if [[ ${#ENABLED_CHANNELS[@]} -eq 0 ]]; then
-    ERROR_MSG="没有任何启用的推送渠道（$CHANNELS_CONFIG 里所有 channel.enabled 都是 false）"
+    ERROR_MSG="没有任何渠道匹配 REPORT_TYPE='$REPORT_TYPE'（检查 $CHANNELS_CONFIG：channel.enabled + message_types 至少一项需含 '$REPORT_TYPE' 或 'all'）"
     echo "❌ $ERROR_MSG"
     exit 1
 fi
-echo "📡 启用渠道: ${ENABLED_CHANNELS[*]}"
+echo "📡 启用渠道: ${ENABLED_CHANNELS[*]} (匹配 REPORT_TYPE=$REPORT_TYPE)"
 
 # ---- 飞书/企业微信渠道需要 docx URL（lark-cli 一次性创建，URL 给两边复用） ----
 NEED_DOCX="false"

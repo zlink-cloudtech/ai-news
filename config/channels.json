@@ -1,18 +1,32 @@
 {
-  "schema_version": "1.0",
-  "updated_at": "2026-06-15T09:47:00+08:00",
+  "schema_version": "1.1",
+  "updated_at": "2026-06-15T10:21:00+08:00",
   "channels": {
     "feishu": {
       "enabled": true,
       "type": "feishu",
       "webhook_url": "https://open.feishu.cn/open-apis/bot/v2/hook/1e1bc2dc-49fc-4289-8d58-a2799d766607",
       "webhook_secret": "8dKqNySUpcxjL7eeONK9Kb",
-      "keyword": "AI资讯"
+      "keyword": "AI资讯",
+      "message_types": [
+        "all"
+      ]
     },
     "wecom": {
       "enabled": true,
       "type": "wecom",
-      "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3faeed76-0761-4201-b22f-acaf6b434b4f"
+      "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3faeed76-0761-4201-b22f-acaf6b434b4f",
+      "message_types": [
+        "daily"
+      ]
+    }
+  },
+  "_schema_doc_v1.1": {
+    "message_types": "string[] - 推送消息类型白名单。'all'=全部；'daily'=每日资讯；'weekly'=周报；'special'=专题。缺失或 []=不推（默认安全）",
+    "report_type_mapping": {
+      "每日资讯/<date>.md": "daily",
+      "周报/<date>.md": "weekly",
+      "专题/<date>.md": "special"
     }
   }
 }
