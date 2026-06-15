@@ -171,7 +171,7 @@ done
 if [[ "$NEED_DOCX" == "true" ]]; then
     echo "📄 创建飞书云文档..."
     DOC_OUTPUT=$(LARK_CLI_NO_PROXY=1 $LARK_CLI docs +create \
-        --as user \
+        --as bot \
         --doc-format markdown \
         --content "@$REPORT_FILE" 2>&1)
     echo "   $(echo "$DOC_OUTPUT" | head -1)"
@@ -195,6 +195,45 @@ sys.exit(1)
         exit 1
     fi
     echo "✅ 云文档已创建: $DOC_URL"
+
+    # ---- 设为公开访问（互联网获得链接的人可阅读）----
+    # 原因：企业微信群里点云文档链接不再需要登录飞书（问题在 2026-06-15 10:00 主人在群反馈）
+    # 前提：lark-cli bot 身份自带 docs:permission.setting:write_only scope
+    # 失败不阻塞推送：文档保持私有，但 URL 仍可用（仅多一个登录步骤）
+    DOC_ID=$(echo "$DOC_OUTPUT" | python3 -c "
+import sys, json
+try:
+    d = json.loads(sys.stdin.read())
+    if d.get('ok') and 'data' in d and 'document' in d['data']:
+        print(d['data']['document'].get('document_id', ''))
+except Exception:
+    pass
+")
+    if [[ -n "$DOC_ID" ]]; then
+        echo "🌐 设置公开访问（互联网获得链接的人可阅读）..."
+        PERM_OUTPUT=$(LARK_CLI_NO_PROXY=1 $LARK_CLI drive permission.public patch \
+            --as bot \
+            --yes \
+            --params "{\"token\":\"$DOC_ID\",\"type\":\"docx\"}" \
+            --data '{"external_access":true,"security_entity":"anyone_can_view","comment_entity":"anyone_can_view","share_entity":"anyone","link_share_entity":"anyone_readable","invite_external":true}' 2>&1)
+        PERM_CODE=$(echo "$PERM_OUTPUT" | python3 -c "
+import sys, json
+try:
+    d = json.loads(sys.stdin.read())
+    # lark-cli 顶层字段是 code（不是 ok）
+    print(d.get('code', -1))
+except Exception:
+    print(-1)
+")
+        if [[ "$PERM_CODE" == "0" ]]; then
+            echo "✅ 公开访问已开启（link_share_entity=anyone_readable）"
+        else
+            echo "⚠️  公开访问设置失败（code=$PERM_CODE），文档保持私有不影响推送"
+            echo "   诊断: $(echo "$PERM_OUTPUT" | head -1)"
+        fi
+    else
+        echo "⚠️  未取到 DOC_ID，跳过公开访问设置"
+    fi
 fi
 
 # ---- 推送 + 汇总（python3 内部 try/except 包裹，单渠道失败不阻塞脚本） ----
