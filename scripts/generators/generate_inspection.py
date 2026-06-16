@@ -38,6 +38,7 @@ INSPECTIONS_DIR = REPO_ROOT / "data" / "inspections"
 LOGS_DAILY_DIR = REPO_ROOT / "logs" / "daily"
 LOGS_DIR = REPO_ROOT / "logs"
 DAILY_DIR = REPO_ROOT / "每日资讯"
+PUBLISHED_DIR = REPO_ROOT / "data" / "published"  # v1.4
 INSPECTOR_CONFIG = REPO_ROOT / "config" / "inspector.yaml"
 ESCALATE_DEDUP_FILE = REPO_ROOT / "logs" / "inspections" / "escalate_dedup.json"
 # recent_memory 在 workspace（/app/data/所有对话/主对话/），不在 git 仓库里
@@ -64,6 +65,7 @@ CFG = load_config()
 FEISHU_MAX = CFG.get("feishu_max_chars", 1800)
 CONSECUTIVE_ZERO_DAYS = CFG.get("consecutive_zero_days", 2)
 LOOKBACK_DAYS = CFG.get("lookback_days", 7)
+PUBLISH_LOOKBACK_DAYS = CFG.get("publish_lookback_days", 7)  # v1.4：发布维度回溯天数
 DISK_WARN_PCT = CFG.get("disk_warn_pct", 80)
 PUSH_LOG_WARN_BYTES = CFG.get("push_log_warn_bytes", 10485760)
 ESCALATE_ON = CFG.get("escalate_on", [])
@@ -368,6 +370,80 @@ def collect_pending_decisions() -> list:
     return deduped
 
 
+# ========== v1.4 新增维度：第 9 节「发布」 ==========
+def collect_publish_anomalies(lookback_days: int = 7) -> dict:
+    """扫 data/published/daily/ 最近 N 天，检测漏推 / 失败累计。
+
+    返回：
+        {
+            "lookback_days": N,
+            "missed": [{"date": "2026-06-15", "report_file": "每日资讯/2026-06-15.md"}],
+            "consecutive_failures": [{"start_date": "...", "end_date": "...", "days": 2, "last_error": "..."}],
+            "success_rate": 0.85, "total_days": 7, "ok_count": 6, "fail_count": 0, "missed_count": 1,
+        }
+    """
+    result = {
+        "lookback_days": lookback_days,
+        "missed": [], "consecutive_failures": [],
+        "success_rate": 1.0, "total_days": lookback_days,
+        "ok_count": 0, "fail_count": 0, "missed_count": 0,
+    }
+    if not PUBLISHED_DIR.exists():
+        return result
+    today = get_today()
+    today_dt = datetime.strptime(today, "%Y-%m-%d").date()
+    day_list = [(today_dt - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(lookback_days)]
+    day_list.reverse()
+    last_error = None
+    consecutive_fail_count = 0
+    consecutive_fail_start = None
+    consecutive_fail_end = None
+    for date_str in day_list:
+        md_file = DAILY_DIR / f"{date_str}.md"
+        pub_file = PUBLISHED_DIR / "daily" / f"{date_str}.json"
+        if not pub_file.exists():
+            if md_file.exists():
+                result["missed"].append({"date": date_str, "report_file": f"每日资讯/{date_str}.md"})
+            continue
+        try:
+            rec = json.loads(pub_file.read_text(encoding="utf-8"))
+            if rec.get("ok"):
+                result["ok_count"] += 1
+                if consecutive_fail_count > 0:
+                    if consecutive_fail_count >= 2:
+                        result["consecutive_failures"].append({
+                            "start_date": consecutive_fail_start, "end_date": consecutive_fail_end,
+                            "days": consecutive_fail_count, "last_error": last_error,
+                        })
+                    consecutive_fail_count = 0
+                    consecutive_fail_start = None
+                    consecutive_fail_end = None
+                    last_error = None
+            else:
+                result["fail_count"] += 1
+                last_error = rec.get("error") or rec.get("channels", {})
+                if consecutive_fail_count == 0:
+                    consecutive_fail_start = date_str
+                consecutive_fail_end = date_str
+                consecutive_fail_count += 1
+        except Exception:
+            result["fail_count"] += 1
+            last_error = "记录解析失败"
+            if consecutive_fail_count == 0:
+                consecutive_fail_start = date_str
+            consecutive_fail_end = date_str
+            consecutive_fail_count += 1
+    if consecutive_fail_count >= 2:
+        result["consecutive_failures"].append({
+            "start_date": consecutive_fail_start, "end_date": consecutive_fail_end,
+            "days": consecutive_fail_count, "last_error": last_error,
+        })
+    result["missed_count"] = len(result["missed"])
+    denom = result["ok_count"] + result["fail_count"]
+    result["success_rate"] = round(result["ok_count"] / denom, 3) if denom > 0 else 1.0
+    return result
+
+
 # ========== 8 节模板渲染 ==========
 def render_full_report(typ: str, sections: dict) -> str:
     """详细报告（落档版，无字符限制）"""
@@ -484,6 +560,25 @@ def render_full_report(typ: str, sections: dict) -> str:
             lines.append(f"- ⚠️ 未推送: {sections['git']['unpushed'][:80]}")
     lines.append("")
 
+    # 【9】发布（v1.4）
+    lines.append("## 【9】发布")
+    lines.append("")
+    sec9 = sections["publish"]
+    lines.append(f"- 回溯: 最近 {sec9['lookback_days']} 天")
+    lines.append(f"- 成功率: {sec9.get('success_rate', 0)*100:.0f}% "
+                 f"(✅ {sec9['ok_count']} / ❌ {sec9['fail_count']} / ⚠️ 漏推 {sec9['missed_count']})")
+    if sec9.get("missed"):
+        lines.append("")
+        lines.append("**漏推:**")
+        for m in sec9["missed"]:
+            lines.append(f"  - ❌ {m['date']} → {m['report_file']}")
+    if sec9.get("consecutive_failures"):
+        lines.append("")
+        lines.append("**连续失败:**")
+        for f in sec9["consecutive_failures"]:
+            lines.append(f"  - ❌ {f['start_date']} ~ {f['end_date']}（{f['days']} 天）")
+    lines.append("")
+
     # 【8】结论
     lines.append("## 【8】结论")
     lines.append("")
@@ -542,6 +637,16 @@ def render_feishu_summary(typ: str, sections: dict) -> str:
         if len(sec6) > 5:
             lines.append(f"  ... 另 {len(sec6) - 5} 项")
 
+    # 【9】发布（v1.4，仅异常时显示）
+    sec9 = sections["publish"]
+    if sec9.get("missed") or sec9.get("consecutive_failures"):
+        lines.append("")
+        lines.append("**【9】发布异常**")
+        for m in sec9.get("missed", []):
+            lines.append(f"  ❌ 漏推: {m['date']}")
+        for f in sec9.get("consecutive_failures", []):
+            lines.append(f"  ❌ 连续失败 {f['days']} 天 ({f['start_date']} ~ {f['end_date']})")
+
     # 结论
     lines.append("")
     lines.append("═══════════════════════════════")
@@ -571,6 +676,12 @@ def should_escalate(sections: dict) -> tuple[bool, list[str]]:
         for ev in sections["calendar_today"]:
             if ev["status"] == "❌":
                 reasons.append(f"日历事件漏触发: {ev['name']}")
+    if "publish_missed" in ESCALATE_ON:
+        for m in sections["publish"].get("missed", []):
+            reasons.append(f"日报漏推: {m['date']} → {m['report_file']}")
+    if "publish_consecutive_failure" in ESCALATE_ON:
+        for f in sections["publish"].get("consecutive_failures", []):
+            reasons.append(f"推送连续失败 {f['days']} 天 ({f['start_date']} ~ {f['end_date']})")
     return bool(reasons), reasons
 
 
@@ -686,6 +797,12 @@ def make_conclusion(sections: dict) -> str:
     sec6 = sections["pending"]
     if sec6:
         issues.append(f"{len(sec6)} 项待办")
+    # 发布异常（v1.4）
+    sec9 = sections["publish"]
+    if sec9.get("missed"):
+        issues.append(f"{len(sec9['missed'])} 日报漏推")
+    if sec9.get("consecutive_failures"):
+        issues.append(f"推送连续失败 {sec9['consecutive_failures'][0]['days']} 天")
 
     if not issues:
         return "✅ 整体正常"
@@ -733,6 +850,7 @@ def generate(typ: str, write_file: bool = True, escalate: bool = True) -> dict:
         "calendar_today": calendar_today,
         "pending": pending,
         "git": git,
+        "publish": collect_publish_anomalies(lookback_days=PUBLISH_LOOKBACK_DAYS),  # v1.4 第 9 维度
     }
     sections["conclusion"] = make_conclusion(sections)
 

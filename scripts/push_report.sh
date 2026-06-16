@@ -1,16 +1,26 @@
 #!/bin/bash
-# AI 资讯追踪 - 通用推送脚本（v1.2 推送架构）
+# AI 资讯追踪 - 通用推送脚本（v1.4 推送架构：手动推送 + 发布记录）
 # 支持 5 类 REPORT_TYPE：daily / weekly / special / management / test
 #
 # 用法：
-#   ./scripts/push_report.sh 每日资讯/2026-06-14.md                    # 推日报
+#   ./scripts/push_report.sh 每日资讯/2026-06-14.md                    # 推日报（默认 skip-if-pushed）
 #   ./scripts/push_report.sh 周报/2026-W24.md                        # 推周报
 #   ./scripts/push_report.sh 专题/2026-06-foundation-models.md       # 推专题
 #   ./scripts/push_report.sh data/inspections/2026-06-16-20-00.md     # 推管理性消息（巡检）
 #   ./scripts/push_report.sh --test [<channel_name>]                  # 推测试/探活（默认所有 enabled+test 渠道）
+#   ./scripts/push_report.sh 每日资讯/2026-06-15.md --repush          # 强制重推
+#   ./scripts/push_report.sh 每日资讯/2026-06-15.md --dry-run         # 干跑（落 _dryrun/）
+#   ./scripts/push_report.sh --list-published [daily|weekly|special|all]
+#   ./scripts/push_report.sh --backfill daily --since 2026-06-10 --until 2026-06-16
 #   ./scripts/push_report.sh --help                                    # 帮助
 #
-# 渠道加载（config/channels.json v1.2）：
+# v1.4 新增：
+#   - EXIT trap 自动调 scripts/published_record.py record 写 data/published/<type>/<date>.json
+#   - 默认 --skip-if-pushed（已推过则静默跳过，不刷屏）；--repush 强制重推
+#   - --dry-run 落档 _dryrun/（不入主索引）
+#   - --list-published / --backfill 运维 CLI
+#
+# 渠道加载（config/channels.json v1.2.1）：
 #   1. 加载 .secrets（注入 env vars；缺则 fail-fast 报错）
 #   2. 读 channels.json（v1.2 强制 env 引用，缺 env 变量 fail-fast）
 #   3. 推断 REPORT_TYPE（按文件路径）
@@ -27,8 +37,9 @@
 #   2) 本脚本 PUSHERS dict 注册 push_xxx 函数
 #
 # 依赖：
-#   - config/channels.json（v1.2 schema）
+#   - config/channels.json（v1.2.1 schema）
 #   - .secrets（已 gitignored）
+#   - scripts/published_record.py（v1.4 引入；发布记录）
 #   - lark-cli bot 身份已就绪（docs:document:create + docs:permission:setting 已授权）
 #   - 沙箱内 lark-cli 必须加 LARK_CLI_NO_PROXY=1；curl 加 --noproxy '*'
 
@@ -51,6 +62,7 @@ REPORT_FILE=""         # 绝对路径
 REPORT_TYPE=""
 LOG_FILE=""
 PUSH_OK="false"
+SKIPPED_PUSHED="false"  # v1.4：skip-if-pushed 触发后置 true，让 trap 跳过 published 写入
 ERROR_MSG=""
 CHANNELS_RESULT="{}"
 DOC_URL=""
@@ -71,17 +83,76 @@ fi
 # ========== 参数解析 ==========
 TEST_MODE="false"
 TEST_TARGETS=()
+REPUSH="false"          # v1.4：强制重推
+SKIP_IF_PUSHED="true"   # v1.4：默认已推过则跳过
+DRY_RUN="false"         # v1.4：干跑
+LIST_PUBLISHED="false"  # v1.4：列出已发布
+LIST_PUBLISHED_TYPE="all"
+BACKFILL_TYPE=""
+BACKFILL_SINCE=""
+BACKFILL_UNTIL=""
+PUSHED_BY_OVERRIDE=""   # v1.4：手动指定 pushed_by
 POSITIONAL=()
-for arg in "$@"; do
+# 使用 while + index 以支持 --list-published [type] 形式
+ARGS=("$@")
+i=0
+n=${#ARGS[@]}
+while [[ $i -lt $n ]]; do
+    arg="${ARGS[$i]}"
     case "$arg" in
         --test)        TEST_MODE="true" ;;
         --test=*)      TEST_MODE="true"; TEST_TARGETS+=("${arg#--test=}") ;;
+        --repush)      REPUSH="true"; SKIP_IF_PUSHED="false" ;;
+        --skip-if-pushed) SKIP_IF_PUSHED="true" ;;
+        --dry-run)     DRY_RUN="true" ;;
+        --list-published)
+            LIST_PUBLISHED="true"
+            # peek next arg as type
+            next_idx=$((i+1))
+            if [[ $next_idx -lt $n ]]; then
+                next_arg="${ARGS[$next_idx]}"
+                if [[ "$next_arg" != --* && "$next_arg" != -* ]]; then
+                    LIST_PUBLISHED_TYPE="$next_arg"
+                    i=$next_idx
+                fi
+            fi
+            ;;
+        --list-published=*) LIST_PUBLISHED="true"; LIST_PUBLISHED_TYPE="${arg#--list-published=}" ;;
+        --backfill=*)  BACKFILL_TYPE="${arg#--backfill=}" ;;
+        --backfill)
+            next_idx=$((i+1))
+            if [[ $next_idx -lt $n ]]; then
+                BACKFILL_TYPE="${ARGS[$next_idx]}"
+                i=$next_idx
+            fi
+            ;;
+        --since=*)     BACKFILL_SINCE="${arg#--since=}" ;;
+        --since)
+            next_idx=$((i+1))
+            if [[ $next_idx -lt $n ]]; then
+                BACKFILL_SINCE="${ARGS[$next_idx]}"
+                i=$next_idx
+            fi
+            ;;
+        --until=*)     BACKFILL_UNTIL="${arg#--until=}" ;;
+        --until)
+            next_idx=$((i+1))
+            if [[ $next_idx -lt $n ]]; then
+                BACKFILL_UNTIL="${ARGS[$next_idx]}"
+                i=$next_idx
+            fi
+            ;;
+        --pushed-by=*) PUSHED_BY_OVERRIDE="${arg#--pushed-by=}" ;;
         --channels-config=*) CHANNELS_CONFIG="${arg#--channels-config=}" ;;
         --help|-h)
             cat <<EOF
 用法:
-  ./scripts/push_report.sh <report_file>              # 推指定报告（按路径推断 REPORT_TYPE）
-  ./scripts/push_report.sh --test [<channel_name>]    # 推测试消息（默认所有 enabled+test 渠道）
+  ./scripts/push_report.sh <report_file>                          # 推指定报告（默认 --skip-if-pushed）
+  ./scripts/push_report.sh <report_file> --repush                 # 强制重推（覆盖记录）
+  ./scripts/push_report.sh <report_file> --dry-run                # 干跑（落 _dryrun/）
+  ./scripts/push_report.sh --test [<channel_name>]                # 推测试消息
+  ./scripts/push_report.sh --list-published [daily|weekly|special|all]
+  ./scripts/push_report.sh --backfill daily --since 2026-06-10 --until 2026-06-16
   ./scripts/push_report.sh --help
 
 支持路径 → REPORT_TYPE:
@@ -90,6 +161,11 @@ for arg in "$@"; do
   专题/<name>.md             → special
   data/inspections/<file>.md → management
   test_messages/<file>.md    → test
+
+v1.4 去重策略（默认）：
+  - 已推过 → 静默跳过（EXIT 0）；不写 published 记录、不真推
+  - 加 --repush → 强制重推（push_count+1，写新记录）
+  - 加 --dry-run → 落档 _dryrun/（不入主索引）
 
 环境变量:
   CHANNELS_CONFIG  渠道配置文件路径（默认 config/channels.json）
@@ -100,7 +176,74 @@ EOF
         每日资讯/*|周报/*|专题/*|data/inspections/*|test_messages/*) POSITIONAL+=("$arg") ;;
         *) echo "❌ 未知参数: $arg"; exit 1 ;;
     esac
+    i=$((i+1))
 done
+
+# ========== v1.4 运维 CLI 早退（不进入推送主流程） ==========
+if [[ "$LIST_PUBLISHED" == "true" ]]; then
+    exec python3 "$SCRIPT_DIR/published_record.py" list "$LIST_PUBLISHED_TYPE"
+fi
+if [[ -n "$BACKFILL_TYPE" ]]; then
+    if [[ -z "$BACKFILL_SINCE" || -z "$BACKFILL_UNTIL" ]]; then
+        echo "❌ --backfill 需配合 --since / --until"
+        exit 1
+    fi
+    # 补推区间内 daily 且 published/ 缺失的日期
+    python3 - "$BACKFILL_TYPE" "$BACKFILL_SINCE" "$BACKFILL_UNTIL" "$REPUSH" <<'PYEOF'
+import json, os, subprocess, sys
+from datetime import date, timedelta
+from pathlib import Path
+
+rtype, since_s, until_s, repush = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4] == "true"
+since = date.fromisoformat(since_s)
+until = date.fromisoformat(until_s)
+repo = Path("/app/data/所有对话/主对话/AI资讯追踪")
+
+path_map = {"daily": "每日资讯", "weekly": "周报", "special": "专题"}
+date_map = {"daily": "%Y-%m-%d", "weekly": "%G-W%V", "special": None}
+if rtype not in path_map:
+    print(f"❌ 不支持的类型: {rtype}（仅 daily/weekly/special）")
+    sys.exit(1)
+
+d, plans = since, []
+while d <= until:
+    if rtype == "daily":
+        label = d.strftime("%Y-%m-%d")
+        rel = f"每日资讯/{label}.md"
+        pub = repo / "data" / "published" / "daily" / f"{label}.json"
+    elif rtype == "weekly":
+        iy, iw, _ = d.isocalendar()
+        label = f"{iy}-W{iw:02d}"
+        rel = f"周报/{label}.md"
+        pub = repo / "data" / "published" / "weekly" / f"{label}.json"
+    else:
+        break  # special 不支持 backfill
+    f = repo / rel
+    if f.exists() and (not pub.exists() or repush):
+        plans.append((rel, label))  # 相对路径：内层 push_report.sh 才能正确解析
+    d += timedelta(days=1)
+
+print(f"📋 待补推 {len(plans)} 份 {rtype}：")
+for fp, lbl in plans:
+    print(f"  - {lbl}: {fp}")
+if not plans:
+    print("（无）")
+    sys.exit(0)
+print()
+for fp, lbl in plans:
+    print(f"🚀 推 {lbl} ...")
+    cmd = ["/app/data/所有对话/主对话/AI资讯追踪/scripts/push_report.sh", fp]
+    if repush:
+        cmd.append("--repush")
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    print(r.stdout[-500:] if r.stdout else "")
+    if r.returncode != 0:
+        print(f"   ❌ exit={r.returncode}")
+        if r.stderr:
+            print(f"   stderr: {r.stderr[-300:]}")
+PYEOF
+    exit $?
+fi
 
 # ========== 计算 STARTED_AT + 准备日志目录 ==========
 STARTED_AT=$(TZ=$TZ_LABEL date -Iseconds)
@@ -151,7 +294,40 @@ with open(log_file, 'a', encoding='utf-8') as f:
   2>/dev/null || true
     echo "📝 结构化日志已追加: $LOG_FILE"
 }
-trap 'write_log' EXIT
+trap 'write_log; write_published_record' EXIT
+
+# ========== v1.4 发布记录（EXIT trap 第二步：写 data/published/<type>/<date>.json） ==========
+write_published_record() {
+    # skip-if-pushed 触发时不写 published（不算"新的推送事件"）
+    if [[ "${SKIPPED_PUSHED:-false}" == "true" ]]; then
+        echo "⏭️  skip-if-pushed 触发，跳过 published 写入"
+        return 0
+    fi
+    # TEST_MODE / DRY_RUN(可选 true→_dryrun) / management 模式都写（仅 test 模式跳过；探针不算"资讯发布"）
+    if [[ "$TEST_MODE" == "true" ]]; then
+        return 0
+    fi
+    if [[ "$REPORT_TYPE" != "daily" && "$REPORT_TYPE" != "weekly" && "$REPORT_TYPE" != "special" && "$REPORT_TYPE" != "management" ]]; then
+        return 0
+    fi
+    # DRY_RUN 模式：pushed-by=dry-run，落档 _dryrun/
+    local dry_flag=""
+    if [[ "$DRY_RUN" == "true" ]]; then
+        dry_flag="--dry-run"
+    fi
+    # PUSHED_BY 自动检测：env PUSH_INVOKED_FROM 优先；否则 manual
+    local pushed_by="${PUSHED_BY_OVERRIDE:-${PUSH_INVOKED_FROM:-manual}}"
+    python3 "$SCRIPT_DIR/published_record.py" record \
+        --type "$REPORT_TYPE" \
+        --file "$TARGET_FILE" \
+        --channels "$CHANNELS_RESULT" \
+        --doc-url "$DOC_URL" \
+        --pushed-by "$pushed_by" \
+        --ok "$PUSH_OK" \
+        --error "${ERROR_MSG:-}" \
+        $dry_flag \
+        2>&1 | tail -5 || true
+}
 
 # ========== TEST_MODE 处理 ==========
 if [[ "$TEST_MODE" == "true" ]]; then
@@ -240,6 +416,31 @@ else
     esac
     echo "🏷️  报告类型: $REPORT_TYPE"
 
+    # ========== v1.4 skip-if-pushed 检查 ==========
+    if [[ "$SKIP_IF_PUSHED" == "true" && "$REPUSH" == "false" && ("$REPORT_TYPE" == "daily" || "$REPORT_TYPE" == "weekly" || "$REPORT_TYPE" == "special") ]]; then
+        DERIVED_DATE=$(python3 -c "
+import re, sys, os
+p = '$TARGET_FILE'
+m = re.search(r'(\\d{4}-\\d{2}-\\d{2})', p) or re.search(r'(\\d{4}-W\\d{2})', p)
+if m: print(m.group(1))
+else: print(os.path.splitext(os.path.basename(p))[0])
+")
+        PUB_REC="$REPO_ROOT/data/published/$REPORT_TYPE/${DERIVED_DATE}.json"
+        if [[ -f "$PUB_REC" ]]; then
+            PREV_OK=$(python3 -c "import json; print(json.load(open('$PUB_REC')).get('ok', False))" 2>/dev/null || echo "False")
+            if [[ "$PREV_OK" == "True" ]]; then
+                PREV_COUNT=$(python3 -c "import json; print(json.load(open('$PUB_REC')).get('push_count', 0))" 2>/dev/null || echo "0")
+                echo "⏭️  已推过（ok=true, push_count=${PREV_COUNT}）：$PUB_REC"
+                echo "   用 --repush 强制重推，或 --dry-run 干跑"
+                # 设置标志让 EXIT trap 跳过 published 写入（但 jsonl 日志仍记一笔 "skipped"）
+                SKIPPED_PUSHED="true"
+                PUSH_OK="true"
+                CHANNELS_RESULT='{"skipped":true,"reason":"already_pushed","prev_record":"'$PUB_REC'"}'
+                exit 0
+            fi
+        fi
+    fi
+
     # normal mode：按 REPORT 日期作 log 文件名（8:30 推 6-15 报告 → logs/daily/2026-06-15-push.jsonl）
     REPORT_DATE_FOR_LOG=$(echo "$TARGET_FILE" | grep -oE '20[0-9]{2}-[0-1][0-9]-[0-3][0-9]' | head -1)
     REPORT_DATE_FOR_LOG="${REPORT_DATE_FOR_LOG:-$TODAY}"
@@ -291,6 +492,19 @@ fi
 NEED_DOCX="false"
 if [[ "$REPORT_TYPE" == "daily" || "$REPORT_TYPE" == "weekly" || "$REPORT_TYPE" == "special" ]]; then
     NEED_DOCX="true"
+fi
+
+# v1.4 dry-run 早退点：必须在 docx 创建之前，否则会污染正式群文档库
+if [[ "$DRY_RUN" == "true" && "$TEST_MODE" != "true" ]]; then
+    echo ""
+    echo "==================================="
+    echo "🧪 DRY-RUN 模式：跳过 docx + webhook 推送（落档 _dryrun/）"
+    echo "==================================="
+    DOC_URL=""
+    CHANNELS_RESULT='{"feishu":{"ok":true,"code":0,"msg":"dry-run-simulated"},"wecom_official":{"ok":true,"code":0,"msg":"dry-run-simulated"}}'
+    PUSH_OK="true"
+    LOG_FILE="$REPO_ROOT/logs/daily/${REPORT_DATE_FOR_LOG:-$TODAY}-push.jsonl"
+    exit 0
 fi
 
 if [[ "$NEED_DOCX" == "true" ]]; then
@@ -503,3 +717,4 @@ else
     echo "❌ $ERROR_MSG"
     exit 1
 fi
+               

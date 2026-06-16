@@ -41,7 +41,17 @@ data/llm_cache/
 
 
 # AI 资讯追踪·运行时产物
-data/inspections/        # 巡检报告（运行时生成；不持久化）
-data/2026-*/             # 按日期分目录的中间数据
+# 巡检报告（运行时生成；不持久化）
+data/inspections/
+# 按日期分目录的中间数据
+data/2026-*/
 logs/daily/*-probe.jsonl # 探针日志（运行时；不持久化）
 # logs/daily/*-push.jsonl # 推送日志（保留作审计；6-14/6-15 已入 git）
+
+# AI 资讯追踪·发布记录（运行时数据；不持久化）
+# 详细 schema 见 docs/data-published-schema.md
+# 包含：推送时间 / 渠道状态 / doc URL / 源统计 / pushed_by
+# v1.4 引入：发布记录（运行时数据；gitignored）
+data/published/
+
+# ===临时测试===

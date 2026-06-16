@@ -29,6 +29,8 @@ escalate_on:
   - consecutive_zero
   - calendar_missed
   - schema_invalid
+  - publish_missed              # v1.4：日报漏推
+  - publish_consecutive_failure # v1.4：推送连续失败 ≥2 天
 
 # 升级通道：owner 私聊（lark-cli im +message-send --as user --chat_id <owner_openid>）
 # 与"探针心跳"共用 owner_openid
@@ -42,3 +44,12 @@ escalate_dedup_hours: 24
 feishu_max_chars: 1800
 # 飞书端只发：结论 + 异常项 + 待办决策摘要 + 落档路径
 # 详细报告落档 data/inspections/<date>-<HH-MM>.md（不推送）
+
+# ========== v1.4 引入：发布维度 ==========
+# 第 9 维度「📤 发布」扫 data/published/daily/ 最近 N 天的回溯天数
+publish_lookback_days: 7
+# 触发条件（在 v1.3 累计异常基础上扩展）：
+#   - 漏推：md 存在但 published/daily/<date>.json 缺失
+#   - 失败累计：连续 ≥ 2 天 ok=false
+# 自动联动 v1.3 owner 私聊升级 hook（24h dedup）
+
