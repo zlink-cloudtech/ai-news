@@ -1,6 +1,6 @@
 {
   "schema_version": "1.2",
-  "updated_at": "2026-06-16T16:30:00+08:00",
+  "updated_at": "2026-06-16T22:55:00+08:00",
   "channels": {
     "feishu": {
       "enabled": true,
@@ -11,10 +11,17 @@
       "purpose": ["official", "management", "test"],
       "message_types": ["daily", "weekly", "special", "management", "test"]
     },
-    "wecom": {
+    "wecom_official": {
       "enabled": true,
       "type": "wecom",
-      "webhook_url_env": "WECOM_AI_NEWS_WEBHOOK",
+      "webhook_url_env": "WECOM_AI_NEWS_OFFICIAL_WEBHOOK",
+      "purpose": ["official"],
+      "message_types": ["daily", "weekly", "special"]
+    },
+    "wecom_test": {
+      "enabled": true,
+      "type": "wecom",
+      "webhook_url_env": "WECOM_AI_NEWS_TEST_WEBHOOK",
       "purpose": ["test"],
       "message_types": ["test"]
     }
@@ -31,6 +38,10 @@
       "test_messages/<scenario>.md": "test"
     },
     "load_semantics": "v1.2 加载逻辑只认 env 引用（webhook_url_env/webhook_secret_env），不认明文 webhook_url/webhook_secret；缺 env 变量直接报错退出（fail-fast）",
-    "extension": "加新渠道：1) channels.json 加 channel（含 enabled/type/purpose/message_types + env 引用）2) scripts/push_report.sh 的 PUSHERS dict 注册 push_xxx 函数"
+    "extension": "加新渠道：1) channels.json 加 channel（含 enabled/type/purpose/message_types + env 引用）2) scripts/push_report.sh 的 PUSHERS dict 注册 push_xxx 函数",
+    "_changelog": [
+      {"version": "1.2", "date": "2026-06-16T16:30:00+08:00", "change": "v1.2 强制迁移：webhook_url/webhook_secret 字段已废弃，统一改为 webhook_url_env/webhook_secret_env"},
+      {"version": "1.2.1", "date": "2026-06-16T22:55:00+08:00", "change": "wecom 渠道拆分为 wecom_official（原 webhook 转正做正式）和 wecom_test（新 webhook 做测试）"}
+    ]
   }
 }
