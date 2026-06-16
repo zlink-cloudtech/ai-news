@@ -1,0 +1,32 @@
+{
+  "source": "openai",
+  "date": "2026-06-15",
+  "saved_at": "2026-06-16T01:05:23+08:00",
+  "count": 1,
+  "meta": {
+    "feed": "https://openai.com/blog/rss.xml",
+    "window": [
+      "2026-06-15T00:00:00+08:00",
+      "2026-06-15T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "Introducing the OpenAI Partner Network",
+      "url": "https://openai.com/index/introducing-openai-partner-network",
+      "published": "2026-06-14T17:00:00+00:00",
+      "published_ts": 1781456400,
+      "summary": "OpenAI launches the Partner Network, investing $150M to help global partners accelerate enterprise AI adoption, deployment, and transformation.",
+      "author": null,
+      "tags": [
+        "Product"
+      ],
+      "source": "openai",
+      "extra": {
+        "article_path": "data/articles/openai/introducing-openai-partner-network.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-16T01:05:23+08:00"
+    }
+  ]
+}

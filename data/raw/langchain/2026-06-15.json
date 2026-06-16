@@ -1,0 +1,48 @@
+{
+  "source": "langchain",
+  "date": "2026-06-15",
+  "saved_at": "2026-06-16T01:06:00+08:00",
+  "count": 1,
+  "meta": {
+    "list_url": "https://www.langchain.com/blog",
+    "total_discovered": 15,
+    "total_parsed": 15,
+    "window": [
+      "2026-06-15T00:00:00+08:00",
+      "2026-06-15T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "How We Made Coding Agent Spend Predictable",
+      "url": "https://www.langchain.com/blog/how-we-made-coding-agent-spend-predictable",
+      "published": "2026-06-15T15:00:00+00:00",
+      "published_ts": 1781535600,
+      "summary": "Learn how LangChain uses LangSmith LLM Gateway to track coding agent spend in real time, set budgets by team and user, and prevent runaway AI costs.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "how-we-made-coding-agent-spend-predictable",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ],
+        "article_path": "data/articles/langchain/how-we-made-coding-agent-spend-predictable.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-16T01:05:50+08:00"
+    }
+  ]
+}

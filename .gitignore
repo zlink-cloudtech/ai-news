@@ -39,3 +39,9 @@ config/.secrets
 # LLM 调用缓存（按需提交，体积可能较大）
 data/llm_cache/
 
+
+# AI 资讯追踪·运行时产物
+data/inspections/        # 巡检报告（运行时生成；不持久化）
+data/2026-*/             # 按日期分目录的中间数据
+logs/daily/*-probe.jsonl # 探针日志（运行时；不持久化）
+# logs/daily/*-push.jsonl # 推送日志（保留作审计；6-14/6-15 已入 git）

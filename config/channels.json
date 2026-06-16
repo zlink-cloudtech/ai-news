@@ -1,32 +1,36 @@
 {
-  "schema_version": "1.1",
-  "updated_at": "2026-06-15T10:21:00+08:00",
+  "schema_version": "1.2",
+  "updated_at": "2026-06-16T16:30:00+08:00",
   "channels": {
     "feishu": {
       "enabled": true,
       "type": "feishu",
-      "webhook_url": "https://open.feishu.cn/open-apis/bot/v2/hook/1e1bc2dc-49fc-4289-8d58-a2799d766607",
-      "webhook_secret": "8dKqNySUpcxjL7eeONK9Kb",
+      "webhook_url_env": "FEISHU_AI_NEWS_WEBHOOK",
+      "webhook_secret_env": "FEISHU_AI_NEWS_SECRET",
       "keyword": "AI资讯",
-      "message_types": [
-        "all"
-      ]
+      "purpose": ["official", "management", "test"],
+      "message_types": ["daily", "weekly", "special", "management", "test"]
     },
     "wecom": {
       "enabled": true,
       "type": "wecom",
-      "webhook_url": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=3faeed76-0761-4201-b22f-acaf6b434b4f",
-      "message_types": [
-        "daily"
-      ]
+      "webhook_url_env": "WECOM_AI_NEWS_WEBHOOK",
+      "purpose": ["test"],
+      "message_types": ["test"]
     }
   },
-  "_schema_doc_v1.1": {
-    "message_types": "string[] - 推送消息类型白名单。'all'=全部；'daily'=每日资讯；'weekly'=周报；'special'=专题。缺失或 []=不推（默认安全）",
+  "_schema_doc_v1.2": {
+    "_breaking": "v1.2 强制迁移：webhook_url/webhook_secret 字段已废弃，统一改为 webhook_url_env/webhook_secret_env（引用 .secrets 或环境变量）；channels.json 内不再存明文密钥",
+    "purpose": "string[] - 渠道用途多选。'official'=正式资讯推送；'management'=管理性消息（巡检、推送状态、统计）；'test'=测试/探活。多选支持同一物理渠道同时承担多种角色",
+    "message_types": "string[] - 推送消息类型白名单。'daily'=每日资讯；'weekly'=周报；'special'=专题；'management'=管理性消息（巡检等）；'test'=测试/探活。空数组=不推（默认安全）",
     "report_type_mapping": {
-      "每日资讯/<date>.md": "daily",
-      "周报/<date>.md": "weekly",
-      "专题/<date>.md": "special"
-    }
+      "每日资讯/<date>.md":       "daily",
+      "周报/<date>.md":           "weekly",
+      "专题/<date>.md":           "special",
+      "data/inspections/<date>.md": "management",
+      "test_messages/<scenario>.md": "test"
+    },
+    "load_semantics": "v1.2 加载逻辑只认 env 引用（webhook_url_env/webhook_secret_env），不认明文 webhook_url/webhook_secret；缺 env 变量直接报错退出（fail-fast）",
+    "extension": "加新渠道：1) channels.json 加 channel（含 enabled/type/purpose/message_types + env 引用）2) scripts/push_report.sh 的 PUSHERS dict 注册 push_xxx 函数"
   }
 }

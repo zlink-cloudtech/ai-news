@@ -1,0 +1,16 @@
+{
+  "source": "runway",
+  "date": "2026-06-15",
+  "saved_at": "2026-06-16T01:06:10+08:00",
+  "count": 0,
+  "meta": {
+    "list_url": "https://runwayml.com/research",
+    "total_discovered": 7,
+    "total_parsed": 7,
+    "window": [
+      "2026-06-15T00:00:00+08:00",
+      "2026-06-15T23:59:59.999999+08:00"
+    ]
+  },
+  "items": []
+}
