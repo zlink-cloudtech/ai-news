@@ -1,15 +1,348 @@
 {
   "source": "jiqizhixin",
   "date": "2026-06-15",
-  "saved_at": "2026-06-16T01:06:44+08:00",
-  "count": 0,
+  "saved_at": "2026-06-16T19:03:49+08:00",
+  "count": 14,
   "meta": {
-    "graphql": "https://www.jiqizhixin.com/graphql",
-    "window": [
-      "2026-06-15T00:00:00+08:00",
-      "2026-06-15T23:59:59.999999+08:00"
+    "sitemap_url": "https://www.jiqizhixin.com/shared/sitemap.xml.gz",
+    "article_api": "https://www.jiqizhixin.com/api/v1/articles",
+    "lastmod_window": [
+      "2026-06-14T18:00:00+00:00",
+      "2026-06-15T18:00:00+00:00"
     ],
-    "note": "list returned 0 items"
+    "window": [
+      "2026-06-14T16:00:00+00:00",
+      "2026-06-15T16:00:00+00:00"
+    ],
+    "sitemap_entries": 29999,
+    "candidates_after_lastmod": 16,
+    "api_ok": 16,
+    "api_fail": 0,
+    "out_of_window": 2,
+    "parse_fail": 0
   },
-  "items": []
+  "items": [
+    {
+      "title": "理想定义具身智能汽车：比人安全、比人高效，还要对齐特斯拉FSD",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-14",
+      "published": "2026-06-15T14:14:42+00:00",
+      "published_ts": 1781532882,
+      "summary": "这一次，李想真的谈了谈具身智能跟造车有什么关系。",
+      "author": "李泽南",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/4f369db0-18e6-4e0d-9532-49ec54fd71d9/QQ20260615-221354.png",
+        "copyright": "原创",
+        "content_len": 3087,
+        "author_id": "eb762ad6-f2e3-4dd9-a9b8-fb6a73a01556",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-14.md",
+        "article_chars": 1734,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:43+08:00"
+    },
+    {
+      "title": "1680份员工履历揭开Anthropic招人底牌：「基础设施老兵」更吃香",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-13",
+      "published": "2026-06-15T12:40:39+00:00",
+      "published_ts": 1781527239,
+      "summary": "当前，在狂热的 AI 浪潮下，大众对于头部 AI 大厂或明星初创公司往往有着一种带有光环的「刻板印象」：一定是由顶尖高校博士、各大优秀前沿研究论文的作者、算法天才等组成的团队。 但实际上，似乎并不总是如此。 最近，科技行业招聘专家 seb@hiiinternet 在 X 上发文，在针对硅谷新贵 Anthropic 进行的一次硬核背景大普查，抓取并分析了 1680 份公开 LinkedIn 履历后发现，这家被外界视为前沿 AI Lab 的公司，真正极度渴求并大规模雇佣的， 似乎并不是理论派的「研究员」，而是有能力在产业界落地大规模生产系统的「构建者」…… seb 表示，他抓取了所有在 LinkedIn 个人资料里把 Anthropic 列为当前雇主的人，一共 5306 人。然后筛出其中真正属于工程岗位的 1680 人，接着又分析了他们过往岗位描述中的 7986 条信息，看看他们在加入 Anthropic 之前到底做过什么。 而从一系列的分析来看，在这在 1680 名工程师的履历数据背后，藏着不同于传统认知 7 大特点： 「闪电式」扩张，18 个月建成「超级战舰」 数据如下图所示： 从数据",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/4c4c58d8-092c-4b3d-8e19-d4ce208cfc81/0__7_.jpg",
+        "copyright": "原创",
+        "content_len": 9107,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-13.md",
+        "article_chars": 3545,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:42+08:00"
+    },
+    {
+      "title": "2026年玩AI必备技能：不是提示词，是循环工程",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-12",
+      "published": "2026-06-15T12:40:26+00:00",
+      "published_ts": 1781527226,
+      "summary": "编辑 | 泽南 2026 年，会不会用 AI 不再看 Prompt（提示词）能力了，而是要看会不会设计循环。 上周，谷歌云 AI 总监 Addy Osmani 的一篇博客文章 《Loop Engineering》 引发了社区的讨论。 Addy Osmani 是一位在前端开发、Web 性能优化以及 AI 开发者工具领域都有影响力的工程师和技术领导者。他最广为人知的身份是曾任 Chrome 开发者体验团队的领导人。 他所讨论的「循环工程」概念有关设计代码智能体实行循环验证提升的方式。Addy Osmani 表示， 就算是使用同样的大模型，会不会用这种思路，产生的结果将会完全不同。 让我们看看这篇文章是怎么说的： 「循环工程」（Loop engineering）指的是不再由你亲自向编程智能体（coding agent）发送指令，而是设计一套系统来自动执行这一过程。这里的「循环」可以理解为一种递归式目标：你设定一个意图，AI 则不断迭代直至任务完成。这一模式大致包含五个核心组件，而 Claude Code 和 Codex 目前都已具备了这全部五个要素。 我相信，这很可能就是我们未来与编程智能体",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/c8ef8a15-8744-4a5f-9238-8eb42e6abcca/0__6_.jpg",
+        "copyright": "原创",
+        "content_len": 8377,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-12.md",
+        "article_chars": 6234,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:47+08:00"
+    },
+    {
+      "title": "给音视频生成打草稿！复旦&腾讯提出Bat：首创语音蓝图指引，实现音画逻辑精准同步",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-11",
+      "published": "2026-06-15T12:40:06+00:00",
+      "published_ts": 1781527206,
+      "summary": "当用户给出一句简单提示词时，当前的音视频生成模型往往已经能够生成具有不错质量的视听内容。然而，一旦提示词变得复杂，问题便开始暴露出来。 例如，用户可能要求模型生成这样一个场景：一个男孩先完成运球训练，随后开始讲话；或者两个人在互动过程中依次说出不同内容；又或者某个动作发生后，对应的声音才逐渐出现并增强。 这类包含多阶段动作、复杂人物交互以及明确时序关系的指令，不仅要求模型理解 「发生了什么」 ，还要求模型准确推理 「什么时候发生」「谁在发生」以及「声音应该如何与画面对应」 。 遗憾的是，对于这类需要长程语义理解的复杂场景，目前大多数开源音视频生成模型仍然表现不佳。生成结果中经常出现人物动作与声音错位、多角色对白对应错误、音画节奏不同步等问题。 其根本原因在于， 现有方法大多将文本提示编码为单个全局语义向量，并将其同时作为视频与音频生成过程的条件信号 。虽然这种方式能够提供场景级别的语义指导，但却难以进一步拆解复杂事件之间的时序关系，也无法明确描述不同角色、动作和声音之间应如何对应。 围绕这一问题，研究社区已经进行了大量探索。例如，Ovi 率先构建了原生视频 &mdash; 音频联合生成",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/3addd280-8226-4eed-865b-5adcda5a7461/0__5_.jpg",
+        "copyright": "原创",
+        "content_len": 20834,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-11.md",
+        "article_chars": 13730,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:40+08:00"
+    },
+    {
+      "title": "腾讯Robotics X开源HyVLA-0.5：基于亚毫米级指套UMI与真机强化，摆脱繁重遥操",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-10",
+      "published": "2026-06-15T10:18:18+00:00",
+      "published_ts": 1781518698,
+      "summary": "6 月 15 日，腾讯 Robotics X、福田实验室与混元团队联合发布面向真实世界机器人操作任务的端到端具身智能模型 Hy-Embodied-0.5-VLA （简称 HyVLA-0.5 ）。HyVLA-0.5 基于自研的亚毫米级高精度指套式 UMI 数据采集软硬件（专利：2025020117CN），构建了 超过 10000 小时 的人类示教数据，使模型在监督训练阶段无需任何遥操作数据，也能在多本体真机任务中取得高部署成功率；基于纯自研 UMI 数据训练的模型，HyVLA-0.5 在 RoboTwin 2.0 仿真基准的简单与复杂设置下均超过 90%，是目前该榜单上 SOTA 的开源 VLA 模型。 在此基础上，HyVLA-0.5 首次将 Proximalized Preference Optimization（PRO）系统性引入基于流匹配的 VLA 强化后训练，充分利用真实机器人失败数据，实现真实机器人任务接近 100% 的成功率。 随着 VLA 模型在机器人连续控制中展现出越来越强的潜力，业界也逐渐意识到，通用机器人能力的形成不能只依赖更大的模型或更强的策略。真实机器人部署需要数",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/43833244-ba8d-4bf5-aab6-4f86bcf9c86c/0__4_.jpg",
+        "copyright": "原创",
+        "content_len": 11930,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-10.md",
+        "article_chars": 5783,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:41+08:00"
+    },
+    {
+      "title": "用国产GPU训练AI给自己写内核，摩尔线程刷榜硬核基准",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-9",
+      "published": "2026-06-15T10:10:47+00:00",
+      "published_ts": 1781518247,
+      "summary": "编辑｜泽南 国产算力生态的难题，从此有了 AI 解。 最近，在比「AI 生成 GPU 内核」的硬核基准 KernelBench 上，摩尔线程的模型拿下了第一。 在 MooreEval 执行式验证协议的加持下，摩尔线程的 MusaCoder-27B-RL 取得了领先业界的表现，超越了 Claude Opus、GLM-5.1、Kimi K2.6 等一众国内外先进大模型。 这次拿下成绩的，是上周才正式发布并开源的 MusaCoder ，这是一款面向 GPU 底层算子生成的专用大模型，能自动把 PyTorch 代码转换为 CUDA 与 MUSA 内核，为 AI 训练等任务提供加速，旨在降低开发者手写底层 GPU 算子的门槛。 论文：《MusaCoder: Native GPU Kernel Generation with Full-Stack Training on Moore Threads GPU》 论文地址：http://arxiv.org/abs/2606.04847 模型权重：https://huggingface.co/MooreThreads/MusaCoder-27B 值得关注",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/0f9f312d-c58e-4251-993d-ee3362d742be/0__3_.jpg",
+        "copyright": "原创",
+        "content_len": 8579,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-9.md",
+        "article_chars": 4032,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:39+08:00"
+    },
+    {
+      "title": "1080条提示词、7款模型大比拼：视频生成离「好看、好用又准确」还差多少？",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-8",
+      "published": "2026-06-15T10:06:37+00:00",
+      "published_ts": 1781517997,
+      "summary": "当视频生成模型走出娱乐创作的舒适区，进入科学、医疗、教育等知识密集场景，它们是否还能生成事实准确、清晰可用的视频？ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 任务对比 &mdash;&mdash; 传统视觉质量导向 vs KIVI 知识密集型导向 针对这一挑战，研究者首次定义了 &nbsp;「知识密集型视频生成」（KIVI） 新任务 &mdash;&mdash; 要求模型从简短提示词出发，生成事实准确、用户能照着做的视频。团队配套构建了 1080 条提示词的 KIVI-Bench 评测集，提出 FactP 与 HelpS 两个自动指标，并在 7 款主流模型上揭示了实体误描、操作错误、组件错位三类系统性短板。 论文标题：Knowledge-Intensive Video Generation 论文链接：https://arxiv.org/abs/2606.01285 代码仓库：https://github.com/wcxhimself/KIVI 一个被忽视的空白：视频生成不该只为娱乐存在 过去两年，从 Sora 到 S",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/d9cfca05-df06-45a8-9b64-e4b88022b0f9/0__2_.jpg",
+        "copyright": "原创",
+        "content_len": 9064,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-8.md",
+        "article_chars": 2629,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:47+08:00"
+    },
+    {
+      "title": "“物理世界的OpenAI”——极佳视界再获10亿元B2轮融资，持续领跑世界模型驱动的物理AGI，加速生产力场景规模化落地",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-7",
+      "published": "2026-06-15T07:15:18+00:00",
+      "published_ts": 1781507718,
+      "summary": "近日， 物理AGI全球领军企业「 极佳视界 」再获10亿元B2轮融资 ，本轮融资由新加坡顶级跨境投资机构狮城资本（多轮持续追投）、中国-比利时基金（中比基金）、建投投资、万向钱潮、复星锐正、华盖创赢、金创投、德屹资本、华仓资本、元石基金等 全球顶级国家队基金、产业资本、财务机构、国资平台共同投资 ，国中资本、达晨财智、图灵资管等 多个老股东持续超额加注 ； 全球顶配资本阵容齐聚，市场投资意向远超原定募资目标 。 此前2026年3月和4月，极佳视界已分别完成10亿元Pre-B轮和15亿元B1轮融资。 3个月内连续3轮大额融资的完成，标志着极佳视界正在成为全球物理AGI赛道技术的引领者和产业的开拓者。 本轮融资将主要用于「双金字塔」数据与算法体系的持续投入、物理AGI基础模型的研发迭代，以及C端家庭场景与B端工业场景的规模化落地。 全球顶级国家队基金、财务机构、产业资本与国资平台的共同选择，背后是对极佳视界「世界模型驱动物理AGI技术路线＋生产力级落地能力」的坚定看好。 这份笃定，源自极佳视界对AI第一性原理的长期践行&mdash;&mdash; 自成立起即坚信「世界模型是语言模型之后下一",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/c447cb4a-accb-45a6-86d8-f257074374e6/%E5%9B%BE%E7%89%871.png",
+        "copyright": "原创",
+        "content_len": 7939,
+        "author_id": "762abca3-540d-48ef-951c-99823c4fae6c",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-7.md",
+        "article_chars": 5191,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:45+08:00"
+    },
+    {
+      "title": "ICML&ACL Oral | 迈向全自动实验室，北大两篇顶会论文让大模型从「推理」走向「物理执行」",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-6",
+      "published": "2026-06-15T06:34:00+00:00",
+      "published_ts": 1781505240,
+      "summary": "作者 | 论文团队 编辑丨ScienceAI AI 正在重塑科学发现的流水线，科学家的核心工作正从亲力亲为的「执行」向上游的「判断」转移。未来的科研核心竞争力，在于能否敏锐地评判 AI 递上的假设与方案。 然而，当科学家将精力聚焦于高维决策时，一个严峻的现实问题随之浮现：谁来接管下游极其复杂、容错率极低的湿实验？大语言模型（LLM）虽有强悍的「数字大脑」，却缺乏操作试管的「物理双手」，其在数字空间里无伤大雅的「概率性幻觉」，一旦落在真实的实验仪器面前，往往意味着惨重的设备损坏与资源溃败。 为了真正跨越这道从「数字理论」到「物理执行」的鸿沟，北京大学深圳研究生院 - 科学智能学院的研究团队交出了一份答卷。直击自动化生命科学实验的核心痛点，两项底层突破性工作分别被顶级人工智能会议&nbsp;ICML 2026 和 ACL 2026&nbsp;Oral（同时入选 ICLR 2026 Workshop）高分接收。 BioProBench（ ICML 2026）论文地址：https://arxiv.org/pdf/2505.07889 开源地址：https://github.com/Yuyang",
+      "author": "ScienceAI",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/9760ab0f-f612-4bbf-8a12-e68c25608065/iShot_2026-06-15_14.34.23.png",
+        "copyright": "原创",
+        "content_len": 8349,
+        "author_id": "deb9e520-19d5-4cac-a5c2-cc885759d6f9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-6.md",
+        "article_chars": 2250,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:44+08:00"
+    },
+    {
+      "title": "打破SWE-bench唯分数论，首个独立测量harness的基准开源了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-5",
+      "published": "2026-06-15T06:27:52+00:00",
+      "published_ts": 1781504872,
+      "summary": "编辑｜杨文 编程 Agent 的评测，一直是本糊涂账。 SWE-bench 如今已成事实标准，几乎每家发布新模型或新 Agent 框架，都会拿出一个 SWE-bench 分数来证明自己有多强。 但这些数字真的能直接横向比较吗？ LLM Agent 的能力，本质上是模型和 harness 共同决定的，同一个模型换一套 harness，在 SWE-bench、Terminal-bench 等评测上的分数能相差十几甚至二十多个百分点，差距堪比换一代模型。 也就是说， 一个 SWE-bench 分数背后，同时藏着三个变量 ：底层用的是哪个大模型、把大模型包装成 Agent 的 harness 是怎么设计的、评测用的是哪批任务。 SWE-agent、AutoCodeRover、OpenHands、mini-SWE-agent，每个系统都有自己的提示词模板、工具接口、最大轮数、超时策略和停止逻辑。模型、harness、任务集，三个变量打包在一起，很难判断 A 比 B 高出的那几个点，是模型更强、harness 设计更优，还是任务集选得更有利。 另一方面，OpenClaw 这类原本面向通用工具调用场",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/e3f5755d-07bc-428b-9885-bef9f2f5f893/0__1_.jpg",
+        "copyright": "原创",
+        "content_len": 12454,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-5.md",
+        "article_chars": 5857,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:48+08:00"
+    },
+    {
+      "title": "林俊旸推荐，Anthropic研究者自白：如何成为一位优秀研究者？",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-4",
+      "published": "2026-06-15T06:21:33+00:00",
+      "published_ts": 1781504493,
+      "summary": "编辑｜Panda 咱们 AI 领域，研究者既是一个身份，也是一种幻觉。 很多人以为自己在做研究，其实只是在追论文、追热点、追大厂的发布会&hellip;&hellip;看起来很忙，实则在原地踏步。 近日，Anthropic 研究者 Vivek Nair 发布了一篇 𝕏 长文，分享了他对于 如何成为一位优秀研究者 的见解。 原文地址：https://x.com/itsreallyvivek/status/2064686372737454155 他指出，真正的研究能力从来不是靠追热点追出来的，而是由 一系列可被刻意训练的小技能 叠加而成的：怎么选题、怎么读文献、怎么写作、怎么加速实验循环，每一条都有具体的方法，每一条都踩过真实的坑。 这篇文章没有鸡汤，只有干货，读完你可能会觉得有点刺痛；因为他说的，正是我们大多数人从未认真想过的问题。 这篇文章引发广泛关注，很多研究者也参与讨论。 Qwen 前负责人林俊旸也转发分享了一下。 下面我们就来详细看看这篇文章： 真的没有人教你做研究。你会得到一张办公桌，一个别人挑选好的问题，以及一个模糊的指示，要求你产出一些新颖的东西。因此，大多数人通过他们能看",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/f326bbea-7266-49f2-8704-5dcdf7809ede/0.jpg",
+        "copyright": "原创",
+        "content_len": 13321,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-4.md",
+        "article_chars": 4403,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:48+08:00"
+    },
+    {
+      "title": "智源大会 | 天工AI重新定义世界模型，公布Matrix-Game 3.5 最新技术突破",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-3",
+      "published": "2026-06-15T03:41:49+00:00",
+      "published_ts": 1781494909,
+      "summary": "6月12日-13日，第8届智源大会在北京举行。本届大会吸引了2位图灵奖得主、8位院士、30位30岁以下青年科学家、40余位AI企业CEO及创始人等参会，围绕Agent、世界模型、具身智能、AI自进化与AI安全等前沿议题展开讨论。 其中世界模型成为本届大会最受关注的议题之一 ，来自具身智能、机器人控制、游戏引擎、物理AI基础设施等不同领域的研究者提出了各自的技术路线，共同探讨世界模型相关深度议题。 昆仑万维旗下Skywork首席科学家刘扬受邀出席6月13日的世界模型分论坛，发表演讲以及参与圆桌讨论。在演讲环节，他以《Matrix-Game：长时序记忆下的实时流式交互式世界模型》为主题，系统阐述了Matrix-Game的研发历程、最新进展，基于对世界模型的深度思考， 他提出了&ldquo;下一帧状态生成和动作生成应该进行联合训练&rdquo;的全新框架。 此外，他首次公布了 Matrix-Game 3.5 的核心技术突破。 Matrix-Game 3.5 计划于2026年7月正式发布，团队也将在近期发布包含更多技术细节的报告 。 1. 定义世界模型：从&ldquo;预测下一帧&rdquo;",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/bbb51c8a-772f-4f62-a63b-893bb92de09b/%E5%9B%BE%E7%89%871.png",
+        "copyright": "原创",
+        "content_len": 5995,
+        "author_id": "762abca3-540d-48ef-951c-99823c4fae6c",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-3.md",
+        "article_chars": 3845,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:45+08:00"
+    },
+    {
+      "title": "一夜反转！「杀进第一梯队」的巴西LLM竟「套壳缝合」了国产模型",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15-2",
+      "published": "2026-06-15T03:29:57+00:00",
+      "published_ts": 1781494197,
+      "summary": "昨天，AI 圈大都被这一新闻「刷屏」： 巴西里约热内卢市政府旗下的一家 IT 公司，平地一声雷地推出一款名为「Rio 3.5」397B 的开源模型， 甚至还一路逆袭杀进了全球第一梯队，超越 Qwen 3.7 Plus 等开源模型，在多项基准测试中斩获 SOTA 性能。 但没想到，反转来得这么快！ 在 Rio 3.5 爆火不到 24 小时后，Nex-AGI 官方便在 X 上发布声明称， 这款风头正劲的「里约之光」实际上是一款高度缝合的套壳模型 。 Nex-AGI 是由上海创智学院发起的 AI 智能体开源项目联盟，专注于研发具备「能动性」的 AI 模型，已开源 Nex-N1 和 Nex-N2 系列模型。 Nex 团队在声明中指出，他们发现 Rio 3.5 模型的原理与自家发布的 Nex N2 Pro 模型极为相似，只是表现形式有所不同。 在对其权重进行了深入的数学分析与对比后发现 ，Rio 3.5 本质上是通过模型合并（Model Merge）技术拼凑而成的产物 ，其底层「技术配方」大约为： 这意味着， 这款宣称带来巨大突破的黑马模型，其中有 60% 的核心基因完全继承自 Nex 团队此前",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/45490399-71f1-4f3f-81d5-e86b3f617d74/0_-_2026-06-15T112140.715.jpg",
+        "copyright": "原创",
+        "content_len": 5817,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15-2.md",
+        "article_chars": 1224,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:41+08:00"
+    },
+    {
+      "title": "微软CEO长文：以后两种资本，人力资本+Token资本",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-15",
+      "published": "2026-06-15T03:25:42+00:00",
+      "published_ts": 1781493942,
+      "summary": "昨天晚上，微软 CEO 萨蒂亚&middot;纳德拉（Satya Nadella）在 𝕏 上发布了一篇长推文《A frontier without an ecosystem is not stable》，即「 没有生态系统的前沿是不稳定的 」。 该条推文一上线就吸引了大量关注，如今浏览量已经突破了 2800 万。 原文地址：https://x.com/satyanadella/status/2066182223213293753 纳德拉深刻探讨了在 AI 驱动的经济时代下，企业未来的形态、数字主权以及 AI 发展的社会经济影响。 其中提出了「 人力资本 」与「 Token 资本 」两个概念。 在他看来，AI 正在改变企业竞争的底层逻辑。过去，企业购买或建设数字工具，是为了提升人力效率：工具放大人，人创造价值。但今天， AI 模型本身就具备了吸收人类专业知识并将其「商品化」的能力 。一个模型在学习了足够多的企业数据之后，可以把原本属于某家公司的独门本领，变成人人皆可调用的标准服务。 如此一来，AI 似乎就有个吞噬其它软件服务的能力，或者按纳德拉的说法是「 各个行业的每家公司都在把价值让渡",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/4e287f4d-d84f-49e3-9e70-2ddb9b311650/0_-_2026-06-15T112133.624.jpg",
+        "copyright": "原创",
+        "content_len": 4711,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-15.md",
+        "article_chars": 2429,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-16T19:03:42+08:00"
+    }
+  ]
 }

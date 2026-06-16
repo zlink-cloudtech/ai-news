@@ -1,0 +1,44 @@
+# AI 资讯追踪·PM 巡检阈值配置（v1.3 引入）
+# 调用方：scripts/generators/generate_inspection.py
+# 设计：阈值集中管理，避免硬编码在脚本里
+
+# ========== 累计异常检测 ==========
+# 连续 N 天 raw/<src>/<date>.json count=0 触发 ⚠️ 累计异常项
+# 默认 2 天（与主人 Q13 拍板一致）
+consecutive_zero_days: 2
+
+# 扫几天数据判断连续 0 条（窗口 = lookback_days）
+lookback_days: 7
+
+# ========== 资源监控 ==========
+# 磁盘使用率告警阈值（df -P 输出的 Use%）
+# 主人 Q13 推荐：超过 80% 触发 ⚠️
+disk_warn_pct: 80
+
+# 推送日志单文件大小告警阈值（bytes）；超 10MB 触发 ⚠️
+push_log_warn_bytes: 10485760
+
+# ========== 异常升级（owner 私聊） ==========
+# 哪些项触发升级到 owner 私聊（与上面阈值同源；列出来更直观）
+# 可选项：
+#   consecutive_zero     - 连续 N 天 0 条的源
+#   calendar_missed      - 日历事件未触发
+#   disk_critical        - 磁盘超阈值
+#   schema_invalid       - 源 schema 解析失败（-1）
+escalate_on:
+  - consecutive_zero
+  - calendar_missed
+  - schema_invalid
+
+# 升级通道：owner 私聊（lark-cli im +message-send --as user --chat_id <owner_openid>）
+# 与"探针心跳"共用 owner_openid
+owner_openid: ou_d61bd0e15a001066cac4a97cace649f8
+
+# 同一异常每 24h 最多升级 1 次（避免重复打扰；走 logs/inspections/escalate_dedup.json）
+escalate_dedup_hours: 24
+
+# ========== 飞书端节流 ==========
+# management 消息飞书端字符上限（飞书 text 2000，留 buffer）
+feishu_max_chars: 1800
+# 飞书端只发：结论 + 异常项 + 待办决策摘要 + 落档路径
+# 详细报告落档 data/inspections/<date>-<HH-MM>.md（不推送）

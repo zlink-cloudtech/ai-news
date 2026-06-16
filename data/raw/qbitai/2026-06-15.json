@@ -1,8 +1,8 @@
 {
   "source": "qbitai",
   "date": "2026-06-15",
-  "saved_at": "2026-06-16T01:06:39+08:00",
-  "count": 9,
+  "saved_at": "2026-06-16T19:03:38+08:00",
+  "count": 4,
   "meta": {
     "feed": "https://www.qbitai.com/feed",
     "window": [
@@ -26,7 +26,7 @@
         "article_path": "data/articles/qbitai/435848.md",
         "article_cached": true
       },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
+      "fetched_at": "2026-06-16T19:03:36+08:00"
     },
     {
       "title": "从ICRA到CVPR，机器人圈最近到底在聊什么？｜北京·周三晚",
@@ -43,7 +43,7 @@
         "article_path": "data/articles/qbitai/435841.md",
         "article_cached": true
       },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
+      "fetched_at": "2026-06-16T19:03:36+08:00"
     },
     {
       "title": "宇树机器人要登珠峰了！",
@@ -61,7 +61,7 @@
         "article_path": "data/articles/qbitai/435817.md",
         "article_cached": true
       },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
+      "fetched_at": "2026-06-16T19:03:36+08:00"
     },
     {
       "title": "89年哈工程校友，拿下全球海洋机器人领域最大单轮融资",
@@ -81,104 +81,7 @@
         "article_path": "data/articles/qbitai/435804.md",
         "article_cached": true
       },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
-    },
-    {
-      "title": "4步出声，单卡0.24秒！Noiz AI联合港科大清华，开源音频生成大模型",
-      "url": "https://www.qbitai.com/2026/06/435802.html",
-      "published": "2026-06-15T06:52:30+00:00",
-      "published_ts": 1781506350,
-      "summary": "还能听懂时间戳",
-      "author": "思邈",
-      "tags": [
-        "资讯",
-        "Noiz AI",
-        "清华",
-        "港科大",
-        "音频AI生成"
-      ],
-      "source": "qbitai",
-      "extra": {
-        "article_path": "data/articles/qbitai/435802.md",
-        "article_cached": true
-      },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
-    },
-    {
-      "title": "刚成立一年就拿下车厂订单，这家清华系公司把具身智能送进真实产线",
-      "url": "https://www.qbitai.com/2026/06/435574.html",
-      "published": "2026-06-15T06:08:58+00:00",
-      "published_ts": 1781503738,
-      "summary": "过去两年，具身智能行业最热的关键词是人形机器人。但未来几年，更重要的关键词或许会变成另一件事：智能生产力。",
-      "author": "田, 晏林",
-      "tags": [
-        "资讯"
-      ],
-      "source": "qbitai",
-      "extra": {
-        "article_path": "data/articles/qbitai/435574.md",
-        "article_cached": true
-      },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
-    },
-    {
-      "title": "低成本复刻Fable 5的路子找到了：OrcaRouter多模型组队，性能反超",
-      "url": "https://www.qbitai.com/2026/06/435558.html",
-      "published": "2026-06-15T05:43:15+00:00",
-      "published_ts": 1781502195,
-      "summary": "原来最强AI不是一个AI",
-      "author": "思邈",
-      "tags": [
-        "资讯",
-        "Fable 5",
-        "OrcaRouter",
-        "模型组队"
-      ],
-      "source": "qbitai",
-      "extra": {
-        "article_path": "data/articles/qbitai/435558.md",
-        "article_cached": true
-      },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
-    },
-    {
-      "title": "Agent时代，华为云开始重新造地基了",
-      "url": "https://www.qbitai.com/2026/06/435531.html",
-      "published": "2026-06-15T03:40:26+00:00",
-      "published_ts": 1781494826,
-      "summary": "Agentic新基建",
-      "author": "梦晨",
-      "tags": [
-        "资讯",
-        "首页轮播",
-        "华为"
-      ],
-      "source": "qbitai",
-      "extra": {
-        "article_path": "data/articles/qbitai/435531.md",
-        "article_cached": true
-      },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
-    },
-    {
-      "title": "智源大会 | 天工AI重新定义世界模型，公布Matrix-Game 3.5 最新技术突破",
-      "url": "https://www.qbitai.com/2026/06/435520.html",
-      "published": "2026-06-15T03:24:30+00:00",
-      "published_ts": 1781493870,
-      "summary": "昆仑万维将持续深耕，步履不停",
-      "author": "量子位的朋友们",
-      "tags": [
-        "资讯",
-        "Matrix-Game 3.5",
-        "天工AI",
-        "昆仑万维"
-      ],
-      "source": "qbitai",
-      "extra": {
-        "article_path": "data/articles/qbitai/435520.md",
-        "article_cached": true
-      },
-      "fetched_at": "2026-06-16T01:06:35+08:00"
+      "fetched_at": "2026-06-16T19:03:36+08:00"
     }
   ]
 }

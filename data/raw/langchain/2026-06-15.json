@@ -1,7 +1,7 @@
 {
   "source": "langchain",
   "date": "2026-06-15",
-  "saved_at": "2026-06-16T01:06:00+08:00",
+  "saved_at": "2026-06-16T19:03:23+08:00",
   "count": 1,
   "meta": {
     "list_url": "https://www.langchain.com/blog",
@@ -42,7 +42,7 @@
         "article_path": "data/articles/langchain/how-we-made-coding-agent-spend-predictable.md",
         "article_cached": true
       },
-      "fetched_at": "2026-06-16T01:05:50+08:00"
+      "fetched_at": "2026-06-16T19:03:14+08:00"
     }
   ]
 }
