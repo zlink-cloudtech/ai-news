@@ -1,0 +1,39 @@
+[project]
+name = "ai-news"
+version = "1.6.0"
+description = "AI 资讯追踪·自动化生产系统（v2.0 daily JSON 先行 + uv 全量迁移）"
+requires-python = ">=3.11,<3.14"
+readme = "README.md"
+
+dependencies = [
+    "requests>=2.33",
+    "PyYAML>=6.0",
+    "feedparser>=6.0",
+    "cloudscraper>=1.2",
+    "openai>=1.40",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+]
+
+[project.scripts]
+# 统一 CLI 入口（替代 4 个 bash 脚本）
+push-report = "scripts.cli:push_report"
+pm-inspect = "scripts.cli:pm_inspect"
+run-generate-daily = "scripts.cli:run_generate_daily"
+news-commit = "scripts.cli:news_commit"
+
+[tool.uv]
+package = false  # 单仓脚本项目，不需要打包发布
+managed = true
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+# 历史代码风格较自由，新代码逐步收口
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]  # 行长度由 formatter 控制
