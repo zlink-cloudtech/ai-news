@@ -4,7 +4,7 @@
 #
 # 用法：
 #   ./scripts/push_report.sh 每日资讯/2026-06-14.md                    # 推日报（默认 skip-if-pushed）
-#   ./scripts/push_report.sh 周报/2026-W24.md                        # 推周报
+#   ./scripts/push_report.sh 每周汇总/2026-W24.md                     # 推周报（v1.5 拍板：路径名=每周汇总）
 #   ./scripts/push_report.sh 专题/2026-06-foundation-models.md       # 推专题
 #   ./scripts/push_report.sh data/inspections/2026-06-16-20-00.md     # 推管理性消息（巡检）
 #   ./scripts/push_report.sh --test [<channel_name>]                  # 推测试/探活（默认所有 enabled+test 渠道）
@@ -157,7 +157,7 @@ while [[ $i -lt $n ]]; do
 
 支持路径 → REPORT_TYPE:
   每日资讯/<date>.md         → daily
-  周报/<date>.md             → weekly
+  每周汇总/<date>.md         → weekly
   专题/<name>.md             → special
   data/inspections/<file>.md → management
   test_messages/<file>.md    → test
@@ -173,7 +173,7 @@ v1.4 去重策略（默认）：
 EOF
             exit 0
             ;;
-        每日资讯/*|周报/*|专题/*|data/inspections/*|test_messages/*) POSITIONAL+=("$arg") ;;
+        每日资讯/*|每周汇总/*|专题/*|data/inspections/*|test_messages/*) POSITIONAL+=("$arg") ;;
         *) echo "❌ 未知参数: $arg"; exit 1 ;;
     esac
     i=$((i+1))
@@ -199,7 +199,7 @@ since = date.fromisoformat(since_s)
 until = date.fromisoformat(until_s)
 repo = Path("/app/data/所有对话/主对话/AI资讯追踪")
 
-path_map = {"daily": "每日资讯", "weekly": "周报", "special": "专题"}
+path_map = {"daily": "每日资讯", "weekly": "每周汇总", "special": "专题"}
 date_map = {"daily": "%Y-%m-%d", "weekly": "%G-W%V", "special": None}
 if rtype not in path_map:
     print(f"❌ 不支持的类型: {rtype}（仅 daily/weekly/special）")
@@ -214,7 +214,7 @@ while d <= until:
     elif rtype == "weekly":
         iy, iw, _ = d.isocalendar()
         label = f"{iy}-W{iw:02d}"
-        rel = f"周报/{label}.md"
+        rel = f"每周汇总/{label}.md"
         pub = repo / "data" / "published" / "weekly" / f"{label}.json"
     else:
         break  # special 不支持 backfill
@@ -404,12 +404,12 @@ else
 
     case "$TARGET_FILE" in
         每日资讯/*)         REPORT_TYPE="daily" ;;
-        周报/*)             REPORT_TYPE="weekly" ;;
+        每周汇总/*)         REPORT_TYPE="weekly" ;;
         专题/*)             REPORT_TYPE="special" ;;
         data/inspections/*) REPORT_TYPE="management" ;;
         test_messages/*)    REPORT_TYPE="test" ;;
         *)                  REPORT_TYPE="unknown"
-                            ERROR_MSG="未知报告路径: $TARGET_FILE（支持：每日资讯/ 周报/ 专题/ data/inspections/ test_messages/）"
+                            ERROR_MSG="未知报告路径: $TARGET_FILE（支持：每日资讯/ 每周汇总/ 专题/ data/inspections/ test_messages/）"
                             echo "❌ $ERROR_MSG"
                             exit 1
                             ;;
@@ -442,7 +442,8 @@ else: print(os.path.splitext(os.path.basename(p))[0])
     fi
 
     # normal mode：按 REPORT 日期作 log 文件名（8:30 推 6-15 报告 → logs/daily/2026-06-15-push.jsonl）
-    REPORT_DATE_FOR_LOG=$(echo "$TARGET_FILE" | grep -oE '20[0-9]{2}-[0-1][0-9]-[0-3][0-9]' | head -1)
+    # v1.5 兼容 weekly 文件名（YYYY-Www 格式），grep 同时匹配 ISO 周；用 || true 兜底防止 set -e + pipefail 误退
+    REPORT_DATE_FOR_LOG=$(echo "$TARGET_FILE" | grep -oE '20[0-9]{2}(-[0-1][0-9]-[0-3][0-9]|-W[0-9]{2})' | head -1 || true)
     REPORT_DATE_FOR_LOG="${REPORT_DATE_FOR_LOG:-$TODAY}"
     LOG_FILE="$REPO_ROOT/logs/daily/${REPORT_DATE_FOR_LOG}-push.jsonl"
 
@@ -569,7 +570,9 @@ echo "🚀 开始推送 ${REPORT_TYPE} → ${TARGET_FILE}"
 echo "==================================="
 
 PY_OUTPUT=$(python3 2>&1 - "$REPO_ROOT" "$TARGET_FILE" "$REPORT_TYPE" "$DOC_URL" "$CHANNELS_CONFIG" "$TEST_TEXT" "${ENABLED_CHANNELS[@]}" << 'PYEOF'
-import json, sys, hmac, hashlib, base64, time, subprocess, os
+import json, sys, hmac, hashlib, base64, time, subprocess, os, re
+from datetime import date, timedelta
+from pathlib import Path
 
 repo_root, target_file, rtype, doc_url, cfg_path, test_text = sys.argv[1:7]
 enabled = sys.argv[7:]
@@ -588,6 +591,71 @@ def get_env(name, channel_name):
         raise ValueError(f"env var '{name}' not set for channel '{channel_name}' (check .secrets)")
     return val
 
+def _build_weekly_text(target_file, doc_url, mode):
+    """v1.5 周报推送文本：标题 + 一句话总结 + 每日资讯链接表 + 完整周报链接。
+    mode: 'feishu' (text, ≤2000 char) | 'wecom' (markdown, ≤4096 char)
+    数据源：
+      - 每周汇总/<week>.md：标题 / 一句话总结 / 汇总周期（确定 7 天）
+      - data/published/daily/<date>.json：每日的 doc_url（v1.4 发布记录）
+    """
+    abs_md = os.path.join(repo_root, target_file)
+    md_text = open(abs_md, encoding="utf-8").read() if os.path.exists(abs_md) else ""
+    basename = target_file.split("/")[-1].replace(".md", "")  # e.g. "2026-W25"
+    # 提取"本周一句话总结"（blockquote 行）
+    summary = ""
+    for line in md_text.splitlines():
+        if "**本周一句话总结**" in line:
+            summary = line.split("**本周一句话总结**", 1)[-1].lstrip("：: ").strip()
+            break
+    # 提取周对应 7 天日期（从"汇总周期"行找 "YYYY-MM-DD ~ YYYY-MM-DD"）
+    monday = sunday = None
+    for line in md_text.splitlines():
+        m = re.search(r"(\d{4}-\d{2}-\d{2})\s*~\s*(\d{4}-\d{2}-\d{2})", line)
+        if m:
+            monday = date.fromisoformat(m.group(1))
+            sunday = date.fromisoformat(m.group(2))
+            break
+    # 读 published/daily 7 天 doc_url
+    daily_links = []
+    if monday and sunday:
+        d = monday
+        while d <= sunday:
+            pub = Path(repo_root) / "data" / "published" / "daily" / f"{d.isoformat()}.json"
+            if pub.exists():
+                try:
+                    rec = json.loads(pub.read_text(encoding="utf-8"))
+                    url = rec.get("doc_url")
+                    if url and rec.get("ok", False):
+                        daily_links.append((d, url))
+                except Exception:
+                    pass
+            d += timedelta(days=1)
+    # 拼接推送文本
+    if mode == "feishu":
+        parts = [f"📊 AI资讯周报 · {basename}"]
+        if summary:
+            parts.append(summary)
+        if daily_links:
+            parts.append("📅 本周日报：")
+            for d, url in daily_links:
+                parts.append(f"• {d.strftime('%m-%d')} · {url}")
+        else:
+            parts.append("（本周日报 doc 链接未生成）")
+        parts.append(f"完整周报：{doc_url}")
+        return "\n\n".join(parts)[:2000]
+    else:  # wecom markdown
+        parts = [f"📊 **AI资讯周报** · {basename}"]
+        if summary:
+            parts.append(summary)
+        if daily_links:
+            parts.append("📅 **本周日报**：")
+            for d, url in daily_links:
+                parts.append(f"• {d.strftime('%m-%d')} · [日报链接]({url})")
+        else:
+            parts.append("（本周日报 doc 链接未生成）")
+        parts.append(f"👉 [完整周报]({doc_url})")
+        return "\n\n".join(parts)[:4000]
+
 def push_feishu(ch_cfg, channel_name):
     if rtype == "test":
         text = test_text
@@ -603,8 +671,8 @@ def push_feishu(ch_cfg, channel_name):
         basename = target_file.split("/")[-1].replace(".md", "")
         if "每日资讯" in target_file:
             text = f"📰 AI资讯日报 · {basename}\n\n完整报告：{doc_url}"
-        elif "周报" in target_file:
-            text = f"📊 AI资讯周报 · {basename}\n\n完整报告：{doc_url}"
+        elif "每周汇总" in target_file:
+            text = _build_weekly_text(target_file, doc_url, "feishu")
         elif "专题" in target_file:
             text = f"📚 AI资讯专题 · {basename}\n\n完整报告：{doc_url}"
         else:
@@ -643,8 +711,8 @@ def push_wecom(ch_cfg, channel_name):
         basename = target_file.split("/")[-1].replace(".md", "")
         if "每日资讯" in target_file:
             content = f"📰 **AI资讯日报** · {basename}\n\n[👉 完整报告]({doc_url})"
-        elif "周报" in target_file:
-            content = f"📊 **AI资讯周报** · {basename}\n\n[👉 完整报告]({doc_url})"
+        elif "每周汇总" in target_file:
+            content = _build_weekly_text(target_file, doc_url, "wecom")
         elif "专题" in target_file:
             content = f"📚 **AI资讯专题** · {basename}\n\n[👉 完整报告]({doc_url})"
         else:
