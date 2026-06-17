@@ -317,6 +317,11 @@ write_published_record() {
     fi
     # PUSHED_BY 自动检测：env PUSH_INVOKED_FROM 优先；否则 manual
     local pushed_by="${PUSHED_BY_OVERRIDE:-${PUSH_INVOKED_FROM:-manual}}"
+    # v2.0 daily：传 daily JSON 路径给 published_record（启用 v2.0 模式 + 嵌套 publish_record）
+    local daily_json_flag=""
+    if [[ "$REPORT_TYPE" == "daily" && -n "${DAILY_V2_JSON:-}" && -f "$DAILY_V2_JSON" ]]; then
+        daily_json_flag="--daily-json $DAILY_V2_JSON"
+    fi
     python3 "$SCRIPT_DIR/published_record.py" record \
         --type "$REPORT_TYPE" \
         --file "$TARGET_FILE" \
@@ -325,6 +330,7 @@ write_published_record() {
         --pushed-by "$pushed_by" \
         --ok "$PUSH_OK" \
         --error "${ERROR_MSG:-}" \
+        $daily_json_flag \
         $dry_flag \
         2>&1 | tail -5 || true
 }
@@ -495,6 +501,16 @@ if [[ "$REPORT_TYPE" == "daily" || "$REPORT_TYPE" == "weekly" || "$REPORT_TYPE" 
     NEED_DOCX="true"
 fi
 
+# v2.0 daily：定位 daily JSON 路径（每日资讯/2026-06-15.md → data/published/daily/2026-06-15.json）
+# ⚠️ 必须在 dry-run 早退点之前计算（dry-run preview 也需要）
+DAILY_V2_JSON=""
+if [[ "$REPORT_TYPE" == "daily" && "$TARGET_FILE" == *每日资讯* ]]; then
+    DAILY_DATE=$(basename "$TARGET_FILE" .md)
+    DAILY_V2_JSON="$REPO_ROOT/data/published/daily/${DAILY_DATE}.json"
+fi
+# 透传给内嵌 python3（通过 env var 传递绝对路径）
+export DAILY_V2_JSON
+
 # v1.4 dry-run 早退点：必须在 docx 创建之前，否则会污染正式群文档库
 if [[ "$DRY_RUN" == "true" && "$TEST_MODE" != "true" ]]; then
     echo ""
@@ -502,6 +518,39 @@ if [[ "$DRY_RUN" == "true" && "$TEST_MODE" != "true" ]]; then
     echo "🧪 DRY-RUN 模式：跳过 docx + webhook 推送（落档 _dryrun/）"
     echo "==================================="
     DOC_URL=""
+
+    # v2.0 daily preview：dry-run 也调 renderer 展示"会推送什么"（不实际发送）
+    if [[ -n "$DAILY_V2_JSON" && -f "$DAILY_V2_JSON" ]]; then
+        echo ""
+        echo "🔍 v2.0 daily push 预览（不实际发送）:"
+        DAIRY_PREVIEW=$(DAILY_V2_JSON="$DAILY_V2_JSON" python3 2>&1 - "$REPO_ROOT" "每日资讯/dry-run-preview" << 'PYEOF'
+import json, sys, os
+repo_root = sys.argv[1]
+daily_path = os.environ.get("DAILY_V2_JSON", "")
+if not daily_path or not os.path.exists(daily_path):
+    print("   (no daily v2.0 JSON)")
+    sys.exit(0)
+daily = json.load(open(daily_path, encoding="utf-8"))
+# 飞书 webhook text（plain）
+date_iso = daily.get("report_date", "")
+one_line = daily.get("one_line_summary", {}).get("text", "")
+doc_url = daily.get("publish_record", {}).get("doc_url") or "(doc_url 尚未生成)"
+feishu_text = f"📰 AI资讯日报 · {date_iso}\n\n{one_line}\n\n完整报告：{doc_url}" if one_line else f"📰 AI资讯日报 · {date_iso}\n\n完整报告：{doc_url}"
+print(f"   [feishu text] ({len(feishu_text)} char):")
+for line in feishu_text.split("\n"):
+    print(f"     {line}")
+# 企微 markdown 调 renderer
+sys.path.insert(0, os.path.join(repo_root, "scripts"))
+from renderers import render_wecom_markdown
+wecom_md = render_wecom_markdown(daily)
+print(f"\n   [wecom markdown via render_wecom_markdown] ({len(wecom_md)} char):")
+for line in wecom_md.split("\n"):
+    print(f"     {line}")
+PYEOF
+)
+        echo "$DAIRY_PREVIEW"
+    fi
+
     CHANNELS_RESULT='{"feishu":{"ok":true,"code":0,"msg":"dry-run-simulated"},"wecom_official":{"ok":true,"code":0,"msg":"dry-run-simulated"}}'
     PUSH_OK="true"
     LOG_FILE="$REPO_ROOT/logs/daily/${REPORT_DATE_FOR_LOG:-$TODAY}-push.jsonl"
@@ -569,13 +618,31 @@ echo "==================================="
 echo "🚀 开始推送 ${REPORT_TYPE} → ${TARGET_FILE}"
 echo "==================================="
 
-PY_OUTPUT=$(python3 2>&1 - "$REPO_ROOT" "$TARGET_FILE" "$REPORT_TYPE" "$DOC_URL" "$CHANNELS_CONFIG" "$TEST_TEXT" "${ENABLED_CHANNELS[@]}" << 'PYEOF'
+# 提醒 DAILY_V2_JSON 状态（实际计算在 docx 处理前已完成）
+if [[ -n "$DAILY_V2_JSON" && -f "$DAILY_V2_JSON" ]]; then
+    echo "📦 daily v2.0 JSON: $DAILY_V2_JSON"
+elif [[ "$REPORT_TYPE" == "daily" ]]; then
+    echo "⚠️  daily v2.0 JSON 不存在 → 回退 v1.0 stub"
+fi
+
+PY_OUTPUT=$(DAILY_V2_JSON="$DAILY_V2_JSON" python3 2>&1 - "$REPO_ROOT" "$TARGET_FILE" "$REPORT_TYPE" "$DOC_URL" "$CHANNELS_CONFIG" "$TEST_TEXT" "${ENABLED_CHANNELS[@]}" << 'PYEOF'
 import json, sys, hmac, hashlib, base64, time, subprocess, os, re
 from datetime import date, timedelta
 from pathlib import Path
 
 repo_root, target_file, rtype, doc_url, cfg_path, test_text = sys.argv[1:7]
 enabled = sys.argv[7:]
+
+# v2.0 daily JSON（透传自 bash env DAILY_V2_JSON；推送时读 JSON 调 renderers）
+_daily_v2_json_path = os.environ.get("DAILY_V2_JSON", "")
+daily_v2 = None
+if _daily_v2_json_path and os.path.exists(_daily_v2_json_path):
+    try:
+        with open(_daily_v2_json_path, encoding="utf-8") as f:
+            daily_v2 = json.load(f)
+    except Exception as e:
+        print(f"⚠️  daily v2.0 JSON 解析失败: {e}（回退 v1.0 stub）", flush=True)
+        daily_v2 = None
 
 def curl_post(url, payload):
     return subprocess.run(
@@ -670,7 +737,16 @@ def push_feishu(ch_cfg, channel_name):
         # daily/weekly/special
         basename = target_file.split("/")[-1].replace(".md", "")
         if "每日资讯" in target_file:
-            text = f"📰 AI资讯日报 · {basename}\n\n完整报告：{doc_url}"
+            if daily_v2 is not None:
+                # v2.0：用 daily JSON 的 one_line_summary 增强（plain text，飞书 webhook 不支持 markdown）
+                date_iso = daily_v2.get("report_date", basename)
+                one_line = daily_v2.get("one_line_summary", {}).get("text", "")
+                if one_line:
+                    text = f"📰 AI资讯日报 · {date_iso}\n\n{one_line}\n\n完整报告：{doc_url}"
+                else:
+                    text = f"📰 AI资讯日报 · {date_iso}\n\n完整报告：{doc_url}"
+            else:
+                text = f"📰 AI资讯日报 · {basename}\n\n完整报告：{doc_url}"
         elif "每周汇总" in target_file:
             text = _build_weekly_text(target_file, doc_url, "feishu")
         elif "专题" in target_file:
@@ -710,7 +786,13 @@ def push_wecom(ch_cfg, channel_name):
     else:
         basename = target_file.split("/")[-1].replace(".md", "")
         if "每日资讯" in target_file:
-            content = f"📰 **AI资讯日报** · {basename}\n\n[👉 完整报告]({doc_url})"
+            if daily_v2 is not None:
+                # v2.0：调 render_wecom_markdown（方案 B：简短摘要 + 飞书公开链接，≤500 字符）
+                sys.path.insert(0, os.path.join(repo_root, "scripts"))
+                from renderers import render_wecom_markdown
+                content = render_wecom_markdown(daily_v2)
+            else:
+                content = f"📰 **AI资讯日报** · {basename}\n\n[👉 完整报告]({doc_url})"
         elif "每周汇总" in target_file:
             content = _build_weekly_text(target_file, doc_url, "wecom")
         elif "专题" in target_file:

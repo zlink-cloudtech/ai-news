@@ -598,13 +598,16 @@ def render_daily_report(
     # 一句话总结（LLM 优先，规则降级）
     if total == 0:
         summary_line = f"{date_iso} 全网 AI 资讯较少，已对接的源均无新增。"
+        summary_source = "rule"
     else:
         summary_line = None
+        summary_source = "rule"
         if llm:
             ctx = _build_one_line_context(date_iso, groups, main_signals)
             llm_sum = llm_one_line_summary(llm, ctx, usage)
             if llm_sum:
                 summary_line = llm_sum.rstrip("。") + "。"
+                summary_source = "llm"
         if summary_line is None:
             summary_line = build_one_line_summary(date_iso, groups, per_source, main_signals)
     lines.append(f"> **昨日一句话总结**：{summary_line}")
@@ -695,7 +698,7 @@ def render_daily_report(
     )
     lines.append("")
 
-    return "\n".join(lines)
+    return "\n".join(lines), summary_line, summary_source, main_signals
 
 
 def build_one_line_summary(date_iso: str, groups: dict[str, list[ScoredItem]],
@@ -819,8 +822,10 @@ def main():
     groups = group_by_board(scored)
 
     fetched_at = datetime.now(ZoneInfo("Asia/Shanghai")).isoformat()
-    md = render_daily_report(date_iso, groups, per_source, fetched_at, _REPO_ROOT,
-                             llm=llm, usage=usage, elapsed_seconds=time.time() - t0)
+    md, summary_line, summary_source, main_signals = render_daily_report(
+        date_iso, groups, per_source, fetched_at, _REPO_ROOT,
+        llm=llm, usage=usage, elapsed_seconds=time.time() - t0,
+    )
 
     if args.dry_run:
         print(md)
@@ -830,6 +835,48 @@ def main():
     out_path.write_text(md, encoding="utf-8")
     total = sum(len(v) for v in groups.values())
     print(f"[OK] 写入 {out_path}  | 板块 {sum(1 for v in groups.values() if v)} 个 / 总条数 {total} | {usage.to_footer()}")
+
+    # ============== v2.0：写 daily 完整结构化 JSON（不依赖 push）==============
+    # 关注点分离：评分（main）+ LLM 精炼（render）+ payload 提取（_daily_payload）+ 写文件（published_record）
+    # 写 daily v2.0 JSON 后，push_report.sh 推送时直接读 JSON 调 renderers/
+    elapsed_seconds = time.time() - t0
+    report_size_bytes = out_path.stat().st_size
+
+    # sys.path 注入（必须在 import 之前）
+    import sys as _sys
+    if str(_REPO_ROOT / "scripts") not in _sys.path:
+        _sys.path.insert(0, str(_REPO_ROOT / "scripts"))
+
+    try:
+        from _daily_payload import build_daily_payload
+        from published_record import write_record  # scripts/published_record.py
+
+        payload = build_daily_payload(
+            date_iso=date_iso,
+            groups=groups,
+            per_source=per_source,
+            fetched_at=fetched_at,
+            usage=usage,
+            one_line_summary_text=summary_line,
+            one_line_summary_source=summary_source,
+            elapsed_seconds=elapsed_seconds,
+            report_file=f"每日资讯/{date_iso}.md",
+            report_size_bytes=report_size_bytes,
+        )
+        rec = write_record(
+            report_type="daily",
+            report_file=f"每日资讯/{date_iso}.md",
+            channels_result={},  # 推送时由 push_report.sh 增量更新
+            doc_url=None,
+            pushed_by=f"generate_daily_v2_{datetime.now(ZoneInfo('Asia/Shanghai')).strftime('%H%M%S')}",
+            ok=False,  # 推送成功前为 False
+            daily_payload=payload,
+            report_date=date_iso,
+        )
+        print(f"[v2.0] daily JSON 写入 {rec.get('_path', '?')}（schema {payload['schema_version']} / {payload['meta']['total_items']} 条）")
+    except Exception as e:
+        print(f"[WARN] v2.0 daily JSON 写入失败: {e}（daily md 已生成，v2.0 JSON 可后续 backfill）", file=sys.stderr)
+
     return 0
 
 

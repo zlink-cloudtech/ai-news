@@ -129,8 +129,19 @@ def write_record(
     report_sha256: str | None = None,
     report_size_bytes: int | None = None,
     raw_summary: dict | None = None,
+    daily_payload: dict | None = None,  # v2.0 新增：daily 完整内容（由 _daily_payload.build_daily_payload 返回）
 ) -> dict:
-    """写一条发布记录；返回写出的 record dict"""
+    """写一条发布记录；返回写出的 record dict
+
+    模式：
+      - v1.0 模式（daily_payload=None）：保持原行为，schema_version="1.0"，字段在顶层
+      - v2.0 模式（daily_payload 提供）：schema_version="2.0"，字段嵌套 publish_record
+        + v1.0 → v2.0 迁移时自动从顶层字段构造 publish_record
+
+    v1.0 → v2.0 迁移路径：
+      - 已有 v1.0 daily JSON（顶层 first_pushed_at/doc_url/...）→ 提供 daily_payload
+        → 自动从 v1.0 顶层字段构造 publish_record 嵌套 → 写 v2.0 JSON
+    """
     if report_date is None:
         report_date = derive_report_date(report_type, report_file)
 
@@ -142,9 +153,8 @@ def write_record(
         if report_size_bytes is None:
             report_size_bytes = abs_path.stat().st_size
 
-    # 自动算 raw_summary（如未提供）
-    if raw_summary is None and report_type == "daily":
-        # 尝试从 report_date 提取 YYYY-MM-DD
+    # 自动算 raw_summary（如未提供，且 v1.0 模式）
+    if raw_summary is None and report_type == "daily" and daily_payload is None:
         try:
             dt = datetime.strptime(report_date, "%Y-%m-%d")
             raw_summary = collect_raw_summary(report_date)
@@ -160,7 +170,97 @@ def write_record(
         except Exception:
             existing = None
 
-    if existing is None:
+    now = now_iso()
+
+    if daily_payload is not None:
+        # ============== v2.0 模式 ==============
+        # 以 daily_payload 为基，添加兼容字段和 publish_record 嵌套
+        record = dict(daily_payload)  # 复制 v2.0 全部字段
+        # v1.0 兼容字段（保留供 v1.0 兼容层读）
+        record["report_file"] = report_file
+        if report_sha256:
+            record["report_sha256"] = report_sha256
+        if report_size_bytes is not None:
+            record["report_size_bytes"] = report_size_bytes
+        # raw_summary 保留为兼容字段（v1.0 + v3 PM 用）
+        if raw_summary is not None:
+            record["raw_summary"] = raw_summary
+        elif "raw_summary" not in record and report_type == "daily":
+            try:
+                dt = datetime.strptime(report_date, "%Y-%m-%d")
+                record["raw_summary"] = collect_raw_summary(report_date)
+            except ValueError:
+                pass
+
+        # 构造 publish_record（嵌套 v1.0 顶层字段）
+        if existing and "publish_record" in existing:
+            # 已有 v2.0 publish_record → 增量更新（保留 first_pushed_at）
+            old_pr = existing["publish_record"]
+            sha_changed = (report_sha256 is not None
+                           and old_pr.get("report_sha256") != report_sha256)
+            record["publish_record"] = {
+                "first_pushed_at": old_pr.get("first_pushed_at", now),
+                "last_pushed_at": now,
+                "push_count": int(old_pr.get("push_count", 0)) + 1,
+                "pushed_by": pushed_by,
+                "doc_url": doc_url or old_pr.get("doc_url"),
+                "ok": ok,
+                "channels": channels_result,
+                "error": error or "",
+                "report_sha256": report_sha256 or old_pr.get("report_sha256"),
+                "_sha_changed_since_first_push": bool(sha_changed),
+            }
+        elif existing and ("first_pushed_at" in existing or "doc_url" in existing):
+            # v1.0 → v2.0 迁移：从 v1.0 顶层字段构造 publish_record
+            old_doc_url = existing.get("doc_url") or doc_url
+            old_first = existing.get("first_pushed_at", now)
+            old_last = existing.get("last_pushed_at", old_first)
+            old_count = int(existing.get("push_count", 1))
+            old_channels = existing.get("channels") or channels_result
+            old_pushed_by = existing.get("pushed_by", pushed_by)
+            old_error = existing.get("error", "")
+            old_sha = existing.get("report_sha256") or report_sha256
+            sha_changed = (report_sha256 is not None
+                           and old_sha is not None
+                           and report_sha256 != old_sha)
+            record["publish_record"] = {
+                "first_pushed_at": old_first,
+                "last_pushed_at": now,
+                "push_count": old_count + 1,
+                "pushed_by": pushed_by,
+                "doc_url": old_doc_url,
+                "ok": ok,
+                "channels": channels_result or old_channels,
+                "error": error or old_error,
+                "report_sha256": report_sha256 or old_sha,
+                "_sha_changed_since_first_push": bool(sha_changed),
+            }
+        else:
+            # 全新 v2.0 daily JSON
+            record["publish_record"] = {
+                "first_pushed_at": now,
+                "last_pushed_at": now,
+                "push_count": 1,
+                "pushed_by": pushed_by,
+                "doc_url": doc_url,
+                "ok": ok,
+                "channels": channels_result,
+                "error": error or "",
+                "report_sha256": report_sha256,
+                "_sha_changed_since_first_push": False,
+            }
+        # 顶层兼容字段（v1.0 风格的 publish_count / first_pushed_at 等也保留）
+        record["first_pushed_at"] = record["publish_record"]["first_pushed_at"]
+        record["last_pushed_at"] = record["publish_record"]["last_pushed_at"]
+        record["push_count"] = record["publish_record"]["push_count"]
+        record["pushed_by"] = record["publish_record"]["pushed_by"]
+        record["doc_url"] = record["publish_record"]["doc_url"]
+        record["ok"] = record["publish_record"]["ok"]
+        record["channels"] = record["publish_record"]["channels"]
+        record["error"] = record["publish_record"]["error"]
+
+    elif existing is None:
+        # ============== v1.0 模式（首次写入）==============
         record = {
             "schema_version": "1.0",
             "report_type": report_type,
@@ -168,8 +268,8 @@ def write_record(
             "report_file": report_file,
             "report_sha256": report_sha256,
             "report_size_bytes": report_size_bytes,
-            "first_pushed_at": now_iso(),
-            "last_pushed_at": now_iso(),
+            "first_pushed_at": now,
+            "last_pushed_at": now,
             "push_count": 1,
             "pushed_by": pushed_by,
             "doc_url": doc_url,
@@ -179,10 +279,10 @@ def write_record(
             "error": error,
         }
     else:
-        # 更新：保留 first_pushed_at，刷新 last_pushed_at/push_count/sha/channels
+        # ============== v1.0 模式（更新已有）==============
         sha_changed = (report_sha256 is not None and existing.get("report_sha256") != report_sha256)
         record = dict(existing)
-        record["last_pushed_at"] = now_iso()
+        record["last_pushed_at"] = now
         record["push_count"] = int(existing.get("push_count", 0)) + 1
         record["pushed_by"] = pushed_by
         record["doc_url"] = doc_url or existing.get("doc_url")
@@ -198,6 +298,9 @@ def write_record(
 
     rec_path.parent.mkdir(parents=True, exist_ok=True)
     rec_path.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # 返回 record 时附带 _path 字段（v2.0 调用方如 _daily_payload.py CLI 调试用）
+    record["_path"] = str(rec_path.relative_to(REPO_ROOT))
 
     # 更新 index.json（dry_run 不入主索引）
     if not dry_run:
@@ -336,11 +439,19 @@ def cmd_record(args) -> int:
         return 2
 
     raw_summary = None
+    daily_payload = None
     if args.raw_summary:
         try:
             raw_summary = json.loads(args.raw_summary)
         except json.JSONDecodeError as e:
             print(f"❌ --raw-summary JSON 解析失败: {e}", file=sys.stderr)
+            return 2
+    if args.daily_json:
+        # v2.0 daily JSON 路径：读入后作为 daily_payload 传入 write_record
+        try:
+            daily_payload = json.loads(Path(args.daily_json).read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"❌ --daily-json 读取/解析失败: {e}", file=sys.stderr)
             return 2
 
     record = write_record(
@@ -353,6 +464,7 @@ def cmd_record(args) -> int:
         error=args.error,
         dry_run=args.dry_run,
         raw_summary=raw_summary,
+        daily_payload=daily_payload,
     )
     out_path = _record_path(args.type, record["report_date"], dry_run=args.dry_run)
     print(f"✅ 记录已写: {out_path.relative_to(REPO_ROOT)}")
@@ -409,6 +521,7 @@ def main() -> int:
     p_rec.add_argument("--ok", type=lambda v: v.lower() in ("1", "true", "yes"), required=True)
     p_rec.add_argument("--error", default=None)
     p_rec.add_argument("--raw-summary", default=None, help="JSON：raw 源统计（不传则自动算 daily）")
+    p_rec.add_argument("--daily-json", default=None, help="v2.0 daily JSON 路径（daily 类型专用；传入则启用 v2.0 模式 + 嵌套 publish_record）")
     p_rec.add_argument("--dry-run", action="store_true", help="落档 _dryrun/，不入主索引")
     p_rec.set_defaults(func=cmd_record)
 

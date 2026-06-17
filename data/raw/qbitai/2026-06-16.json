@@ -1,0 +1,183 @@
+{
+  "source": "qbitai",
+  "date": "2026-06-16",
+  "saved_at": "2026-06-17T01:07:15+08:00",
+  "count": 9,
+  "meta": {
+    "feed": "https://www.qbitai.com/feed",
+    "window": [
+      "2026-06-16T00:00:00+08:00",
+      "2026-06-16T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "一个模型控制手脚腰身！机器人终于学会全身协同干精细活了",
+      "url": "https://www.qbitai.com/2026/06/436073.html",
+      "published": "2026-06-16T13:23:06+00:00",
+      "published_ts": 1781616186,
+      "summary": "手的问题，其实不在手",
+      "author": "允中",
+      "tags": [
+        "资讯",
+        "具身智能"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/436073.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "和朱广权同台讲脱口秀，鸿蒙小艺这次把AI助手卷到新阶段了？！",
+      "url": "https://www.qbitai.com/2026/06/435953.html",
+      "published": "2026-06-16T13:02:10+00:00",
+      "published_ts": 1781614930,
+      "summary": "会思考、能调度、还会自进化",
+      "author": "梦瑶",
+      "tags": [
+        "资讯",
+        "首页轮播",
+        "华为"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435953.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "网易有道首席科学家段亦涛：让AI技术扎根业务场景",
+      "url": "https://www.qbitai.com/2026/06/435950.html",
+      "published": "2026-06-16T10:36:35+00:00",
+      "published_ts": 1781606195,
+      "summary": "转载来源：网易有道 本文为量子位获授权转载，观点仅为原作者所有。",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "智源大会",
+        "网易有道"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435950.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "不儿，罗永浩、胡彦斌都来参加这场AI大赛了啊",
+      "url": "https://www.qbitai.com/2026/06/435931.html",
+      "published": "2026-06-16T09:31:02+00:00",
+      "published_ts": 1781602262,
+      "summary": "100万奖金，0门槛参赛",
+      "author": "十三",
+      "tags": [
+        "资讯",
+        "首页轮播",
+        "TRAE",
+        "TRAE AI创造力大赛",
+        "字节跳动",
+        "胡彦斌"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435931.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "SpaceX华人女孩刷屏！没有硕博学位，6年从火箭小白到「猛禽」飞行操作员",
+      "url": "https://www.qbitai.com/2026/06/435882.html",
+      "published": "2026-06-16T06:40:17+00:00",
+      "published_ts": 1781592017,
+      "summary": "她并不是一位被神话出来的「星舰女王」",
+      "author": "听雨",
+      "tags": [
+        "资讯",
+        "首页轮播",
+        "AI"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435882.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "三连发！阿里发布首个具身大模型Qwen-Robot系列",
+      "url": "https://www.qbitai.com/2026/06/435873.html",
+      "published": "2026-06-16T04:39:39+00:00",
+      "published_ts": 1781584779,
+      "summary": "边走、边看、边思考",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "阿里云"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435873.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "从技术向运营生产力“质变”：神州数码以AI for Process构建AI落地产业的“飞轮”",
+      "url": "https://www.qbitai.com/2026/06/435859.html",
+      "published": "2026-06-16T04:10:43+00:00",
+      "published_ts": 1781583043,
+      "summary": "",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435859.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "沙利文权威认证：范式 Rise vGPU 获评 Tier 1 领先平台",
+      "url": "https://www.qbitai.com/2026/06/435853.html",
+      "published": "2026-06-16T02:47:51+00:00",
+      "published_ts": 1781578071,
+      "summary": "成为全球领先的通用人工智能科技公司",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "范式"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435853.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    },
+    {
+      "title": "上线首月吸引 10 万开发者，AnySearch 为 Agent 解锁网页之外的世界",
+      "url": "https://www.qbitai.com/2026/06/435861.html",
+      "published": "2026-06-16T01:32:25+00:00",
+      "published_ts": 1781573545,
+      "summary": "专为 Agent 设计的 AI 搜索层服务",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "AnySearch"
+      ],
+      "source": "qbitai",
+      "extra": {
+        "article_path": "data/articles/qbitai/435861.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:07:11+08:00"
+    }
+  ]
+}

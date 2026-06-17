@@ -1,0 +1,79 @@
+{
+  "source": "langchain",
+  "date": "2026-06-16",
+  "saved_at": "2026-06-17T01:06:32+08:00",
+  "count": 2,
+  "meta": {
+    "list_url": "https://www.langchain.com/blog",
+    "total_discovered": 16,
+    "total_parsed": 16,
+    "window": [
+      "2026-06-16T00:00:00+08:00",
+      "2026-06-16T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "Building a 100x Cheaper Trace Judge with Fireworks",
+      "url": "https://www.langchain.com/blog/building-a-100x-cheaper-trace-judge-with-fireworks",
+      "published": "2026-06-15T16:55:00+00:00",
+      "published_ts": 1781542500,
+      "summary": "LangChain and Fireworks fine-tuned an open model to mine perceived error signals from production traces, matching frontier model performance at a fraction of the cost.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "building-a-100x-cheaper-trace-judge-with-fireworks",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ],
+        "article_path": "data/articles/langchain/building-a-100x-cheaper-trace-judge-with-fireworks.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:06:09+08:00"
+    },
+    {
+      "title": "Why Fleet Has Both General Purpose Chat and Specialized Agents",
+      "url": "https://www.langchain.com/blog/why-fleet-has-both-general-purpose-chat-and-specialized-agents",
+      "published": "2026-06-16T14:45:00+00:00",
+      "published_ts": 1781621100,
+      "summary": "Fleet supports both quick, ad hoc tasks and recurring responsibilities. See how General Purpose Chat and Specialized Agents help teams delegate work.",
+      "author": "LangChain Accounts",
+      "tags": [
+        "langchain",
+        "agent"
+      ],
+      "source": "langchain",
+      "extra": {
+        "slug": "why-fleet-has-both-general-purpose-chat-and-specialized-agents",
+        "jsonld_keys": [
+          "@type",
+          "dateModified",
+          "datePublished",
+          "description",
+          "headline",
+          "mainEntityOfPage",
+          "url",
+          "author",
+          "image",
+          "publisher"
+        ],
+        "article_path": "data/articles/langchain/why-fleet-has-both-general-purpose-chat-and-specialized-agents.md",
+        "article_cached": true
+      },
+      "fetched_at": "2026-06-17T01:06:29+08:00"
+    }
+  ]
+}

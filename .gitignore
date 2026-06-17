@@ -18,6 +18,13 @@ __pycache__/
 .venv/
 venv/
 
+# uv（v2.0 引入：依赖锁定 + venv 管理）
+# - .venv 不入 git（设备/sandbox 各自重建）
+# - uv.lock 入 git（依赖锁文件，跨环境保持一致）
+.venv/
+# uv 缓存目录（不提交）
+.uv-cache/
+
 # 日志（按源单独控制：爬虫日志在 logs/，已 gitignored）
 *.log
 logs/
