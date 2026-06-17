@@ -46,9 +46,8 @@ def _check_repo_root() -> None:
 def push_report() -> None:
     """推送 daily/weekly/special/management/test（替代 push_report.sh）"""
     _check_repo_root()
-    # 委托给 push_report.py（v2.1 重构阶段会拆出 push_report.py）
-    from push_report import main as _pr_main
-    sys.exit(_pr_main(sys.argv[1:]))
+    from scripts.push_report import main as _pr_main
+    sys.exit(_pr_main(sys.argv[1:]) or 0)
 
 
 # ==================== 子命令：pm-inspect ====================
@@ -65,8 +64,43 @@ def pm_inspect() -> None:
     parser.add_argument("--dry-run", action="store_true", help="只生成报告不推送")
     args = parser.parse_args(sys.argv[1:])
 
-    from generators.generate_inspection import main as _gi_main
-    sys.exit(_gi_main([args.type] + (["--no-escalate"] if args.no_escalate else [])))
+    # 1. 跑 generate_inspection.py 生成详细 + 飞书摘要
+    from scripts.generators.generate_inspection import generate
+    result, sections, feishu_text = generate(
+        typ=args.type,
+        write_file=True,
+        escalate=not args.no_escalate,
+    )
+    print(f"✅ 巡检报告已落档: data/inspections/{result.get('full_report_file', '?')}")
+    print(f"📊 飞书摘要: {result.get('feishu_text_chars', '?')} 字符 / 落档详细: {result.get('full_text_chars', '?')} 字符")
+    print(f"🔍 结论: {result.get('conclusion', '?')}")
+    if "escalation" in result:
+        esc = result["escalation"]
+        if esc.get("escalated"):
+            print(f"🚨 异常升级: {len(esc.get('reasons', []))} 项已 DM owner")
+        else:
+            print(f"✅ 无需升级: {esc.get('reason', '?')}")
+    if not feishu_text:
+        print("⚠️  generate() 返回 feishu_text 为空，跳过 push")
+        return
+
+    if args.dry_run:
+        print("ℹ️  --dry-run，跳过 push")
+        return
+
+    # 2. 推送飞书摘要到 management 渠道（v2.1 commit D 前用 push_report.sh 过渡）
+    from datetime import datetime as _dt
+    date_str = _dt.now(TZ_SH).strftime("%Y-%m-%d")
+    time_tag = args.type.replace(":", "-")
+    feishu_file = REPO_ROOT / "data" / "inspections" / f"{date_str}-{time_tag}-feishu.md"
+    if not feishu_file.exists():
+        print(f"⚠️  飞书摘要未生成: {feishu_file}（fallback 推详细）", file=sys.stderr)
+        feishu_file = REPO_ROOT / "data" / "inspections" / f"{date_str}-{time_tag}.md"
+
+    print(f"--- Step 2: 推送飞书摘要到 management 渠道（{feishu_file.name}）---")
+    from scripts.push_report import main as _pr_main
+    r = _pr_main([str(feishu_file.relative_to(REPO_ROOT))])
+    sys.exit(r if r is not None else 0)
 
 
 # ==================== 子命令：run-generate-daily ====================
@@ -151,7 +185,14 @@ def news_commit() -> None:
 # ==================== main ====================
 
 if __name__ == "__main__":
-    # 直接调 scripts/cli.py 时的友好提示
+    # `python -m scripts.cli <cmd> [args...]` 形式：路由到子命令
+    if len(sys.argv) > 1 and sys.argv[1] in ("push-report", "pm-inspect", "run-generate-daily", "news-commit"):
+        cmd_name = sys.argv[1].replace("-", "_")
+        cmd_fn = globals().get(cmd_name)
+        if cmd_fn:
+            # 移除命令名，让子命令 argparse 看到干净 argv
+            sys.argv = [sys.argv[0]] + sys.argv[2:]
+            sys.exit(cmd_fn() or 0)
     print("⚠️  请通过 `uv run push-report / pm-inspect / run-generate-daily / news-commit` 调用", file=sys.stderr)
     print("   或 `uv run python scripts/cli.py <cmd> [args...]`", file=sys.stderr)
     sys.exit(1)
