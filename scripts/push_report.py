@@ -83,6 +83,9 @@ class PushState:
     dry_run: bool = False
     pushed_by_override: str = ""
     enabled_channels: list[str] = field(default_factory=list)
+    include_manual: bool = False          # v1.2.2：让 manual_only 渠道也参与（手动预发测试用）
+    only_channels: list[str] = field(default_factory=list)  # v1.2.2：白名单，只推这些渠道
+    doc_title_prefix: str = ""            # v1.2.2：docx 标题前缀（手动预发测试加 [预发] 标记）
 
 
 # ============== 工具函数 ==============
@@ -163,13 +166,21 @@ def _infer_report_type(target_file: str) -> str:
     return "unknown"
 
 
-def _select_channels(cfg: dict, report_type: str) -> list[str]:
-    """按 report_type + implied purpose 选 enabled 渠道"""
+def _select_channels(cfg: dict, report_type: str, include_manual: bool = False, only: list[str] | None = None) -> list[str]:
+    """按 report_type + implied purpose 选 enabled 渠道
+    v1.2.2 扩展：
+      - include_manual: True 时让 manual_only 渠道也参与（手动预发测试）
+      - only: 渠道白名单（如 ['wecom_test']），只推这些；与 include_manual 配合限制只推测试群
+    """
     need_purpose = IMPLIED_PURPOSE.get(report_type, report_type)
     result = []
     for name, c in cfg.get("channels", {}).items():
         if not c.get("enabled"):
             continue
+        if c.get("manual_only") and not include_manual:
+            continue  # v1.2.2：手动专用渠道，自动任务不选
+        if only and name not in only:
+            continue  # v1.2.2：白名单过滤
         purposes = c.get("purpose", [])
         types = c.get("message_types", [])
         if (report_type in types or "all" in types) and need_purpose in purposes:
@@ -201,26 +212,58 @@ def _read_published_record(report_type: str, date: str) -> dict | None:
 
 # ============== 飞书 docx ==============
 
-def _create_feishu_docx(target_file: str) -> tuple[str, str]:
-    """lark-cli 建飞书云文档；返回 (doc_url, doc_id)"""
+def _create_feishu_docx(target_file: str, title_prefix: str = "") -> tuple[str, str]:
+    """lark-cli 建飞书云文档；返回 (doc_url, doc_id)
+    v1.2.2：支持 title_prefix 非空时临时改 markdown 第一行加前缀（区分正式/测试文档）"""
     lark_cli = os.environ.get("LARK_CLI", "lark-cli")
     env = {**os.environ, "LARK_CLI_NO_PROXY": "1"}
-    r = subprocess.run(
-        [lark_cli, "docs", "+create",
-         "--as", "bot",
-         "--doc-format", "markdown",
-         "--content", f"@{target_file}"],
-        capture_output=True, text=True, env=env, timeout=60
-    )
-    output = r.stdout
+
+    # v1.2.2：title_prefix 处理
+    content_arg = f"@{target_file}"
+    tmp_path = None
+    if title_prefix:
+        md_path = REPO_ROOT / target_file
+        if md_path.exists():
+            md_text = md_path.read_text(encoding="utf-8")
+            lines = md_text.split("\n")
+            title_replaced = False
+            new_lines = []
+            for line in lines:
+                if not title_replaced and line.startswith("# "):
+                    new_lines.append(f"# {title_prefix} {line[2:]}")
+                    title_replaced = True
+                else:
+                    new_lines.append(line)
+            if not title_replaced:
+                new_lines.insert(0, f"# {title_prefix}")
+            # 写临时文件
+            tmp_path = REPO_ROOT / f".tmp_docx_{_now_compact()}.md"
+            tmp_path.write_text("\n".join(new_lines), encoding="utf-8")
+            # v1.2.2 fix：content_arg 用相对路径（lark-cli @绝对路径会 silently fallback 丢标题）
+            content_arg = f"@{tmp_path.name}"
+
     try:
-        d = json.loads(output)
-        if d.get("ok") and "data" in d and "document" in d["data"]:
-            doc = d["data"]["document"]
-            return doc.get("url", ""), doc.get("document_id", "")
-    except Exception:
-        pass
-    return "", ""
+        r = subprocess.run(
+            [lark_cli, "docs", "+create",
+             "--api-version", "v2",  # v1.2.2 切到 v2：v1 对标题中 [xxx] 形式会过滤/转义
+             "--as", "bot",
+             "--doc-format", "markdown",
+             "--content", content_arg],
+            capture_output=True, text=True, env=env, timeout=60
+        )
+        output = r.stdout
+        try:
+            d = json.loads(output)
+            if d.get("ok") and "data" in d and "document" in d["data"]:
+                doc = d["data"]["document"]
+                return doc.get("url", ""), doc.get("document_id", "")
+        except Exception:
+            pass
+        return "", ""
+    finally:
+        # v1.2.2：清理临时文件
+        if tmp_path and tmp_path.exists():
+            tmp_path.unlink(missing_ok=True)
 
 
 def _set_docx_public(doc_id: str) -> bool:
@@ -595,13 +638,15 @@ def _create_docx_if_needed(state: PushState) -> None:
     if state.report_type not in ("daily", "weekly", "special"):
         return
     print("📄 创建飞书云文档...")
-    doc_url, doc_id = _create_feishu_docx(state.target_file)
+    # v1.2.2：手动预发测试支持 docx 标题加 prefix
+    doc_url, doc_id = _create_feishu_docx(state.target_file, title_prefix=state.doc_title_prefix)
     if not doc_url:
         state.error_msg = f"创建飞书云文档失败（lark-cli 返回无 url）"
         print(f"❌ {state.error_msg}")
         sys.exit(1)
     state.doc_url = doc_url
-    print(f"✅ 云文档已创建: {state.doc_url}")
+    prefix_note = f"（标题前缀='{state.doc_title_prefix}'）" if state.doc_title_prefix else ""
+    print(f"✅ 云文档已创建{prefix_note}: {state.doc_url}")
     if doc_id:
         print("🌐 设置公开访问...")
         if _set_docx_public(doc_id):
@@ -665,8 +710,12 @@ def cmd_normal(args, state: PushState, cfg: dict) -> int:
     if _check_skip_if_pushed(state):
         return 0
 
-    # 加载 enabled 渠道
-    state.enabled_channels = _select_channels(cfg, state.report_type)
+    # 加载 enabled 渠道（v1.2.2 扩展 include_manual/only 参数）
+    state.enabled_channels = _select_channels(
+        cfg, state.report_type,
+        include_manual=state.include_manual,
+        only=state.only_channels or None,
+    )
     if not state.enabled_channels:
         state.error_msg = f"没有任何渠道匹配 REPORT_TYPE='{state.report_type}'（检查 channels.json）"
         print(f"❌ {state.error_msg}")
@@ -872,6 +921,13 @@ v1.4 去重策略（默认）:
                         help="渠道配置文件路径")
     parser.add_argument("--secrets-file", default=str(REPO_ROOT / ".secrets"),
                         help=".secrets 路径")
+    # v1.2.2：手动预发测试参数
+    parser.add_argument("--include-manual", action="store_true",
+                        help="让 manual_only=true 渠道也参与（手动预发测试用）")
+    parser.add_argument("--only", default="", metavar="CHAN1,CHAN2",
+                        help="渠道白名单（逗号分隔），只推这些渠道；与 --include-manual 配合限制只推测试群")
+    parser.add_argument("--doc-title-prefix", default="", metavar="STR",
+                        help="docx 标题前缀（手动预发测试加 [预发] 标记方便区分正式/测试）")
     args = parser.parse_args(argv)
 
     # 加载 .secrets + channels
@@ -886,6 +942,9 @@ v1.4 去重策略（默认）:
         dry_run=args.dry_run,
         pushed_by_override=args.pushed_by,
         started_at=_now_iso(),
+        include_manual=args.include_manual,                                  # v1.2.2
+        only_channels=[s.strip() for s in args.only.split(",") if s.strip()],  # v1.2.2
+        doc_title_prefix=args.doc_title_prefix,                             # v1.2.2
     )
 
     # 子命令早退
