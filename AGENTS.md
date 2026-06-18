@@ -25,11 +25,12 @@
 ### 1.1 Git 链
 
 - **远程**：HTTPS + PAT 嵌入 URL（PAT 仅限 `ai-news` 仓库 Contents Read/Write）
-- **分支**：`main`（无 develop / feature 分支）
-- **post-commit hook**：每次 `git commit` 自动 `git push origin main`
+- **分支**：`main`（生产）+ `feature/vX.X.X-<short-desc>`（开发预发，详见 §10）— 6-18 主人规范起强制
+- **post-commit hook**：每次 `git commit` 自动 `git push origin main`（**只对 main 生效**；feature 分支不自动 push）
 - **Git LFS**：管理图片/视频/文档（当前无大文件入库）
 - **commit 风格**：`feat(<scope>): <简述>` / `fix(<scope>): <简述>` / `refactor(<scope>): <简述>`
 - **push 失败时**：用 `git push --no-verify` 绕过 git-lfs pre-push hook（hook 误报时）
+- **tag**：合入 main 后立即 `git tag -a vX.X.X -m "..."` + `git push origin vX.X.X`（附注 tag，含完整版本说明）
 
 ### 1.2 关键版本演进（20 commits）
 
@@ -309,3 +310,89 @@ python3 -c "from scripts.generators._llm import call_llm; print(call_llm('test p
 7. **汇报**：飞书群发 commit 链接 + 关键新增 + 验证点 + 决策记录路径
 
 详细节奏可参考 `../recent_memory/decision/ai_news_v1_4_manual_push_published.md`（v1.4 完整 4 步 + 6 bug 修复 + 验证全过的标准范例）。
+
+---
+
+## 10. Git 分支与预发测试流程（6-18 主人规范·v1.2.2 实施起强制）
+
+> **背景**：v1.2.2 之前所有开发都直接在 main 上 commit + push（单人开发 + 沙箱 + 高频小改）。6-18 主人拍板：从下一次新需求开始走"开发分支 → 预发测试 → 合入"的标准流程，避免未验证代码污染 main / 企微生产群。
+>
+> **生效起点**：v1.2.2 commit `15f826a` 已为支持本流程实施完 `--include-manual` / `--only` / `--doc-title-prefix` 三个参数。
+
+### 10.1 5 步标准流程
+
+```
+1. **创建 feature 分支**（基于 main HEAD）
+   git checkout main && git pull
+   git checkout -b feature/vX.X.X-<short-desc>
+
+2. **在分支上开发**：commit 不限次数，message 风格 feat/fix/refactor(<scope>)
+
+3. **预发测试**（涉及 push 链路时）：
+   python3 -m scripts.cli push-report <md> \
+       --include-manual --only wecom_test --doc-title-prefix="[预发]"
+   → 推到 wecom_test（manual_only=true，calendar 自动任务不选）
+   → 主人在测试群确认 daily 形态可打开 + 内容正确
+
+4. **合入 main**（主人确认测试通过后）：
+   git checkout main
+   git merge --no-ff feature/vX.X.X-<short-desc> \
+     -m "Merge feature/vX.X.X-<short-desc>"
+   git push origin main
+   git branch -d feature/vX.X.X-<short-desc>  # 本地删除
+
+5. **打 tag**（合入后立即）：
+   git tag -a vX.X.X -m "<版本主题>"
+   git push origin vX.X.X
+```
+
+### 10.2 命名规范
+
+| 要素 | 规则 | 示例 |
+|------|------|------|
+| 分支名 | `feature/vX.X.X-<short-desc>` | `feature/v1.3-pm-p0-p1`、`feature/v1.3.1-wecom-markdown-fix` |
+| Tag 名 | `vX.X.X`（与分支前缀版本号一致） | `v1.2.2`、`v1.3` |
+| 合并策略 | `--no-ff`（保留 feature commit + merge commit 双痕迹） | — |
+| docx 测试标题前缀 | `[预发]`（与 `--doc-title-prefix` 一致） | `[预发] 🤖 AI每日资讯 \| 2026-06-17（昨日）` |
+| commit author | `AI资讯追踪 <ai-news@zlink.cloud>` | （沙箱无 git config 时需 `-c user.name=... -c user.email=...`） |
+
+### 10.3 适用范围
+
+| 改动类型 | 是否走流程 | 预发测试 |
+|----------|-----------|---------|
+| push 链路（`scripts/push_report.py` / `scripts/renderers/`） | **必须** | wecom_test |
+| 渠道配置（`config/channels.json` / `.secrets`） | **必须** | wecom_test |
+| 云文档 API（lark-cli 调用） | **必须** | wecom_test |
+| 抓取/生成器（`scripts/crawlers/` / `scripts/generators/`） | **必须** | 抓 dry-run + 主 agent 自检 |
+| 纯文档（`AGENTS.md` / `README.md` / 决策记录） | **建议**（分支+合入，但不走 wecom_test） | 主人直接 review |
+| data/ 运行时数据 | **不需** | 生产任务自动落档 |
+| LLM 提示词 | **建议**（v2.0 渲染器会读 prompt） | dry-run 渲染输出对比 |
+
+### 10.4 预发测试命令参考
+
+```bash
+# 推 daily 到 wecom_test（带 [预发] 前缀）
+python3 -m scripts.cli push-report "每日资讯/2026-06-17.md" \
+    --include-manual --only wecom_test --doc-title-prefix="[预发]"
+
+# 推 weekly 到 wecom_test
+python3 -m scripts.cli push-report "每周汇总/2026-W25.md" \
+    --include-manual --only wecom_test --doc-title-prefix="[预发-周报]"
+
+# dry-run（不真发，只看渲染结果）
+python3 -m scripts.cli push-report "每日资讯/2026-06-17.md" \
+    --include-manual --only wecom_test --doc-title-prefix="[预发]" --dry-run
+```
+
+### 10.5 与 v1.2.2 manual_only 的关系
+
+- **v1.2.2 commit `15f826a`** 就是为支持本流程而实施
+- **wecom_test 配置**：`manual_only=true` + `purpose=["test","official"]` + `message_types` 包含 daily/weekly/special — calendar 自动任务**永远不选** wecom_test，只有手动 `--include-manual` 才会触发
+- **6-18 12:33 主人确认**：6-17 报告（docx `SIK5dqUxJoISwBxFkktcySwYn6b`）可在企微正常打开；`_render_daily_for_wecom` 仍用 `[👉 完整报告](URL)` markdown 形式，**不修改为裸 URL**
+
+### 10.6 异常处理
+
+- **push 失败**（git-lfs hook 误报）：`git push --no-verify origin main`（不绕安全检查，只绕缺失 git-lfs 二进制的 hook）
+- **merge 冲突**：在 feature 分支上 rebase main 后再 merge；不要在 main 上直接解冲突
+- **预发失败**：主人拍板回退（`git reset --hard <good-commit>`）或修复后重测；不要把失败代码合入 main
+- **tag 错了**：`git tag -d vX.X.X`（本地）+ `git push --delete origin vX.X.X`（远端）+ 重新打；**已经基于错误 tag 引用代码**则需额外补救
