@@ -1,29 +1,31 @@
 """
-每周汇总生成器
-==============
+每周汇总生成器 v2.2（议题 H：weekly 重做）
+====================================
 
-读 `每日资讯/<date>.md` × 7 天 → 解析速览表 + 主线信号 + 一句话总结 →
-聚合 → 渲染 → 落盘 `每周汇总/YYYY-WXX.md`
+读 7 天 daily v2.0 JSON（schema 2.0）→ 聚合 + 跨周对比 + 周度 Top 10 +
+板块热度图 + 跨话题洞察（白名单 4 类）→ 渲染 → 落盘 `每周汇总/YYYY-Www.md`
 
-设计原则：
-- 数据从"每日 md"读，不重新跑评分（避免和日报矛盾）
-- LLM 增强 + 规则降级双路径
-- 支持不全周（< 7 天）也能生成（标 WIP）
+v2.2 相对 v1.5 的 4 大核心改动（议题 H）：
+  1. 数据源：daily md（正则解析）→ daily v2.0 JSON（结构化）
+  2. LLM：trend 砍 LLM + insights 砍 LLM（议题 A B 方案）→ 100% 规则
+  3. 推送节奏：周日 8:30（v1.5，已 cancel）→ 周一 8:30 推上一周（commit Y 新建 calendar）
+  4. 模板：+跨周对比 / +板块热度图 / +周度 Top 10 / -下周关注清单
 
 用法：
     python3 scripts/generators/generate_weekly.py --week 2026-W24
     python3 scripts/generators/generate_weekly.py                    # 默认 = 本周（周一~周日，Asia/Shanghai）
     python3 scripts/generators/generate_weekly.py --week 2026-W24 --dry-run
-    python3 scripts/generators/generate_weekly.py --week 2026-W24 --no-llm
+    python3 scripts/generators/generate_weekly.py --week 2026-W24 --no-llm   # v2.2 已默认 --no-llm；保留参数兼容
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from collections import Counter, defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -36,7 +38,6 @@ from _utils_gen import (  # noqa: E402
     BOARD_META,
     BOARD_ORDER,
 )
-from _llm import LLMClient, LLMError, load_llm_client  # noqa: E402
 
 
 # ============== ISO 周工具 ==============
@@ -62,232 +63,109 @@ def current_week() -> tuple[int, int]:
     return cal[0], cal[1]
 
 
-# ============== LLM Prompt ==============
-
-PROMPT_WEEKLY_TREND_SYSTEM = (
-    "你是一个 AI 行业分析师，需要根据本周 7 天 AI 资讯，"
-    "分析各话题板块的趋势与关键事件。"
-    "硬性规则：\n"
-    "① 输出按板块分块（5 个板块各一段）\n"
-    "② 每段 2-3 句（≤ 80 字/句）\n"
-    "③ 段首标热度：📈 上升 / ➡️ 平稳 / 📉 下降\n"
-    "④ 每段至少提 1 个本周关键事件（带日期）\n"
-    "⑤ 禁词：'本周/据悉/该文章'\n"
-    "⑥ 板块名固定：LLM 发展 / Agent 框架与工具 / 数字人 / 行业动态 / 其他"
-)
-
-PROMPT_WEEKLY_TREND_USER_TMPL = (
-    "本周（{date_range}）各板块数据：\n{context}\n"
-    "请按规则输出各板块趋势："
-)
-
-PROMPT_WEEKLY_INSIGHTS_SYSTEM = (
-    "你是一个 AI 行业分析师，需要从本周 7 天 AI 资讯中提炼 3-5 条跨话题宏观洞察。"
-    "硬性规则：\n"
-    "① 至少 2 条必须真正'跨话题'（同时涉及 2 个板块）\n"
-    "② 覆盖维度多样：资本 / 监管 / 技术 / 商业化 / 风险\n"
-    "③ **每条单行输出**，格式：`【主题】 内容描述。`（不要换行分标题和描述）\n"
-    "④ 每条 40-80 字\n"
-    "⑤ 禁词：'本周/据悉/该文章/我'"
-)
-
-PROMPT_WEEKLY_INSIGHTS_USER_TMPL = (
-    "本周汇总：\n{context}\n"
-    "请输出 3-5 条洞察："
-)
+def prev_week(year: int, week: int) -> tuple[int, int]:
+    """给定 ISO (year, week) → 返上一周 ISO (year, week)"""
+    monday, _ = week_dates(year, week)
+    prev_monday = monday - timedelta(days=7)
+    cal = prev_monday.isocalendar()
+    return cal[0], cal[1]
 
 
-# ============== LLM Usage ==============
-
-class LLMUsage:
-    def __init__(self) -> None:
-        self.calls = 0
-        self.failed = 0
-        self.cache_hits = 0
-        self.last_provider = ""
-        self.last_model = ""
-
-    def add_call(self, provider: str, model: str) -> None:
-        self.calls += 1
-        self.last_provider = provider
-        self.last_model = model
-
-    def add_fail(self) -> None:
-        self.failed += 1
-
-    def to_footer(self) -> str:
-        if self.calls == 0 and self.failed == 0:
-            return "未启用 LLM（无 .secrets 配置或 --no-llm）"
-        base = f"{self.calls} 次调用"
-        if self.cache_hits:
-            base += f"（{self.cache_hits} 次缓存命中）"
-        if self.failed:
-            base += f"，{self.failed} 次降级到规则渲染"
-        return f"{base} · {self.last_provider}/{self.last_model}"
-
-
-def _safe_llm(usage: LLMUsage, client: LLMClient | None,
-              system: str, user: str) -> str | None:
-    if client is None:
-        usage.add_fail()
-        return None
-    try:
-        cache_key = client._cache_key(system, user)
-        was_cached = client._cache_get(cache_key) is not None
-        usage.add_call(client.provider, client.model)
-        if was_cached:
-            usage.cache_hits += 1
-        return client.chat(system, user)
-    except LLMError as e:
-        print(f"[WARN] LLM 调用失败，降级到规则: {e}", file=sys.stderr)
-        usage.add_fail()
-        return None
-
-
-# ============== 每日 md 解析 ==============
-
-# 速览表行：| 🧠 LLM 发展 | 6 | 0 | 6 | 0 | agent、安全 |  (允许 **加粗** 和 — 兜底)
-SPEEDRUN_ROW_RE = re.compile(
-    r"\|\s*([^|]+?)\s*\|\s*(?:\*\*)?\s*(\d+)\s*(?:\*\*)?\s*\|\s*(?:\*\*)?\s*(\d+)\s*(?:\*\*)?\s*\|\s*(?:\*\*)?\s*(\d+)\s*(?:\*\*)?\s*\|\s*(?:\*\*)?\s*(\d+)\s*(?:\*\*)?\s*\|"
-)
-
-# 主线信号行：1. **🚀 产品发布**（4 条 · 涉及 `36kr`、`jiqizhixin`）
-SIGNAL_ROW_RE = re.compile(r"^\s*(\d+)\.\s+\*\*([^*]+?)\*\*")
-
-# 板块名 → emoji 映射（用于速览表匹配）
-BOARD_EMOJI: dict[str, str] = {b: m["emoji"] for b, m in BOARD_META.items()}
-
+# ============== 数据结构 ==============
 
 @dataclass
-class DailySummary:
-    """从每日 md 解析的当日概要（不解析每条详情）"""
+class DailyWeekSummary:
+    """从 daily v2.0 JSON 解析的当日概要（v2.2 新增：JSON 数据源）"""
     date: str                       # YYYY-MM-DD
-    file_path: Path                 # 源 md 路径
-    exists: bool                    # md 是否存在
+    file_path: Path                 # 源 JSON 路径
+    exists: bool                    # JSON 是否存在
     board_stats: dict[str, dict]    # {board: {total, high, mid, low, keywords}}
-    main_signals: list[dict]        # [{display, count, sources, first_item}, ...]
-    one_line_summary: str           # 当日一句话总结
-    total_items: int                # 当日总条数
+    main_signals: list[dict]        # main_signals 列表
+    one_line_summary: str           # one_line_summary.text
+    total_items: int                # meta.total_items
+    top_items: list[dict]           # 全部 top_items 扁平（用于周度 Top 10）
+    doc_url: str                    # publish_record.doc_url or 顶层 doc_url
+    hit_rate: float                 # meta.hit_rate
+    boards_with_data: list[str]     # meta.boards_with_data
+    sources_with_zero: list[str]    # meta.sources_with_zero
 
 
-def _parse_iso_daily(md_text: str, date_iso: str, file_path: Path) -> DailySummary:
-    """解析每日 md → DailySummary"""
-    board_stats: dict[str, dict] = {b: {"total": 0, "high": 0, "mid": 0, "low": 0, "keywords": []}
-                                    for b in BOARD_ORDER}
-    main_signals: list[dict] = []
-    one_line_summary = ""
-    total_items = 0
+def _empty_board_stats() -> dict[str, dict]:
+    return {b: {"total": 0, "high": 0, "mid": 0, "low": 0, "keywords": []}
+            for b in BOARD_ORDER}
 
-    lines = md_text.splitlines()
-    section: str | None = None  # "speedrun" / "signals" / "summary" / None
 
-    for line in lines:
-        # 章节切换
-        if "## 📊 昨日速览" in line:
-            section = "speedrun"
-            continue
-        if "## 🔥 主线信号" in line:
-            section = "signals"
-            continue
-        if "## 💡" in line or "## 📌" in line or "## 📎" in line or "## 📈" in line:
-            section = None
-            continue
-        if "## " in line and section is not None and "## " + ("📊" if section == "speedrun" else "🔥") not in line:
-            # 进入新章节
-            section = None
-        if line.startswith("---"):
-            continue
+def _parse_v2_daily(data: dict, date_iso: str, file_path: Path) -> DailyWeekSummary:
+    """解析 daily v2.0 JSON → DailyWeekSummary"""
+    boards_data = data.get("boards", {}) or {}
+    board_stats: dict[str, dict] = _empty_board_stats()
+    top_items_flat: list[dict] = []
 
-        # 一句话总结（blockquote）
-        sm = re.match(r">\s*\*\*昨日一句话总结\*\*[：:](.*)", line.strip())
-        if sm:
-            one_line_summary = sm.group(1).strip()
-            continue
+    for board_key in BOARD_ORDER:
+        b = boards_data.get(board_key, {}) or {}
+        board_stats[board_key] = {
+            "total": b.get("total", 0),
+            "high": b.get("high", 0),
+            "mid": b.get("mid", 0),
+            "low": b.get("low", 0),
+            "keywords": list(b.get("keywords", []) or []),
+        }
+        for it in b.get("top_items", []) or []:
+            top_items_flat.append({
+                **it,
+                "board": board_key,  # 显式标 board
+            })
 
-        if section == "speedrun":
-            m = SPEEDRUN_ROW_RE.match(line)
-            if not m:
-                continue
-            label = m.group(1).strip()
-            n_total, n_high, n_mid, n_low = map(int, m.groups()[1:5])
-            # 合计行：提取 total_items
-            if "合计" in label:
-                total_items = n_total
-                continue
-            # label 含 emoji + 板块名
-            matched_board = None
-            for board, emoji in BOARD_EMOJI.items():
-                if emoji in label:
-                    matched_board = board
-                    break
-            if matched_board is None:
-                continue
-            board_stats[matched_board]["total"] = n_total
-            board_stats[matched_board]["high"] = n_high
-            board_stats[matched_board]["mid"] = n_mid
-            board_stats[matched_board]["low"] = n_low
-            # 主题词在第 6 列
-            parts = line.split("|")
-            if len(parts) >= 7:
-                kws = parts[6].strip()
-                if kws and kws != "—":
-                    board_stats[matched_board]["keywords"] = [k.strip() for k in kws.split("、") if k.strip()]
+    # doc_url 优先取 publish_record.doc_url（v2.0 阶段 5 修复），兜底顶层 doc_url
+    pub_record = data.get("publish_record", {}) or {}
+    doc_url = pub_record.get("doc_url") or data.get("doc_url") or ""
 
-        elif section == "signals":
-            sm = SIGNAL_ROW_RE.match(line)
-            if sm:
-                display = sm.group(2).strip()
-                # 抓 count + sources
-                count_m = re.search(r"（(\d+)\s*条", line)
-                count = int(count_m.group(1)) if count_m else 0
-                srcs_m = re.search(r"涉及\s+(.+?)\s*）", line)
-                sources = []
-                if srcs_m:
-                    sources = [s.strip("`") for s in srcs_m.group(1).split("、") if s.strip()]
-                main_signals.append({
-                    "display": display,
-                    "count": count,
-                    "sources": sources,
-                })
+    meta = data.get("meta", {}) or {}
 
-    # 找主线条目（每个信号的第一条关联，line 后几行）
-    # 简化：只记 display/count/sources，不抓具体 URL（避免二次解析）
-
-    return DailySummary(
+    return DailyWeekSummary(
         date=date_iso,
         file_path=file_path,
         exists=True,
         board_stats=board_stats,
-        main_signals=main_signals,
-        one_line_summary=one_line_summary,
-        total_items=total_items,
+        main_signals=list(data.get("main_signals", []) or []),
+        one_line_summary=(data.get("one_line_summary", {}) or {}).get("text", ""),
+        total_items=meta.get("total_items", 0),
+        top_items=top_items_flat,
+        doc_url=doc_url,
+        hit_rate=meta.get("hit_rate", 0.0),
+        boards_with_data=list(meta.get("boards_with_data", []) or []),
+        sources_with_zero=list(meta.get("sources_with_zero", []) or []),
     )
 
 
-def load_week_summaries(monday: date, sunday: date,
-                        daily_root: Path) -> list[DailySummary]:
-    """读 7 天的每日 md（不存在的标 exists=False）"""
-    out: list[DailySummary] = []
+def load_week_daily_jsons(monday: date, sunday: date,
+                          daily_json_root: Path) -> list[DailyWeekSummary]:
+    """读 7 天 daily v2.0 JSON（v2.2 数据源升级；缺失日期标 exists=False）"""
+    out: list[DailyWeekSummary] = []
     cur = monday
     while cur <= sunday:
         iso = cur.isoformat()
-        fp = daily_root / f"{iso}.md"
+        fp = daily_json_root / f"{iso}.json"
         if not fp.exists():
-            out.append(DailySummary(
+            out.append(DailyWeekSummary(
                 date=iso, file_path=fp, exists=False,
-                board_stats={b: {"total": 0, "high": 0, "mid": 0, "low": 0, "keywords": []} for b in BOARD_ORDER},
+                board_stats=_empty_board_stats(),
                 main_signals=[], one_line_summary="", total_items=0,
+                top_items=[], doc_url="", hit_rate=0.0,
+                boards_with_data=[], sources_with_zero=[],
             ))
         else:
             try:
-                text = fp.read_text(encoding="utf-8")
-                out.append(_parse_iso_daily(text, iso, fp))
+                data = json.loads(fp.read_text(encoding="utf-8"))
+                out.append(_parse_v2_daily(data, iso, fp))
             except Exception as e:
-                print(f"[WARN] 解析失败: {fp}: {e}", file=sys.stderr)
-                out.append(DailySummary(
+                print(f"[WARN] daily v2.0 JSON 解析失败: {fp}: {e}", file=sys.stderr)
+                out.append(DailyWeekSummary(
                     date=iso, file_path=fp, exists=False,
-                    board_stats={b: {"total": 0, "high": 0, "mid": 0, "low": 0, "keywords": []} for b in BOARD_ORDER},
+                    board_stats=_empty_board_stats(),
                     main_signals=[], one_line_summary="", total_items=0,
+                    top_items=[], doc_url="", hit_rate=0.0,
+                    boards_with_data=[], sources_with_zero=[],
                 ))
         cur += timedelta(days=1)
     return out
@@ -295,8 +173,8 @@ def load_week_summaries(monday: date, sunday: date,
 
 # ============== 聚合 ==============
 
-def aggregate_week(summaries: list[DailySummary]) -> dict:
-    """聚合 7 天数据 → 周度统计"""
+def aggregate_week(summaries: list[DailyWeekSummary]) -> dict:
+    """聚合 7 天数据 → 周度统计（v2.2 增强：板块级 + 周度 Top 10 + 信息源覆盖）"""
     week_stats: dict[str, dict] = {}
     for board in BOARD_ORDER:
         total = high = mid = low = 0
@@ -328,14 +206,40 @@ def aggregate_week(summaries: list[DailySummary]) -> dict:
         if not s.exists:
             continue
         for sig in s.main_signals:
-            signal_counter[sig["display"]] += sig["count"]
-            for src in sig["sources"]:
-                signal_sources[sig["display"]].add(src)
+            disp = sig.get("display", sig.get("tag", ""))
+            count = sig.get("count", 0)
+            signal_counter[disp] += count
+            for src in sig.get("sources", []) or []:
+                signal_sources[disp].add(src)
     top_signals = signal_counter.most_common(5)
 
     # 抓取覆盖（哪些日期存在日报）
     days_with_data = sum(1 for s in summaries if s.exists and s.total_items > 0)
     days_missing = 7 - days_with_data
+
+    # 周度 Top 10（按 score desc 跨板块；v2.2 新增）
+    weekly_top10: list[dict] = sorted(
+        [it for s in summaries if s.exists for it in s.top_items],
+        key=lambda x: (-(x.get("score", 0) or 0), x.get("published_at", "")),
+    )[:10]
+
+    # 信息源覆盖（v2.2 增强：直接读 sources_with_zero + 用 top_items 统计源命中天数）
+    source_days: dict[str, set[str]] = defaultdict(set)
+    source_mentions: dict[str, int] = defaultdict(int)
+    for s in summaries:
+        if not s.exists:
+            continue
+        for it in s.top_items:
+            src = it.get("source", "")
+            if src:
+                source_days[src].add(s.date)
+                source_mentions[src] += 1
+    # 累计 0 源（7 天都 0 命中）
+    cumulative_zero_sources: list[str] = sorted([
+        src for src, days in source_days.items() if not days
+    ])
+    # 本周 0 命中源（7 天都没出现）
+    weekly_zero_sources: list[str] = sorted(cumulative_zero_sources)
 
     return {
         "week_stats": week_stats,
@@ -344,144 +248,134 @@ def aggregate_week(summaries: list[DailySummary]) -> dict:
         "signal_sources": signal_sources,
         "days_with_data": days_with_data,
         "days_missing": days_missing,
+        "weekly_top10": weekly_top10,                  # v2.2 新增
+        "source_days": source_days,                    # v2.2 重构
+        "source_mentions": source_mentions,            # v2.2 重构
+        "weekly_zero_sources": weekly_zero_sources,    # v2.2 新增
     }
 
 
-# ============== LLM 增强 ==============
+def cross_week_compare(curr: dict, prev: dict | None) -> dict:
+    """跨周对比：vs 上周（v2.2 新增；上周数据缺失或为 0 时降级为 unavailable）"""
+    if prev is None:
+        return {"available": False, "reason": "上周 daily JSON 不存在或不可读"}
 
-def _build_trend_context(agg: dict, summaries: list[DailySummary]) -> str:
-    """给 LLM 的本周趋势上下文"""
-    parts: list[str] = []
+    # 边界：上周完全无数据（0 条 / 0 天有数据）→ 不可比
+    prev_total = sum(s["total"] for s in prev["week_stats"].values())
+    prev_days_with_data = prev.get("days_with_data", 0)
+    if prev_total == 0 and prev_days_with_data == 0:
+        return {"available": False, "reason": f"上周 0 条数据（{prev_days_with_data}/7 天有数据），无法对比"}
+
+    out: dict = {"available": True}
+    # 总条数
+    curr_total = sum(s["total"] for s in curr["week_stats"].values())
+    prev_total = sum(s["total"] for s in prev["week_stats"].values())
+    out["total_delta"] = curr_total - prev_total
+    out["total_pct"] = (curr_total - prev_total) / prev_total * 100 if prev_total > 0 else None
+
+    # 高优条数
+    curr_high = sum(s["high"] for s in curr["week_stats"].values())
+    prev_high = sum(s["high"] for s in prev["week_stats"].values())
+    out["high_delta"] = curr_high - prev_high
+
+    # 板块条数对比
+    out["board_delta"] = {}
     for board in BOARD_ORDER:
-        ws = agg["week_stats"][board]
-        meta = BOARD_META[board]
-        parts.append(f"【{meta['name']}】共 {ws['total']} 条（🔴{ws['high']} / 🟡{ws['mid']} / 🟢{ws['low']}）")
-        # 主题词
-        kws = agg["week_keywords"].get(board, [])
-        if kws:
-            parts.append(f"  主题词：{', '.join(kws)}")
-        # 该板块每日条数
-        daily_lines = []
-        for s in summaries:
-            if s.exists:
-                n = s.board_stats.get(board, {}).get("total", 0)
-                daily_lines.append(f"{s.date[-5:]}={n}")
-        if daily_lines:
-            parts.append(f"  每日条数：{', '.join(daily_lines)}")
-    return "\n".join(parts)
+        cb = curr["week_stats"][board]["total"]
+        pb = prev["week_stats"][board]["total"]
+        out["board_delta"][board] = {
+            "curr": cb, "prev": pb, "delta": cb - pb,
+        }
+
+    # 信息源覆盖对比
+    out["zero_sources_delta"] = sorted(
+        set(curr["weekly_zero_sources"]) - set(prev["weekly_zero_sources"])
+    )
+
+    return out
 
 
-def _build_insights_context(agg: dict) -> str:
-    """给 LLM 的本周洞察上下文"""
-    parts: list[str] = []
-    parts.append("本周累计主线信号 Top 5：")
-    for display, count in agg["top_signals"]:
-        sources = sorted(agg["signal_sources"].get(display, []))
-        parts.append(f"- {display}（{count} 条，跨 {len(sources)} 个源：{', '.join(sources)}）")
-    parts.append("\n本周各板块主题词：")
-    for board in BOARD_ORDER:
-        kws = agg["week_keywords"].get(board, [])
-        if kws:
-            parts.append(f"- {BOARD_META[board]['name']}：{', '.join(kws)}")
-    return "\n".join(parts)
+# ============== 规则版洞察（B 方案：白名单 4 类） ==============
 
-
-def llm_weekly_trend(client: LLMClient | None, context: str,
-                     date_range: str, usage: LLMUsage) -> str | None:
-    raw = _safe_llm(usage, client, PROMPT_WEEKLY_TREND_SYSTEM,
-                    PROMPT_WEEKLY_TREND_USER_TMPL.format(date_range=date_range, context=context))
-    return raw
-
-
-def llm_weekly_insights(client: LLMClient | None, context: str,
-                        usage: LLMUsage) -> list[str] | None:
-    raw = _safe_llm(usage, client, PROMPT_WEEKLY_INSIGHTS_SYSTEM,
-                    PROMPT_WEEKLY_INSIGHTS_USER_TMPL.format(context=context))
-    if not raw:
-        return None
-    lines: list[str] = []
-    for line in raw.splitlines():
-        s = re.sub(r"^\s*[\-\*]?\s*\d+[\.、]?\s*", "", line).strip()
-        if s and len(s) >= 15:
-            lines.append(s)
-    return lines[:5] if lines else None
-
-
-# ============== 降级 ==============
-
-def build_trend_fallback(agg: dict, summaries: list[DailySummary]) -> str:
-    """规则版趋势（LLM 不可用时）"""
-    parts: list[str] = []
-    for board in BOARD_ORDER:
-        ws = agg["week_stats"][board]
-        meta = BOARD_META[board]
-        # 热度判断
-        days_with = [s for s in summaries if s.exists and s.board_stats.get(board, {}).get("total", 0) > 0]
-        if ws["total"] >= 10:
-            heat = "📈 上升"
-        elif ws["total"] == 0:
-            heat = "📉 下降"
-        else:
-            heat = "➡️ 平稳"
-        kws = agg["week_keywords"].get(board, [])
-        kw_str = "、".join(kws[:3]) if kws else "—"
-        parts.append(
-            f"### {meta['emoji']} {meta['name']}（{heat}）\n"
-            f"- **本周条数**：{ws['total']}（🔴 {ws['high']} / 🟡 {ws['mid']} / 🟢 {ws['low']}）\n"
-            f"- **主题词**：{kw_str}\n"
-            f"- **覆盖天数**：{len(days_with)} / 7"
-        )
-    return "\n\n".join(parts)
-
-
-def build_insights_fallback(agg: dict) -> list[str]:
-    """规则版洞察（LLM 不可用时）"""
+def build_insights_whitelist(agg: dict, summaries: list[DailyWeekSummary]) -> list[str]:
+    """议题 A B 方案：洞察收紧为白名单 4 类（v2.2 全规则，0 LLM 调用）
+    4 类：
+      ① 跨源聚合（top_signals 跨 ≥2 源）
+      ② 资本节奏（含资本/融资/估值主线信号）
+      ③ 监管动态（含监管/安全主线信号）
+      ④ 覆盖缺口（板块空缺 / 源连续 0 命中）
+    """
     insights: list[str] = []
     top = agg["top_signals"]
-    if top:
-        first_display, first_count = top[0]
+
+    # ① 跨源聚合（取第一个跨 ≥2 源的信号）
+    cross_src_signals = [
+        (d, c) for d, c in top
+        if len(agg["signal_sources"].get(d, [])) >= 2
+    ]
+    if cross_src_signals:
+        first_display, first_count = cross_src_signals[0]
         n_sources = len(agg["signal_sources"].get(first_display, []))
+        sources = sorted(agg["signal_sources"].get(first_display, []))
         if n_sources >= 3:
             insights.append(
                 f"**跨源聚合**：{first_display} 本周累计 {first_count} 条，"
-                f"跨 {n_sources} 个独立源（{', '.join(sorted(agg['signal_sources'][first_display]))}）确认，"
+                f"跨 {n_sources} 个独立源（{', '.join(sources)}）确认，"
                 f"提示该方向已是行业级共识而非单点噪音。"
             )
-        elif n_sources >= 2:
+        else:
             insights.append(
                 f"**双源确认**：{first_display} 本周累计 {first_count} 条，"
-                f"跨 {n_sources} 个源（{', '.join(sorted(agg['signal_sources'][first_display]))}）"
+                f"跨 {n_sources} 个源（{', '.join(sources)}）"
                 f"被独立报道，信号强度较高。"
             )
 
-    # 监管 / 资本类信号识别
-    capital_signals = [(d, c) for d, c in top if "💰" in d or "资本" in d or "融资" in d]
-    reg_signals = [(d, c) for d, c in top if "⚖️" in d or "监管" in d]
+    # ② 资本节奏
+    capital_signals = [(d, c) for d, c in top
+                       if "💰" in d or "资本" in d or "融资" in d or "估值" in d]
     if capital_signals:
         d, c = capital_signals[0]
-        insights.append(f"**资本节奏**：{d} 本周累计 {c} 条，提示 AI 行业资本流动仍在加速。")
+        insights.append(
+            f"**资本节奏**：{d} 本周累计 {c} 条，"
+            f"提示 AI 行业资本流动仍在加速。"
+        )
+
+    # ③ 监管动态
+    reg_signals = [(d, c) for d, c in top
+                   if "⚖️" in d or "监管" in d or "安全" in d or "合规" in d]
     if reg_signals:
         d, c = reg_signals[0]
-        insights.append(f"**监管动态**：{d} 本周累计 {c} 条，监管侧动作需持续追踪。")
+        insights.append(
+            f"**监管动态**：{d} 本周累计 {c} 条，监管侧动作需持续追踪。"
+        )
 
-    # 板块空缺
+    # ④ 覆盖缺口
     empty_boards = [b for b in BOARD_ORDER if agg["week_stats"][b]["total"] == 0]
+    zero_sources = agg.get("weekly_zero_sources", []) or []
+    gap_msgs: list[str] = []
     if empty_boards:
         names = "、".join(BOARD_META[b]["name"] for b in empty_boards)
-        insights.append(f"**覆盖缺口**：本周 {names} 板块无新增，可能需评估是否补充对应源。")
+        gap_msgs.append(f"板块 {names} 无新增")
+    if zero_sources:
+        gap_msgs.append(f"源 {', '.join(f'`{s}`' for s in zero_sources)} 连续 0 命中")
+    if gap_msgs:
+        insights.append(
+            f"**覆盖缺口**：本周 {' / '.join(gap_msgs)}，"
+            f"可能需评估是否补充对应源或修抓取。"
+        )
 
     return insights[:5] if insights else ["本周数据较少，跨话题趋势暂不显著。"]
 
 
-# ============== 渲染 ==============
+# ============== 渲染（v2.2 模板升级） ==============
 
 def render_weekly_report(
     year: int, week: int, monday: date, sunday: date,
-    summaries: list[DailySummary], agg: dict,
-    llm: LLMClient | None, usage: LLMUsage,
+    summaries: list[DailyWeekSummary], agg: dict,
+    cross: dict | None,
     elapsed_seconds: float = 0.0,
 ) -> str:
-    """渲染周汇总 Markdown"""
+    """渲染周汇总 Markdown（v2.2 模板：+跨周对比 / +板块热度图 / +周度 Top 10 / -下周关注清单）"""
     label = week_label(year, week)
     date_range = f"{monday.strftime('%m.%d')} - {sunday.strftime('%m.%d')}"
     full_date_range = f"{monday.isoformat()} ~ {sunday.isoformat()}"
@@ -491,6 +385,7 @@ def render_weekly_report(
     total_low = sum(s["low"] for s in agg["week_stats"].values())
 
     lines: list[str] = []
+    # ============== 头部 ==============
     lines.append(f"# 📊 AI每周资讯汇总 | {year} 年第 {week} 周（{date_range}）")
     lines.append("")
     lines.append(f"> **汇总周期**：本周（{full_date_range}）")
@@ -498,16 +393,13 @@ def render_weekly_report(
     lines.append("> **话题板块**：🧠 LLM 发展 · 💻 Agent 框架与工具 · 🧍 数字人 · 🏢 行业动态 · 📦 其他（可扩展）")
     lines.append("> **每版块条数**：周度 Top 10（按\"重要度 + 时新性\"排序；不足按实际）")
     lines.append("")
-
-    # WIP 提示
     if agg["days_with_data"] < 7:
         lines.append(f"> ⚠️ **WIP**：本周 {agg['days_with_data']} 天数据可用，{agg['days_missing']} 天日报缺失（系统未生成或 0 命中）")
         lines.append("")
-
     lines.append("---")
     lines.append("")
 
-    # 速览表
+    # ============== 1. 本周概览（v1.5 沿用） ==============
     lines.append("## 🎯 本周概览")
     lines.append("")
     lines.append("| 话题板块 | 本周条数 | 日均 | 🔴 高优 | 🟡 中等 | 🟢 一般 | 核心主题词 |")
@@ -529,7 +421,6 @@ def render_weekly_report(
     if total == 0:
         summary_line = f"{label} 全网 AI 资讯较少，已对接的源均无新增。"
     else:
-        # 规则版：取当天累计主线信号 Top 3
         top3 = agg["top_signals"][:3]
         if top3:
             sig_str = "；".join(f"{d}（{c} 条）" for d, c in top3)
@@ -541,7 +432,101 @@ def render_weekly_report(
     lines.append("---")
     lines.append("")
 
-    # 跨话题宏观观察
+    # ============== 2. 跨周对比（v2.2 新增） ==============
+    lines.append("## 🔁 跨周对比")
+    lines.append("")
+    if cross is None:
+        lines.append("> ⏭️ 已禁用跨周对比（--no-cross-week）")
+    elif not cross.get("available"):
+        lines.append(f"> ⏭️ {cross.get('reason', '无对比数据')}")
+    else:
+        total_delta = cross["total_delta"]
+        total_pct = cross["total_pct"]
+        pct_str = f"（{total_pct:+.1f}%）" if total_pct is not None else ""
+        delta_emoji = "📈" if total_delta > 0 else ("📉" if total_delta < 0 else "➡️")
+        prev_total = sum(cross["board_delta"][b]["prev"] for b in BOARD_ORDER)
+        lines.append(
+            f"- **总条数**：{delta_emoji} {total:+d}{pct_str}（本周 {total} / 上周 {prev_total}）"
+        )
+        # cross["high_delta"] = curr_high - prev_high
+        high_delta = cross["high_delta"]
+        prev_high = total_high - high_delta
+        high_emoji = "📈" if high_delta > 0 else ("📉" if high_delta < 0 else "➡️")
+        lines.append(
+            f"- **高优条数（🔴）**：{high_emoji} {high_delta:+d}（本周 {total_high} / 上周 {prev_high}）"
+        )
+        # 板块条数对比表
+        lines.append("")
+        lines.append("| 话题板块 | 本周条数 | 上周条数 | 差值 |")
+        lines.append("|---------|---------|---------|------|")
+        for board in BOARD_ORDER:
+            d = cross["board_delta"][board]
+            meta = BOARD_META[board]
+            delta_emoji_b = "📈" if d["delta"] > 0 else ("📉" if d["delta"] < 0 else "➡️")
+            lines.append(
+                f"| {meta['emoji']} {meta['name']} | {d['curr']} | {d['prev']} | {delta_emoji_b} {d['delta']:+d} |"
+            )
+        # 新增 0 源
+        new_zeros = cross.get("zero_sources_delta", [])
+        if new_zeros:
+            lines.append("")
+            lines.append(f"> ⚠️ **新增 0 源**：`{', '.join(new_zeros)}`（上周有命中，本周连续 0）")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # ============== 3. 板块热度图（v2.2 新增；全规则） ==============
+    lines.append("## 🌡️ 板块热度图")
+    lines.append("")
+    lines.append("| 话题板块 | 本周条数 | 热度 | 主题词 |")
+    lines.append("|---------|---------|------|--------|")
+    for board in BOARD_ORDER:
+        ws = agg["week_stats"][board]
+        meta = BOARD_META[board]
+        # 热度判断（v2.2 规则；议题 A B 方案：全规则，无 LLM）
+        days_with = [s for s in summaries if s.exists and s.board_stats.get(board, {}).get("total", 0) > 0]
+        if ws["total"] == 0:
+            heat = "📉 静默"
+        elif ws["total"] >= 15:
+            heat = "📈 升温"
+        elif ws["total"] >= 5:
+            heat = "➡️ 平稳"
+        else:
+            heat = "📉 偏低"
+        kws = "、".join(agg["week_keywords"].get(board, [])[:3]) or "—"
+        lines.append(
+            f"| {meta['emoji']} {meta['name']} | {ws['total']} | {heat} | {kws} |"
+        )
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # ============== 4. 周度 Top 10（v2.2 新增） ==============
+    lines.append("## ⭐ 周度 Top 10（按 score 排序，跨板块）")
+    lines.append("")
+    if agg["weekly_top10"]:
+        lines.append("| # | 板块 | 标题 | 来源 | 分数 | 评级 |")
+        lines.append("|---|------|------|------|------|------|")
+        for idx, it in enumerate(agg["weekly_top10"], 1):
+            board = it.get("board", "")
+            meta = BOARD_META.get(board, {"emoji": "·", "name": board})
+            title = it.get("title", "")
+            url = it.get("url", "")
+            src = it.get("source", "")
+            score = it.get("score", 0)
+            priority = it.get("priority", "")
+            priority_emoji = {"high": "🔴", "mid": "🟡", "low": "🟢"}.get(priority, "·")
+            title_disp = f"[{title[:50]}{'…' if len(title) > 50 else ''}]({url})" if url else title[:50]
+            lines.append(
+                f"| {idx} | {meta['emoji']} {meta['name']} | {title_disp} | `{src}` | {score} | {priority_emoji} |"
+            )
+    else:
+        lines.append("本周无高优条目。")
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+
+    # ============== 5. 跨话题宏观观察（v1.5 沿用） ==============
     lines.append("## 🌐 跨话题宏观观察（Top 主线信号）")
     lines.append("")
     if agg["top_signals"]:
@@ -555,21 +540,34 @@ def render_weekly_report(
     lines.append("---")
     lines.append("")
 
-    # 各板块趋势（LLM 优先，规则降级）
+    # ============== 6. 各板块趋势（v2.2 砍 LLM，全规则） ==============
     lines.append("## 📈 各板块趋势")
     lines.append("")
-    trend_text: str | None = None
-    if llm and total > 0:
-        ctx = _build_trend_context(agg, summaries)
-        trend_text = llm_weekly_trend(llm, ctx, date_range, usage)
-    if not trend_text:
-        trend_text = build_trend_fallback(agg, summaries)
-    lines.append(trend_text)
-    lines.append("")
+    for board in BOARD_ORDER:
+        ws = agg["week_stats"][board]
+        meta = BOARD_META[board]
+        days_with = [s for s in summaries if s.exists and s.board_stats.get(board, {}).get("total", 0) > 0]
+        # 热度判断（与板块热度图一致）
+        if ws["total"] == 0:
+            heat = "📉 静默"
+        elif ws["total"] >= 15:
+            heat = "📈 升温"
+        elif ws["total"] >= 5:
+            heat = "➡️ 平稳"
+        else:
+            heat = "📉 偏低"
+        kws = "、".join(agg["week_keywords"].get(board, [])) or "—"
+        lines.append(
+            f"### {meta['emoji']} {meta['name']}（{heat}）\n"
+            f"- **本周条数**：{ws['total']}（🔴 {ws['high']} / 🟡 {ws['mid']} / 🟢 {ws['low']}）\n"
+            f"- **主题词**：{kws}\n"
+            f"- **覆盖天数**：{len(days_with)} / 7"
+        )
+        lines.append("")
     lines.append("---")
     lines.append("")
 
-    # 各板块每日条数小表
+    # ============== 7. 每日条数（v1.5 沿用） ==============
     lines.append("## 📅 每日条数（按板块）")
     lines.append("")
     lines.append("| 日期 | LLM | Agent | 数字人 | 行业 | 其他 | 合计 | 一句话 |")
@@ -585,82 +583,61 @@ def render_weekly_report(
             row.append(str(n) if n else "·")
             day_total += n
         row.append(str(day_total))
-        ols = s.one_line_summary[:60] + ("…" if len(s.one_line_summary) > 60 else "")
+        ols = (s.one_line_summary or "")[:60] + ("…" if len(s.one_line_summary or "") > 60 else "")
         row.append(ols or "—")
         lines.append("| " + " | ".join(row) + " |")
     lines.append("")
     lines.append("---")
     lines.append("")
 
-    # 本周洞察
-    lines.append("## 🌟 本周洞察")
+    # ============== 8. 本周洞察（B 方案：白名单 4 类，0 LLM） ==============
+    lines.append("## 🌟 本周洞察（白名单 4 类 · 100% 规则）")
     lines.append("")
-    insights: list[str] | None = None
-    if llm and total > 0:
-        ctx = _build_insights_context(agg)
-        insights = llm_weekly_insights(llm, ctx, usage)
-    if not insights:
-        insights = build_insights_fallback(agg)
+    insights = build_insights_whitelist(agg, summaries)
     for i, ins in enumerate(insights, 1):
         lines.append(f"{i}. {ins}")
     lines.append("")
     lines.append("---")
     lines.append("")
 
-    # 下周关注清单
-    lines.append("## 🔮 下周关注清单")
-    lines.append("")
-    todos: list[str] = []
-    # 基于本周主线信号 Top 3 推下周
-    for display, count in agg["top_signals"][:3]:
-        todos.append(f"持续追踪 **{display}**（本周 {count} 条），关注是否有新进展或主线延续")
-    todos.append("对比本周与下周板块条数变化，识别趋势拐点（行业 / 监管 / 资本方向）")
-    todos.append("抽样本周高优条目（🔴）做全文精读，更新对核心玩家的判断")
-    for t in todos:
-        lines.append(f"- [ ] {t}")
-    lines.append("")
-    lines.append("---")
-    lines.append("")
-
-    # 信息源覆盖
+    # ============== 9. 信息源覆盖（v2.2 重构） ==============
     lines.append("## 📎 信息源覆盖")
     lines.append("")
-    # 7 天每个源被命中的天数（按日期去重）+ 主线条目里被提到的次数
-    source_days: dict[str, set[str]] = defaultdict(set)  # src -> {date_iso}
-    source_mentions: dict[str, int] = defaultdict(int)
-    for s in summaries:
-        if not s.exists:
-            continue
-        for sig in s.main_signals:
-            for src in sig["sources"]:
-                source_mentions[src] += 1
-                source_days[src].add(s.date)
-    if source_days:
-        lines.append("| 来源 | 命中天数 | 占比 | 主线条目提到次数 |")
+    if agg["source_days"]:
+        lines.append("| 来源 | 命中天数 | 占比 | Top 10 提到次数 |")
         lines.append("|------|---------|------|---------------|")
-        for src in sorted(source_days.keys(), key=lambda x: -len(source_days[x])):
-            n = len(source_days[src])
-            lines.append(f"| `{src}` | {n} / 7 | {n/7*100:.0f}% | {source_mentions[src]} |")
+        for src in sorted(agg["source_days"].keys(), key=lambda x: -len(agg["source_days"][x])):
+            n = len(agg["source_days"][src])
+            lines.append(
+                f"| `{src}` | {n} / 7 | {n/7*100:.0f}% | {agg['source_mentions'][src]} |"
+            )
     else:
         lines.append("本周无命中源。")
+    if agg.get("weekly_zero_sources"):
+        lines.append("")
+        lines.append(
+            f"> ⚠️ **本周 0 命中源**（{len(agg['weekly_zero_sources'])} 个）："
+            f"`{', '.join(agg['weekly_zero_sources'])}`（连续 7 天无数据，建议排查抓取 / 评估是否弃用）"
+        )
     lines.append("")
 
-    # 元信息
+    # ============== 10. 元信息（v1.5 沿用 + v2.2 增强） ==============
     lines.append("## 📈 元信息")
     lines.append("")
     lines.append(f"- **周标识**：{label}")
     lines.append(f"- **汇总周期**：{full_date_range}")
     lines.append(f"- **日报覆盖**：{agg['days_with_data']} / 7 天")
     lines.append(f"- **总条数**：{total}（🔴 {total_high} / 🟡 {total_mid} / 🟢 {total_low}）")
-    lines.append(f"- **LLM 精炼**：{usage.to_footer()}")
+    lines.append(f"- **数据源**：daily v2.0 JSON（schema 2.0）")
+    lines.append(f"- **LLM 精炼**：0 次调用（议题 A B 方案：100% 规则渲染）")
     if elapsed_seconds > 0:
-        lines.append(f"- **生成耗时**：{elapsed_seconds:.1f}s")
+        lines.append(f"- **生成耗时**：{elapsed_seconds:.2f}s")
     lines.append("")
 
     # 底部 log
     lines.append(
-        f"*汇总周期：{date_range} · 数据来源：{agg['days_with_data']} 天日报 · "
-        f"🤖 LLM 精炼：{usage.to_footer()} · 报告生成：AI调研专家*"
+        f"*汇总周期：{date_range} · 数据来源：{agg['days_with_data']} 天 daily v2.0 JSON · "
+        f"🤖 LLM 精炼：0 次 · 报告生成：AI调研专家*"
     )
     lines.append("")
 
@@ -670,13 +647,15 @@ def render_weekly_report(
 # ============== 入口 ==============
 
 def main():
-    parser = argparse.ArgumentParser(description="生成每周汇总 Markdown 报告")
+    parser = argparse.ArgumentParser(description="生成每周汇总 Markdown 报告 v2.2（议题 H：weekly 重做）")
     parser.add_argument("--week", help="ISO 周标识 (YYYY-Www)，默认 = 本周 Asia/Shanghai")
-    parser.add_argument("--daily-dir", default="每日资讯", help="每日 md 目录")
+    parser.add_argument("--daily-json-root", default="data/published/daily",
+                        help="daily v2.0 JSON 根目录（默认 data/published/daily）")
     parser.add_argument("--out-dir", default="每周汇总", help="输出目录")
     parser.add_argument("--dry-run", action="store_true", help="只打印到 stdout，不落盘")
-    parser.add_argument("--llm", default=None, help="临时指定 LLM provider")
-    parser.add_argument("--no-llm", action="store_true", help="强制关闭 LLM 精炼")
+    parser.add_argument("--no-cross-week", action="store_true",
+                        help="跳过跨周对比（v2.2 默认开启；用此 flag 关闭）")
+    parser.add_argument("--no-llm", action="store_true", help="兼容 v1.5 参数（v2.2 已默认 0 LLM）")
     args = parser.parse_args()
 
     if args.week:
@@ -689,36 +668,39 @@ def main():
         year, week = current_week()
 
     monday, sunday = week_dates(year, week)
-    daily_root = (_REPO_ROOT / args.daily_dir).resolve()
+    daily_json_root = (_REPO_ROOT / args.daily_json_root).resolve()
     out_dir = (_REPO_ROOT / args.out_dir).resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-
-    # 加载 LLM
-    usage = LLMUsage()
-    if args.no_llm:
-        llm: LLMClient | None = None
-        print("[i] --no-llm 已指定，跳过 LLM 加载", file=sys.stderr)
-    else:
-        llm = load_llm_client(provider=args.llm)
-        if llm is None:
-            print("[i] 未配置 LLM（无 .secrets 或字段缺失），全部走规则渲染", file=sys.stderr)
-        else:
-            print(f"[i] LLM 客户端已加载: {llm!r}", file=sys.stderr)
 
     import time
     t0 = time.time()
 
-    # 加载 + 聚合
-    summaries = load_week_summaries(monday, sunday, daily_root)
-    days_with_md = sum(1 for s in summaries if s.exists)
+    # 加载本周 7 天 daily v2.0 JSON
+    summaries = load_week_daily_jsons(monday, sunday, daily_json_root)
+    days_with_json = sum(1 for s in summaries if s.exists)
     days_with_data = sum(1 for s in summaries if s.exists and s.total_items > 0)
-    print(f"[i] 本周日报覆盖：{days_with_md}/7 天，命中数据：{days_with_data} 天", file=sys.stderr)
+    print(f"[i] 本周 daily v2.0 JSON 覆盖：{days_with_json}/7 天，命中数据：{days_with_data} 天", file=sys.stderr)
 
+    # 聚合本周（一次；供 cross + render 复用）
     agg = aggregate_week(summaries)
+
+    # 加载上周 daily v2.0 JSON（跨周对比）
+    cross: dict | None = None
+    if not args.no_cross_week:
+        prev_y, prev_w = prev_week(year, week)
+        prev_monday, prev_sunday = week_dates(prev_y, prev_w)
+        try:
+            prev_summaries = load_week_daily_jsons(prev_monday, prev_sunday, daily_json_root)
+            prev_agg = aggregate_week(prev_summaries)
+            cross = cross_week_compare(agg, prev_agg)
+            print(f"[i] 跨周对比：上周 {prev_y}-W{prev_w:02d}", file=sys.stderr)
+        except Exception as e:
+            cross = {"available": False, "reason": f"上周聚合失败: {e}"}
+            print(f"[WARN] 跨周对比失败: {e}（降级为无对比数据）", file=sys.stderr)
 
     # 渲染
     md = render_weekly_report(year, week, monday, sunday, summaries, agg,
-                              llm=llm, usage=usage,
+                              cross=cross,
                               elapsed_seconds=time.time() - t0)
 
     if args.dry_run:
@@ -727,8 +709,8 @@ def main():
 
     out_path = out_dir / f"{week_label(year, week)}.md"
     out_path.write_text(md, encoding="utf-8")
-    total = sum(s["total"] for s in agg["week_stats"].values())
-    print(f"[OK] 写入 {out_path}  | 总条数 {total} | {usage.to_footer()}")
+    final_total = sum(s["total"] for s in agg["week_stats"].values())
+    print(f"[OK] 写入 {out_path}  | 总条数 {final_total} | LLM 0 次 | {days_with_data}/7 天数据")
     return 0
 
 
