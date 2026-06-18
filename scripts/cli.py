@@ -159,7 +159,7 @@ def run_generate_daily() -> None:
         print("ℹ️  --no-commit，跳过 git 同步")
         return
 
-    from news_commit import commit_and_push
+    from scripts.news_commit import commit_and_push
     commit_and_push(
         target_date=target_date,
         report_file=report_file,
@@ -178,7 +178,7 @@ def news_commit() -> None:
     parser.add_argument("message", nargs="?", default="chore: 更新资讯", help="commit message")
     args = parser.parse_args(sys.argv[1:])
 
-    from news_commit import commit_and_push
+    from scripts.news_commit import commit_and_push
     commit_and_push(message=args.message)
 
 
