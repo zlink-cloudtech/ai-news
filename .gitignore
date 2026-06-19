@@ -18,6 +18,9 @@ __pycache__/
 .venv/
 venv/
 
+# v2.3.3 deps self-heal cache（cli.py 运行时写，不入 git）
+data/.deps_ok
+
 # uv（v2.0 引入：依赖锁定 + venv 管理）
 # - .venv 不入 git（设备/sandbox 各自重建）
 # - uv.lock 入 git（依赖锁文件，跨环境保持一致）
