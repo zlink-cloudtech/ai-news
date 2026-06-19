@@ -86,6 +86,8 @@ class PushState:
     include_manual: bool = False          # v1.2.2：让 manual_only 渠道也参与（手动预发测试用）
     only_channels: list[str] = field(default_factory=list)  # v1.2.2：白名单，只推这些渠道
     doc_title_prefix: str = ""            # v1.2.2：docx 标题前缀（手动预发测试加 [预发] 标记）
+    cfg: dict | None = None               # v2.3.4：channels.json 上下文（_write_published_record 剥 manual_only 用）
+    skip_check_reason: str = ""           # v2.3.4：skip-if-pushed 检查结果原因（already_pushed / no_record / manual_only_only）
 
 
 # ============== 工具函数 ==============
@@ -186,6 +188,20 @@ def _select_channels(cfg: dict, report_type: str, include_manual: bool = False, 
         if (report_type in types or "all" in types) and need_purpose in purposes:
             result.append(name)
     return result
+
+
+def _filter_manual_channels(channels_result: dict, cfg: dict | None) -> dict:
+    """v2.3.4：剥掉 manual_only 渠道（写 published_record 时调用）
+    目的：避免预发测试污染 channels 字典，让 per-channel skip 检查更可靠
+    行为：
+      - cfg 为空 → 不过滤（向后兼容）
+      - channels_result 中 manual_only 渠道 → 剥掉
+      - 'skipped' 标记保留（per-channel skip 触发时写的）
+    """
+    if not cfg or "channels" not in cfg:
+        return channels_result
+    manual_names = {name for name, c in cfg.get("channels", {}).items() if c.get("manual_only")}
+    return {k: v for k, v in channels_result.items() if k not in manual_names}
 
 
 def _derive_date_from_path(target_file: str) -> str:
@@ -530,6 +546,9 @@ def _write_published_record(state: PushState) -> None:
     # PUSHED_BY 自动检测
     pushed_by = state.pushed_by_override or os.environ.get("PUSH_INVOKED_FROM") or "manual"
 
+    # v2.3.4：manual_only 渠道写隔离（写 published_record 时剥掉，预发测试不污染 channels 字典）
+    channels_to_record = _filter_manual_channels(state.channels_result, state.cfg)
+
     # dry-run
     dry_flag = ["--dry-run"] if state.dry_run else []
 
@@ -541,22 +560,21 @@ def _write_published_record(state: PushState) -> None:
         daily_json_flag = ["--daily-json", state.daily_v2_json]
 
     try:
+        # 基础参数（必传）
         cmd = [
             sys.executable, str(REPO_ROOT / "scripts" / "published_record.py"), "record",
             "--type", state.report_type,
             "--file", state.target_file,
-            "--channels", json.dumps(state.channels_result, ensure_ascii=False),
+            "--channels", json.dumps(channels_to_record, ensure_ascii=False),
             "--doc-url", state.doc_url,
             "--pushed-by", pushed_by,
             "--ok", "true" if state.push_ok else "false",
-            "--error", state.error_msg,
-            *daily_json_flag,
-            *dry_flag,
         ]
-        # --error 空时省略
-        if not state.error_msg:
-            cmd.remove("--error")
-            cmd.remove(state.error_msg) if state.error_msg in cmd else None
+        # 可选参数（按需追加，避免空值污染 argparse）
+        if state.error_msg:
+            cmd.extend(["--error", state.error_msg])
+        cmd.extend(daily_json_flag)
+        cmd.extend(dry_flag)
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
         # 打印 stdout 末尾
         if r.stdout:
@@ -590,25 +608,60 @@ def _resolve_daily_v2_json(state: PushState) -> None:
 
 
 def _check_skip_if_pushed(state: PushState) -> bool:
-    """v1.4 skip-if-pushed 检查；返回 True 表示已 skip"""
+    """v2.3.4 per-channel skip-if-pushed 检查；返回 True 表示已 skip
+
+    v1.4 旧版：只看 rec['ok'] 顶层字段。
+    问题：manual_only 渠道（wecom_test）预发测试 → 写 rec.ok=true → 后续 calendar 任务误判已推。
+
+    v2.3.4 改为 per-channel：
+      - rec.channels 中**有非 manual_only 渠道 OK** → skip
+      - rec.channels 中**只有 manual_only 渠道 OK**（如 wecom_test 预发） → 视为未推，继续
+      - rec 无 channels 字段（v1.0 老 schema） → fallback to rec.ok=true（兼容）
+    """
     if not (state.skip_if_pushed and not state.repush):
         return False
     if state.report_type not in ("daily", "weekly", "special"):
         return False
     derived_date = _derive_date_from_path(state.target_file)
     rec = _read_published_record(state.report_type, derived_date)
-    if rec and rec.get("ok"):
-        prev_count = rec.get("push_count", 0)
-        print(f"⏭️  已推过（ok=true, push_count={prev_count}）：data/published/{state.report_type}/{derived_date}.json")
+    if not rec or not rec.get("ok"):
+        state.skip_check_reason = "no_record"
+        return False
+
+    # rec.channels 可能在 publish_record 嵌套（v2.0）或 顶层（v1.0 / v2.0 兼容层）
+    rec_pr = rec.get("publish_record") or {}
+    rec_channels = rec_pr.get("channels") if rec_pr else None
+    if rec_channels is None:
+        rec_channels = rec.get("channels", {}) or {}
+    prev_count = (rec_pr.get("push_count", 0) if rec_pr else rec.get("push_count", 0)) or 0
+
+    # 过滤掉 manual_only 渠道 + 'skipped' 标记（这些不影响"应推"判断）
+    manual_names = set()
+    if state.cfg and "channels" in state.cfg:
+        manual_names = {name for name, c in state.cfg.get("channels", {}).items() if c.get("manual_only")}
+    auto_channels = {
+        k: v for k, v in rec_channels.items()
+        if k != "skipped" and k not in manual_names and isinstance(v, dict) and v.get("ok")
+    }
+
+    if auto_channels:
+        # ✅ 有非 manual_only 渠道推送过且都 ok → skip
+        auto_ok_names = sorted(auto_channels.keys())
+        print(f"⏭️  已推过（per-channel OK: {','.join(auto_ok_names)}, push_count={prev_count}）: data/published/{state.report_type}/{derived_date}.json")
         print(f"   用 --repush 强制重推，或 --dry-run 干跑")
         state.skipped_pushed = True
         state.push_ok = True
+        state.skip_check_reason = "already_pushed_per_channel"
         state.channels_result = {
             "skipped": True,
-            "reason": "already_pushed",
+            "reason": "already_pushed_per_channel",
             "prev_record": f"data/published/{state.report_type}/{derived_date}.json",
+            "auto_channels_ok": auto_ok_names,
         }
         return True
+    # rec ok=true 但只有 manual_only 渠道 ok（如 wecom_test 预发）→ 视为未推
+    print(f"ℹ️  rec ok=true 但非 manual_only 渠道无 OK 记录（仅 manual_only 渠道如 wecom_test 预发）→ 视为未推")
+    state.skip_check_reason = "manual_only_only"
     return False
 
 
@@ -945,6 +998,7 @@ v1.4 去重策略（默认）:
         include_manual=args.include_manual,                                  # v1.2.2
         only_channels=[s.strip() for s in args.only.split(",") if s.strip()],  # v1.2.2
         doc_title_prefix=args.doc_title_prefix,                             # v1.2.2
+        cfg=cfg,                                                            # v2.3.4：写 published_record 时剥 manual_only 用
     )
 
     # 子命令早退
