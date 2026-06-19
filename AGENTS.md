@@ -396,3 +396,4 @@ python3 -m scripts.cli push-report "每日资讯/2026-06-17.md" \
 - **merge 冲突**：在 feature 分支上 rebase main 后再 merge；不要在 main 上直接解冲突
 - **预发失败**：主人拍板回退（`git reset --hard <good-commit>`）或修复后重测；不要把失败代码合入 main
 - **tag 错了**：`git tag -d vX.X.X`（本地）+ `git push --delete origin vX.X.X`（远端）+ 重新打；**已经基于错误 tag 引用代码**则需额外补救
+- **mock 污染真实数据**（6-19 v2.3.4 踩坑）：**禁止** mock 走 `subprocess.run` 调真实脚本测本地写入——会污染 `data/published/*.json` 等运行时产物。**正确做法**：直接 `import` 真实模块的 `write_record()` 等函数（不走 subprocess），monkey-patch 模块级 `REPO_ROOT` / `PUB_DIR` / `RAW_DIR` 切到临时目录。**典型教训**：v2.3.4 push_report 改造验证时第一版走 subprocess 把 `data/published/daily/2026-06-18.json` 的 doc_url 覆盖成 `https://test.feishu.cn/docx/test`、push_count 2→5、channels 字典被清空——从 `logs/daily/2026-06-18-push.jsonl` 重建关键字段才恢复。
