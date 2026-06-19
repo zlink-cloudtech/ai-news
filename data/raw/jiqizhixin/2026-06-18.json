@@ -1,0 +1,322 @@
+{
+  "source": "jiqizhixin",
+  "date": "2026-06-18",
+  "saved_at": "2026-06-19T08:42:57+08:00",
+  "count": 13,
+  "meta": {
+    "sitemap_url": "https://www.jiqizhixin.com/shared/sitemap.xml.gz",
+    "article_api": "https://www.jiqizhixin.com/api/v1/articles",
+    "lastmod_window": [
+      "2026-06-17T18:00:00+00:00",
+      "2026-06-18T18:00:00+00:00"
+    ],
+    "window": [
+      "2026-06-17T16:00:00+00:00",
+      "2026-06-18T16:00:00+00:00"
+    ],
+    "sitemap_entries": 30044,
+    "candidates_after_lastmod": 1921,
+    "api_ok": 1921,
+    "api_fail": 0,
+    "out_of_window": 1908,
+    "parse_fail": 0
+  },
+  "items": [
+    {
+      "title": "DeepSeek识图模式全量上线，却认不出自家老板梁文锋",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-13",
+      "published": "2026-06-18T13:10:02+00:00",
+      "published_ts": 1781788202,
+      "summary": "比闹钟还准。 端午节前，DeepSeek 不出所料又有了新动作：官方平台全量推送了识图模式，手机端 App 也发布了更新，打开就能看到。 此前，已经有不少网友体验过这个功能，但当时它还处在小范围的灰度测试阶段，只有部分用户能够在官方 App 或网页版里看到。但是今天下午，很多人都表示自己也能用了。 出于好奇，我们也打开 App 测试了一下。 第一个测试案例用了黄仁勋前段时间在北京小吃街喝豆汁的图片。可以看到，DeepSeek 能够认出图中人物是黄仁勋，但瓶身上的「豆汁」字样被忽略了，因此错把豆汁认成了牛奶。此外，它对于人物表情的解读也不够精准。 接下来，我们切换了深度思考模式，有意思的地方来了：虽然 DeepSeek 依然「看不清」瓶身上的「尹三豆汁」字样，但凭借推理能力和世界知识，他推断出了这是「豆汁」。不过，表情解读方面，深度思考也没有太大帮助。 在社交媒体上，也有不少网友进行了人物方面的测试，但效果似乎不太理想，像何同学等知名人物都出现了识别错误的现象。 就连梁文锋本人，DeepSeek 也没有认出来。从思考过程来看，它识别人物的时候主要依靠视觉线索（面部特征、发型）与人物公众形",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/1ce35154-427e-439a-99cc-56f63492e0c2/0_-_2026-06-18T210234(2).412.jpg",
+        "copyright": "原创",
+        "content_len": 14507,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-13.md",
+        "article_chars": 1354,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:25:13+08:00"
+    },
+    {
+      "title": "比英伟达早，比李飞飞强，大晓Kairos原生一体化世界模型定义物理AI新路线",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-12",
+      "published": "2026-06-18T13:06:42+00:00",
+      "published_ts": 1781788002,
+      "summary": "在世界模型这条赛道上，很少有时刻能像现在这样耐人寻味。 时间拨回 2025 年 12 月，大晓机器人正式发布 Kairos &quot;多模态理解 &mdash; 生成 &mdash; 预测&quot; 原生一体化架构；今年 3 月，这套架构完成了端侧部署和验证。而此后，英伟达最新发布的 Cosmos 3.0，竟也采用了同源架构。 一家中国具身智能公司，比行业巨头提前押中了同一条技术路线。这背后，是 Kairos 开悟世界模型早已新创的原生一体化技术体系。 而就在近日，这套体系交出了一份足够硬的成绩单 &mdash;&mdash; 大晓机器人开悟世界模型（Kairos）在 RoboTwin 2.0、LIBERO-Plus、WorldModelBench、DreamGen Bench 四大全球权威具身智能基准上全面登顶。这份领跑成绩的背后，是 Kairos 3.0 对世界模型技术路线的底层范式革新。 如今，大晓机器人正式发布开悟世界模型技术报告，详细阐述 Kairos 开悟世界模型以原生一体化设计、面向具身智能训练为核心哲学，从架构底层为物理 AI 原生打造，首次实现 &quot;多模态",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/e4ff76fb-3e1f-469c-9236-85dfbd4252c4/0_-_2026-06-18T210229(2).584.jpg",
+        "copyright": "原创",
+        "content_len": 6525,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-12.md",
+        "article_chars": 4276,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:40:47+08:00"
+    },
+    {
+      "title": "GPT‑5.4+化学智能体，OpenAI让AI自主优化药物反应，同步上线生命科学基准LifeSciBench",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-11",
+      "published": "2026-06-18T10:05:00+00:00",
+      "published_ts": 1781777100,
+      "summary": "编辑丨&amp; 智能系统正日益具备执行科学任务的能力。但它们要面对的生命科学里最难的，往往不是单点答案，而是多步判断、证据取舍、实验设计和不确定性处理。 生命科学中的 AI，最有说服力的时刻，往往不是在答题，而是在实验里拿出结果。2026 年 6 月 17 日，OpenAI 向科学界分享了 GPT-5.4 的一项惊人突破，他们将自主 AI 科学家的视野扩展到了药物化学领域。 在这项工作里，OpenAI 把 GPT-5.4 接到 Molecule.one 的 Maria 系统和高通量实验室上，让模型生成研究提案、设计实验、分析数据，并继续提出下一轮实验。人类化学家的角色仍然关键，但重心已经从手动试错转向操作模型提出可检验的假设，再由实验去筛。 图示：Maria 实验室。 AI 自主优化药物反应 该工作瞄准的是药物化学领域一个实用但棘手的反应问题，Chan&ndash;Lam coupling。OpenAI 解释说，这类反应对药物化学很重要，因为它能形成常见的碳&mdash;氮键，但历史上在某些底物上表现一直偏低，限制了可探索分子的范围。 在 GPT-5.4 提出的多个方案里，最有价值的",
+      "author": "ScienceAI",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/a09078d8-3b23-4ad8-af4e-cdd670d6d29f/iShot_2026-06-18_18(2).03.55.png",
+        "copyright": "原创",
+        "content_len": 6867,
+        "author_id": "deb9e520-19d5-4cac-a5c2-cc885759d6f9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-11.md",
+        "article_chars": 2151,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:35:43+08:00"
+    },
+    {
+      "title": "人形机器人不再「走走停停」：Current Robotics发布全身灵巧操作模型Curr-0",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-10",
+      "published": "2026-06-18T09:35:35+00:00",
+      "published_ts": 1781775335,
+      "summary": "让人形机器人在移动中完成精细操作，一直是具身智能领域没有被很好解决的问题。 过去的主流方案是把移动和操作拆成两个独立模块：机器人先走到目标位置，停下来，再执行手部操作。这套逻辑在工厂流水线上勉强够用，但放到真实世界里就会失效 &mdash;&mdash; 站姿决定抓取的可达范围，躯干姿态影响手臂的施力方式，脚和地面的接触条件决定全身平衡，而手部接触动态又会反过来影响身体接下来的运动。移动和操作在物理上是耦合的，不能简单拆成两步走。 Current Robotics 今天发布全身灵巧操作模型 Curr-0 ，通过 Single Policy 将移动控制、全身姿态协调和手部精细操作统一为一个端到端训练的策略，运行在 70 + 自由度的人形机器人本体上，单一模型、共享权重，全程自主执行。 Curr-0 展示的任务包括撕开茶包、点香、文件盖章、清理桌面垃圾，以及抱着玩具穿过门口蹲下放进篮子 &mdash;&mdash; 这些动作看起来简单，但每一个都要求机器人在移动过程中实时调整全身姿态，并在接触瞬间完成精细的力控。 Single Policy 背后的系统设计 Curr-0 的核心思路是把全身",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/27c7c78e-26e2-4bd7-b654-ed29c42c9d20/0__33_(2).jpg",
+        "copyright": "原创",
+        "content_len": 4687,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-10.md",
+        "article_chars": 1735,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:26:00+08:00"
+    },
+    {
+      "title": "PPT之外，AI之内｜2026WAIC机器之心特别企划栏目",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-9",
+      "published": "2026-06-18T09:32:22+00:00",
+      "published_ts": 1781775142,
+      "summary": "在智能浪潮席卷全球之际，2026世界人工智能大会暨人工智能全球治理高级别会议将于 7 月 17 日至 20 日在上海举行，分设世博(世博中心、世博展览馆)、张江(张江科学会堂)、西岸(西岸国际会展中心)三大片区，本届大会以&ldquo;智能伙伴，共创未来&rdquo;为主题。 作为全球人工智能领域最具影响力的顶级盛会之一，WAIC 不仅是前沿技术交流的窗口，更是企业向世界展示自身实力与愿景的绝佳舞台。借助这一契机，机器之心将在大会期间特别推出视频专题栏目，诚邀 AI 领域代表性先锋企业参与，共同打造兼具深度与影响力的品牌传播内容。 打开传播新窗口 &nbsp;讲好 AI 企业「技术故事」 在大模型、多模态、智能体、具身智能等技术日新月异的今天，人工智能正从单点技术突破迈向系统能力构建，从&ldquo;能生成、能理解&rdquo;进一步走向&ldquo;能推理、能行动、能协同&rdquo;。然而，技术成果的「看得见」，并不意味着技术价值能够真正「被理解」。企业面临的不仅是技术产品化、场景落地与规模化应用的挑战，更需要思考如何以专业、可信且具有影响力的方式，将自身的技术积累与产业实践，转化",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/e900e72d-2f9a-4dd9-a739-dab537806523/0__32_(2).jpg",
+        "copyright": "原创",
+        "content_len": 2195,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-9.md",
+        "article_chars": 993,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:41:06+08:00"
+    },
+    {
+      "title": "ICML 2026 Oral | 为3D空间智能数据构建全自动数据飞轮，Holi-Spatial打造400万级空间多模态数据集",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-8",
+      "published": "2026-06-18T09:30:13+00:00",
+      "published_ts": 1781775013,
+      "summary": "从原始视频出发，无需人工介入，自动生成 3D 重建、深度、2D mask、3D 框、实例描述、3D grounding 和空间问答。Holi-Spatial 试图把「空间智能」的数据生产，推进到自动化、可扩展的新阶段。 Holi-Spatial 3D grounding 展示。从视频流中恢复场景几何并定位开放词表目标。 Holi-Spatial 整体亮点。自动化管线从原始视频流生成高质量 3D 空间标注，并进一步提升 VLM 空间能力。 近年来，大模型已经在图像理解、OCR、多图推理、视频问答等任务上快速迭代。但当问题进入真实三维世界，模型仍然常常「看得见，却想不清楚」：物体在左前还是右后？相机移动了多远？两个物体的空间关系是什么？同一个物体换一个视角后还能否稳定定位？ 这些能力背后有一个绕不开的问题：空间智能需要大规模、细粒度、带几何约束的 3D 数据。 现有做法通常依赖 ScanNet、ScanNet++ 等少量人工标注 3D 数据集，再在其上生成 QA。这样做能推动研究，但也带来两个限制：一是数据规模受限，二是人工采集和标注形成的领域分布较窄，模型很难真正面向开放真实场景泛化。 ",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/89626c58-d6c4-4969-a0bb-4ddfbffa9d05/0__31_(2).jpg",
+        "copyright": "原创",
+        "content_len": 15341,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-8.md",
+        "article_chars": 5748,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:34:00+08:00"
+    },
+    {
+      "title": "RAG新SOTA，还在5亿条数据上跑进秒级，只有它了",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-7",
+      "published": "2026-06-18T04:13:13+00:00",
+      "published_ts": 1781755993,
+      "summary": "编辑｜Sia 前阵子，Claude Code 意外泄露了 512,000 行 TypeScript 源码。 好家伙，Anthropic 这波莫不是把 Claude Code 的「底裤」都露出来了？ AI 圈扒完之后发现，最有意思的地方不是模型，而是 Claude Code 这个 Coding Agent 外面那层运行系统。 泄露的大部分代码，都在处理这些事：什么时候读文件，什么时候调用工具，什么时候压缩上下文，什么时候继续下一步。 也就是今天越来越火的 Agent Harness。 一次意外，也算给行业提了个醒。 Agent 时代，真正重要的不只是模型智商，还有模型外面那套上下文组织、工具调用和任务循环系统。 这套系统里，连接「模型」和「外部知识世界」的基础设施&mdash;&mdash;RAG，也必须跟着进化。 为啥嘞？ 如果有人想知道「某条产品路线到底受谁影响？」，答案可能藏在这样一条链里： A 公司收购了 B 公司、B 公司的 CTO 后来加入了 C 项目、 C 项目又影响了某条产品路线。 三件事分开看，未必都和用户的问题特别相似；只有把它们串起来，才是真正的答案。 传统 RAG",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/340669d7-edbc-4717-9a61-5020033b9746/0__29_(2).jpg",
+        "copyright": "原创",
+        "content_len": 24935,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-7.md",
+        "article_chars": 6133,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:26:59+08:00"
+    },
+    {
+      "title": "用了10年，奥特曼终于等到了他想要的人",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-6",
+      "published": "2026-06-18T04:05:24+00:00",
+      "published_ts": 1781755524,
+      "summary": "Noam Shazeer，这位谷歌两年前斥资 27 亿美元 请回的 AI 传奇人物，宣布离开谷歌，转投 OpenAI。 刚刚，Noam Shazeer 在 X 上确认了这一消息。他表示自己即将加入 OpenAI，并期待与那里的优秀团队共事。他同时表示，离开谷歌并不是一个容易的决定；他为 Google 团队以及大家共同打造的一切感到无比自豪，能与这些同事并肩工作，是一段令人荣幸且愉快的经历。 随后，Sam Altman 表示 「 从 OpenAI 创立之初起，Noam 就是我最想合作的人之一。 只不过花了 10 年才等到。我相信，这份等待会是值得的！ 」 OpenAI 研究负责人 Mark Chen 等人也在 X 上转发回应： 「 非常欢迎 Noam Shazeer 加入 OpenAI，担任架构研究负责人！他在 Transformer、MoE（混合专家模型）和高效解码方面的研究成果，深刻塑造了现代 AI 的发展。 他不仅对实现 AGI 充满信念，而且在如何确保其发展顺利这一问题上有着深思熟虑的见解。欢迎你，Noam！ 」 Noam Shazeer Noam Shazeer 是谷歌最重要的",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/85e4efaa-7a10-49e3-8515-c6d60942bd09/0__28_(2).jpg",
+        "copyright": "原创",
+        "content_len": 8869,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-6.md",
+        "article_chars": 1432,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:33:43+08:00"
+    },
+    {
+      "title": "天工3.1 重磅发布：上线 Skywork Design 与 Dynamic Workflows，给 AI 一张画布和一支军团",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-5",
+      "published": "2026-06-18T03:42:16+00:00",
+      "published_ts": 1781754136,
+      "summary": "AI 时代最大的幻觉，是把 Demo 等同于产品。 一句 prompt 生成一个漂亮页面，截图发朋友圈，点赞过百。但你真拿它去见客户，客户问：其他页面呢？配色统一吗？手机端适配了吗？能不能改一版？ Demo 和产品之间，差的就是这些问题。 Skywork 3.0 上线后一个月，天工超级智能体的收入实现了三倍增长。 增长的背后，是越来越多的用户开始把天工当作交付结果的生产力工具来使用。 这一变化在用户行为数据里有具体的印证。在天工所有产出能力中， Websites 是用户沉淀最深的场景。 用户并不满足于生成一个页面便离开，而是围绕同一个项目持续打磨：补充需求、调整结构、推翻重来、再次细化。 深度用户在单个 project 上的平均交互轮数超过 40 轮 ，许多复杂项目横跨多次登录才逐步成形。 而大多数人用AI，三轮就结束了。 我们发现这群深度用户使用天工的方式完全不同。他们不是来问答的，是来建造的&mdash;&mdash;来构建一件长期的、复杂的、属于自己的东西。这些需求超长尾且高度个性化，一次生成做不出来，只能在反复迭代中逐渐定型。 第 1 轮到第 3 轮，出来的是 Demo。第 4",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/cbfed868-faa4-4b94-9034-bd0e3b3cfd5f/%E5%9B%BE%E7%89%871(2).png",
+        "copyright": "原创",
+        "content_len": 4329,
+        "author_id": "762abca3-540d-48ef-951c-99823c4fae6c",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-5.md",
+        "article_chars": 2306,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:38:50+08:00"
+    },
+    {
+      "title": "入局AI新风向，WAIC 2026全球开票！",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-4",
+      "published": "2026-06-18T03:05:02+00:00",
+      "published_ts": 1781751902,
+      "summary": "",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/a9bbb7fa-4c83-4af5-b5df-aacd92cc3b53/0__27_(2).jpg",
+        "copyright": "原创",
+        "content_len": 1354,
+        "author_id": "762abca3-540d-48ef-951c-99823c4fae6c"
+      },
+      "fetched_at": "2026-06-19T08:36:22+08:00"
+    },
+    {
+      "title": "ARR达到3亿美金，Liblib完成近3亿美金融资，估值超20亿美金",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-3",
+      "published": "2026-06-18T02:21:17+00:00",
+      "published_ts": 1781749277,
+      "summary": "编辑｜张倩 近期，国内 AI 应用层单轮融资纪录又被刷新了。 这次刷新纪录的公司大家并不陌生，它是 LiblibAI 母公司演语科技 。去年 10 月，他们刚刚用 1.3 亿美元融资创下纪录。今年上半年，他们又自己把这个纪录打破了。 这轮融资是他们的 B + 轮，总共筹集了 近 3 亿美元 。其中既有红杉、顺为、高榕等原有股东持续加码支持，又有腾讯等新股东加入。这轮融资后，演语科技的 估值超过了 20 亿美元 。 说白了，这些顶级投资机构真金白银下注的，无非是「谁能把 AI 应用变成赚钱的生意」。而 ARR 达到 3 亿美金的演语科技 ，已经逐渐拉开与国内同行的差距 &mdash;&mdash; 无论是融资规模、收入规模、用户规模，还是业务生态的广度，都开始呈现出断层领先的态势。2026 年 5 月， 集团整体收入同比增长超过 3000%，成为了全球增长最快的 AI 应用公司之一 。 演语科技此次创纪录融资，本质上正是资本对其领先地位的一次集中认可。 演语科技巨额融资背后，找到 PMF 是关键 最近两年，但凡聊 AI 创业，「是否找到 PMF（Product-Market Fit）」都",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/8eb325ac-d313-4c89-bdd8-b21ce187b13d/0__26_(2).jpg",
+        "copyright": "原创",
+        "content_len": 11967,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-3.md",
+        "article_chars": 4368,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:34:24+08:00"
+    },
+    {
+      "title": "直播预约 | Recursive Self-Improvement：当AI开始进化AI",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18-2",
+      "published": "2026-06-18T02:15:53+00:00",
+      "published_ts": 1781748953,
+      "summary": "当 AI 告别被动训练、走向主动迭代，AI 自主进化正在重写技术演进的底层法则。从 DeepSeek 的高效训练、OpenAI o 系列的自我推理，到全球前沿力量对递归自我改进（RSI）的押注，2026 年的 AI 已开始在无人类干预下，通过自我博弈、评估与修正实现能力的持续提升。 当前，从学术界的自我博弈微调、递归内省等理论突破，到产业界的工程落地，产学研各界正密集交汇。为此， 6月24日 19:00 - 21:00 ，机器之心联合黄大年茶思屋，汇聚国内 AI 自主进化领域代表性的技术专家，通过主题分享，呈现&ldquo;AI 如何自我超越&rdquo;的技术路线与未来图景。 嘉宾阵容（按分享顺序排列）: 仉尚航，北京大学计算机学院研究员 温颖，上海交通大学人工智能学院长聘教轨副教授 王立元，清华大学心理与认知科学系助理教授 诸葛鸣晨，KAUST博士 &amp; Recursive 创始成员 主题与嘉宾 从一体化到自进化：迈向物理世界智能涌现 仉尚航 | 北京大学计算机学院研究员 仉尚航，北京大学计算机学院研究员，致力于具身智能多模态大模型方向研究，荣获世界人工智能顶级会议AAAI ",
+      "author": "机器之心",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/ebc285fc-4bc2-46e7-bb36-2860cc69b16f/0__25_(2).jpg",
+        "copyright": "原创",
+        "content_len": 8672,
+        "author_id": "27999d5c-8072-4eb7-8f45-f4c1bcc1d0b9",
+        "article_path": "data/articles/jiqizhixin/2026-06-18-2.md",
+        "article_chars": 2627,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:41:20+08:00"
+    },
+    {
+      "title": "九章云极发布AI工厂技术体系：以三大范式重构重绘AI效能曲线",
+      "url": "https://www.jiqizhixin.com/articles/2026-06-18",
+      "published": "2026-06-18T02:09:32+00:00",
+      "published_ts": 1781748572,
+      "summary": "6月17日，在&ldquo;智算&middot;新云&middot;新章&mdash;&mdash;2026全球智算科技峰会暨九章云极战略发布会&rdquo;上，九章云极技术负责人胡宗星揭开了AI工厂的技术底牌。这套以训练工厂和Token工厂为核心的技术体系，试图回答一个根本性问题：当AI从&ldquo;发明时代&rdquo;进入&ldquo;工业化时代&rdquo;，算力基础设施应该如何重构？ 推理效率的10倍差距从何而来 胡宗星在演讲中首先抛出了一组对比数据：一台顶级8卡服务器的聚合内存带宽约38 TB/秒，理论上每秒可生成约1000个Token。但主流推理框架实际解码速度仅数十token/s，二者相差整整一个数量级。 这一差距并非源于GPU算力不足。胡宗星将其归因于&ldquo;执行间隙&rdquo;&mdash;&mdash;核心程序之间的等待、通信与计算的串行化、主机与设备间的同步开销、数据在多层存储间的反复搬运。这些间隙叠加，导致算力被&ldquo;困&rdquo;在了从计算到输出的路径上。 九章云极的判断是：推理正在从&ldquo;计算问题&rdquo;演化为&ldquo",
+      "author": "新闻资讯",
+      "tags": [
+        "jiqizhixin"
+      ],
+      "source": "jiqizhixin",
+      "extra": {
+        "api": "https://www.jiqizhixin.com/api/v1/articles",
+        "cover_image_url": "https://image.jiqizhixin.com/uploads/article/cover_image/fa89d037-6c15-4fee-8fc6-ccd1822581a4/%E5%9B%BE%E7%89%871(2).png",
+        "copyright": "原创",
+        "content_len": 2696,
+        "author_id": "762abca3-540d-48ef-951c-99823c4fae6c",
+        "article_path": "data/articles/jiqizhixin/2026-06-18.md",
+        "article_chars": 1978,
+        "article_cached": false
+      },
+      "fetched_at": "2026-06-19T08:42:23+08:00"
+    }
+  ]
+}
