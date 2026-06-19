@@ -68,7 +68,7 @@ def run_module(mod_name: str, extra_args: list[str]) -> tuple[str, int]:
         return mod_name, 1
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="一键跑全部抓取源")
     parser.add_argument("--with-github", action="store_true",
                         help="加上 GitHub Trending（需先部署 RSSHub）")
@@ -79,7 +79,7 @@ def main() -> int:
     parser.add_argument("--all", action="store_true", help="调试：忽略窗口")
     parser.add_argument("--source", action="append", default=[],
                         help="只跑指定源（可多次传），如 --source openai --source langchain")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     extra_args: list[str] = []
     if args.date:

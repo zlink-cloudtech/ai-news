@@ -775,7 +775,7 @@ def build_todos(groups: dict[str, list[ScoredItem]]) -> list[str]:
 
 # ============== 入口 ==============
 
-def main():
+def main(argv: list[str] | None = None):
     parser = argparse.ArgumentParser(description="生成每日资讯 Markdown 报告")
     parser.add_argument("--date", help="目标日期 YYYY-MM-DD（默认 = 昨天 Asia/Shanghai）")
     parser.add_argument("--raw-root", default="data/raw", help="抓取数据根目录")
@@ -785,7 +785,7 @@ def main():
                         help="临时指定 LLM provider（覆盖 .secrets / 环境变量）")
     parser.add_argument("--no-llm", action="store_true",
                         help="强制关闭 LLM 精炼（走规则降级）")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.date:
         date_iso = args.date
