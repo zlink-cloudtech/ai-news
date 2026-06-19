@@ -59,6 +59,12 @@ LASTMOD_WINDOW_HOURS_AFTER = 26   # target+1 02:00 之前
 # 限速: 站点不是反爬很严, 设个保守 delay 即可
 DEFAULT_DELAY = 0.3
 
+# v2.3.2 升级: 0 候选 retry
+# 场景: 凌晨 1:00 抓取时 sitemap 还没含当天真发 (6-16/17/18 连续 3 天触发阈值)
+# 解决: 0 候选时等 5 分钟 retry 1 次, 期间 sitemap 可能已更新
+DEFAULT_RETRY_DELAY_SEC = 300  # 5 分钟
+DEFAULT_RETRY_MAX = 1          # 最多 retry 1 次
+
 
 # ---------- URL 标准化 ----------
 def normalize_url(raw_url: str) -> str | None:
@@ -358,6 +364,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="抓取机器之心（sitemap + REST API）")
     parser.add_argument("--delay", type=float, default=DEFAULT_DELAY,
                         help="API 请求间隔秒数（默认 0.3）")
+    parser.add_argument("--retry-on-zero", dest="retry_on_zero", action="store_true",
+                        help="v2.3.2: 0 候选时 retry N 次（默认 False，配合 --retry-delay 用）")
+    parser.add_argument("--retry-delay", type=int, default=DEFAULT_RETRY_DELAY_SEC,
+                        help=f"v2.3.2: retry 间隔秒数（默认 {DEFAULT_RETRY_DELAY_SEC}）")
+    parser.add_argument("--retry-max", type=int, default=DEFAULT_RETRY_MAX,
+                        help=f"v2.3.2: retry 最多次数（默认 {DEFAULT_RETRY_MAX}）")
     add_date_args(parser)
     args = parser.parse_args()
 
@@ -373,6 +385,33 @@ def main() -> int:
             })
             LOG.warning(f"[{date_str}] 异常落空 -> {path}")
             continue
+
+        # v2.3.2: 0 候选 retry
+        retry_count = 0
+        if args.retry_on_zero and not items:
+            for attempt in range(1, args.retry_max + 1):
+                LOG.warning(
+                    f"[{date_str}] ⚠️ 0 候选触发 v2 retry（{attempt}/{args.retry_max}），"
+                    f"等待 {args.retry_delay} 秒后重试..."
+                )
+                time.sleep(args.retry_delay)
+                try:
+                    items, content_map, meta = crawl_for_date(date_str, delay=args.delay)
+                except Exception as e:
+                    LOG.error(f"[{date_str}] retry 异常: {e}")
+                    items, content_map, meta = [], {}, {"error": "retry_exception", "detail": str(e)}
+                    break
+                retry_count = attempt
+                if items:
+                    LOG.info(f"[{date_str}] ✅ retry {attempt} 命中 {len(items)} 条")
+                    break
+            else:
+                LOG.warning(f"[{date_str}] ❌ retry {args.retry_max} 次后仍 0 候选")
+
+        # meta 记录 retry 信息
+        meta = dict(meta or {})
+        meta["v2_retry_count"] = retry_count
+        meta["v2_retry_on_zero"] = args.retry_on_zero
 
         # 落盘 (空也写, 跟 GraphQL 旧版行为一致)
         path = save_items(SOURCE, date_str, items, meta=meta)
