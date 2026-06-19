@@ -12,6 +12,11 @@ AI 资讯追踪·统一 CLI 入口（v2.0 uv 迁移版）
 - 错误统一退出码 → 0 成功 / 1 失败 / 2 参数错
 - 所有命令以仓库根为 cwd 启动（避免路径错位）
 
+v2.3.3 升级：
+- 启动时自愈依赖（沙箱新 session 缺包不再 fail-fast）
+- 检查 requirements.txt 列出的包，缺则 pip install --user
+- 缓存到 data/.deps_ok，同一会话内不重复装
+
 子命令：
   push-report        推送 daily/weekly/special/management/test（替代 push_report.sh）
   pm-inspect         12:00 / 20:00 PM 巡检（替代 pm_inspect.sh）
@@ -22,7 +27,9 @@ AI 资讯追踪·统一 CLI 入口（v2.0 uv 迁移版）
 from __future__ import annotations
 
 import argparse
+import importlib
 import os
+import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -31,6 +38,80 @@ from zoneinfo import ZoneInfo
 # 仓库根 = scripts/ 的父目录
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TZ_SH = ZoneInfo("Asia/Shanghai")
+
+# v2.3.3: 沙箱依赖自愈
+# 关键包名（import 名 = PyPI 名 时直接用；不同时写 "import_name:pypi_name"）
+DEPS_REQUIRED = [
+    "requests", "yaml", "feedparser", "cloudscraper", "openai",
+    "trafilatura", "lxml",
+]
+DEPS_CACHE_FILE = REPO_ROOT / "data" / ".deps_ok"
+DEPS_REQUIREMENTS_FILE = REPO_ROOT / "requirements.txt"
+
+
+def _ensure_deps() -> None:
+    """v2.3.3: 沙箱启动时检查 + 自愈依赖。
+    - 检查 DEPS_REQUIRED 全部可 import
+    - 缺任一则 pip install --user -r requirements.txt
+    - 成功则写缓存文件 DEPS_CACHE_FILE
+    - 同 session 内 DEPS_CACHE_FILE 存在则跳过
+    """
+    if DEPS_CACHE_FILE.exists():
+        return  # 缓存命中
+
+    missing = []
+    for pkg in DEPS_REQUIRED:
+        try:
+            importlib.import_module(pkg)
+        except ImportError:
+            missing.append(pkg)
+
+    if not missing:
+        DEPS_CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        DEPS_CACHE_FILE.write_text(
+            f"# v2.3.3 deps ok at {datetime.now(TZ_SH).isoformat()}\n# checked: {','.join(DEPS_REQUIRED)}\n",
+            encoding="utf-8",
+        )
+        return  # 全 OK
+
+    print(f"⚠️  [v2.3.3] 缺依赖: {missing}，自愈安装...", file=sys.stderr)
+    if not DEPS_REQUIREMENTS_FILE.exists():
+        print(f"❌ 缺 {DEPS_REQUIREMENTS_FILE}，无法自愈", file=sys.stderr)
+        sys.exit(2)
+    try:
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "--user", "-q", "-r", str(DEPS_REQUIREMENTS_FILE)],
+            check=True,
+            timeout=300,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"❌ pip install 失败 (exit {e.returncode})", file=sys.stderr)
+        sys.exit(1)
+    except subprocess.TimeoutExpired:
+        print("❌ pip install 超时 300s", file=sys.stderr)
+        sys.exit(1)
+
+    # 二次检查
+    still_missing = [pkg for pkg in missing if not _try_import(pkg)]
+    if still_missing:
+        print(f"❌ 装完仍缺: {still_missing}", file=sys.stderr)
+        sys.exit(1)
+
+    DEPS_CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    DEPS_CACHE_FILE.write_text(
+        f"# v2.3.3 deps installed at {datetime.now(TZ_SH).isoformat()}\n"
+        f"# installed: {','.join(missing)}\n",
+        encoding="utf-8",
+    )
+    print(f"✅ [v2.3.3] 依赖自愈完成: {missing}", file=sys.stderr)
+
+
+def _try_import(pkg: str) -> bool:
+    try:
+        importlib.import_module(pkg)
+        return True
+    except ImportError:
+        return False
 
 
 def _check_repo_root() -> None:
@@ -185,6 +266,9 @@ def news_commit() -> None:
 # ==================== main ====================
 
 if __name__ == "__main__":
+    # v2.3.3: 沙箱启动时自愈依赖（缺则 pip install --user -r requirements.txt）
+    _ensure_deps()
+
     # `python -m scripts.cli <cmd> [args...]` 形式：路由到子命令
     if len(sys.argv) > 1 and sys.argv[1] in ("push-report", "pm-inspect", "run-generate-daily", "news-commit"):
         cmd_name = sys.argv[1].replace("-", "_")
