@@ -1,0 +1,165 @@
+{
+  "source": "qbitai",
+  "date": "2026-06-18",
+  "saved_at": "2026-06-19T01:19:37+08:00",
+  "count": 10,
+  "meta": {
+    "feed": "https://www.qbitai.com/feed",
+    "window": [
+      "2026-06-18T00:00:00+08:00",
+      "2026-06-18T23:59:59.999999+08:00"
+    ]
+  },
+  "items": [
+    {
+      "title": "AI看病成为医患新包袱？补上「多轮追问」，通用AI才迈得过医疗关",
+      "url": "https://www.qbitai.com/2026/06/436758.html",
+      "published": "2026-06-18T13:46:04+00:00",
+      "published_ts": 1781790364,
+      "summary": "M4是大脑，百小医是身体",
+      "author": "Jay",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "魔法原子牵手万机易租，全栈产品入驻2.0平台共建租赁生态",
+      "url": "https://www.qbitai.com/2026/06/436802.html",
+      "published": "2026-06-18T13:42:09+00:00",
+      "published_ts": 1781790129,
+      "summary": "全系产品入驻万机易租2.0",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "具身智能",
+        "机器人租赁",
+        "魔法原子"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "香港特区政府财政司司长陈茂波一行到访 PPIO",
+      "url": "https://www.qbitai.com/2026/06/436751.html",
+      "published": "2026-06-18T10:14:49+00:00",
+      "published_ts": 1781777689,
+      "summary": "",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "AIEC 2026 | 太初元碁分享国产 AI 算力实践 助力 Token 服务落地生根",
+      "url": "https://www.qbitai.com/2026/06/436740.html",
+      "published": "2026-06-18T09:45:11+00:00",
+      "published_ts": 1781775911,
+      "summary": "",
+      "author": "智能车参考",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "腾讯老兵+大厂00后新锐，码上飞想做的不只是AI Coding",
+      "url": "https://www.qbitai.com/2026/06/436674.html",
+      "published": "2026-06-18T09:39:35+00:00",
+      "published_ts": 1781775575,
+      "summary": "已接入华为鸿蒙生态",
+      "author": "听雨",
+      "tags": [
+        "资讯"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "ABot-Earth0.5登顶Hugging Face论文三榜第一，获国际图形学权威陈宝权好评",
+      "url": "https://www.qbitai.com/2026/06/436698.html",
+      "published": "2026-06-18T09:39:05+00:00",
+      "published_ts": 1781775545,
+      "summary": "能够直接导入Unity、Unreal Engine等主流引擎进行交互开发",
+      "author": "量子位的朋友们",
+      "tags": [
+        "资讯",
+        "高德地图"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "全员本科生！何恺明组新作：文生图，258M参数就够了",
+      "url": "https://www.qbitai.com/2026/06/436518.html",
+      "published": "2026-06-18T09:12:09+00:00",
+      "published_ts": 1781773929,
+      "summary": "整篇论文一共六位作者。除了何恺明之外，其余五位都还是本科生。",
+      "author": "henry",
+      "tags": [
+        "资讯",
+        "何恺明"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "18年前不让你苦修PS的美图，这次不让你苦修AI了",
+      "url": "https://www.qbitai.com/2026/06/436517.html",
+      "published": "2026-06-18T09:07:51+00:00",
+      "published_ts": 1781773671,
+      "summary": "用八款产品，讲一个变化",
+      "author": "梦瑶",
+      "tags": [
+        "资讯",
+        "用八款产品，讲一个变化"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "哈？Q1狂烧250亿！OpenAI财报泄露全网炸锅",
+      "url": "https://www.qbitai.com/2026/06/436477.html",
+      "published": "2026-06-18T05:12:25+00:00",
+      "published_ts": 1781759545,
+      "summary": "给A社都干沉默了…",
+      "author": "鹭羽",
+      "tags": [
+        "资讯",
+        "OpenAI",
+        "财报"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    },
+    {
+      "title": "国产算力正在进入Token标准化时代",
+      "url": "https://www.qbitai.com/2026/06/436468.html",
+      "published": "2026-06-18T01:45:19+00:00",
+      "published_ts": 1781747119,
+      "summary": "当前国产算力的瓶颈不在芯片本身，而在从异构算力到可用Token之间的工程化转化能力。",
+      "author": "允中",
+      "tags": [
+        "资讯",
+        "国产token",
+        "是石科技"
+      ],
+      "source": "qbitai",
+      "extra": {},
+      "fetched_at": "2026-06-19T01:19:32+08:00"
+    }
+  ]
+}

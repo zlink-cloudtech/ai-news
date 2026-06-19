@@ -208,7 +208,7 @@ def run_generate_daily() -> None:
 
     # 1. 抓取
     print("🕷️  抓取 raw json...")
-    from crawlers.run_all import main as _ra_main
+    from scripts.crawlers.run_all import main as _ra_main
     try:
         _ra_main(["--date", target_date])
         print("✅ 抓取完成")
@@ -218,7 +218,7 @@ def run_generate_daily() -> None:
 
     # 2. 生成
     print("🔧 生成日报...")
-    from generators.generate_daily import main as _gd_main
+    from scripts.generators.generate_daily import main as _gd_main
     gen_args = ["--date", target_date]
     if args.no_llm:
         gen_args.append("--no-llm")
