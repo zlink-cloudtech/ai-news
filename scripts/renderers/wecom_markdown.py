@@ -48,21 +48,29 @@ def render(daily_json: dict) -> str:
         doc_url = f"（飞书 docx 链接待推送生成）"
 
     # 拼接简短摘要 + 飞书链接
+    # v2.3.9: 改用裸 URL 触发企微"链接预览"卡片（避开企微内置 webview 对飞书域名兼容差）
+    # v2.3.9.1: 主人 6-20 10:21 反馈"链接有效但企微没识别为链接"
+    #   → 中文冒号 `：` + 紧贴 URL，企微 markdown 渲染器无法识别 URL 边界
+    #   → 改用英文冒号 `: ` + 空格分隔，URL 前留出 token 边界，企微才能识别为独立 URL
+    # v2.3.9.2: 主人 6-20 10:49 反馈"双击触发可识别"
+    #   → 在"完整日报"后追加 "(双击打开)" 提示，企微客户端对未自动识别的 URL
+    #     通过双击强制触发 URL 处理链路（避开 webview 加载飞书 docx 的兼容问题）
+    #   → 实际：双击文本段 → 企微弹出操作菜单（打开/复制/搜索）→ 选"打开"走链接预览卡片
     parts: list[str] = []
     parts.append(f"📰 **AI资讯日报** · {date_iso}")
     if one_line:
         parts.append(f"\n{one_line}")
-    parts.append(f"\n👉 [完整日报]({doc_url})")
+    parts.append(f"\n👉 完整日报（双击打开）: {doc_url}")
     out = "\n".join(parts)
 
     # 字符数截断（防御性）
     if len(out) > MAX_CHARS:
         # 截断一句话总结 + 保留飞书链接
-        safe_summary = one_line[: MAX_CHARS - len(f"📰 **AI资讯日报** · {date_iso}\n\n👉 [完整日报]({doc_url})") - 10] + "…"
+        safe_summary = one_line[: MAX_CHARS - len(f"📰 **AI资讯日报** · {date_iso}\n\n👉 完整日报（双击打开）: {doc_url}") - 10] + "…"
         parts = [
             f"📰 **AI资讯日报** · {date_iso}",
             f"\n{safe_summary}",
-            f"\n👉 [完整日报]({doc_url})",
+            f"\n👉 完整日报（双击打开）: {doc_url}",
         ]
         out = "\n".join(parts)
 
